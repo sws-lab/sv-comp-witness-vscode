@@ -1,0 +1,10 @@
+**/out
+**/dist
+**/node_modules
+**/.idea
+**/.vscode-test/**
+webpack.config.js
+vsc-extension-quickstart.md
+**/*.map
+**/.vscode-test.*
+package-lock.json

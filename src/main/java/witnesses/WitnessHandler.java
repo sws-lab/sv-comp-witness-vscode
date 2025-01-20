@@ -20,9 +20,9 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.List;
 
-public class ProcessWitnesses {
+public class WitnessHandler {
 
-    private static final Logger log = LogManager.getLogger(ProcessWitnesses.class);
+    private static final Logger log = LogManager.getLogger(WitnessHandler.class);
 
     private List<Witness> readWitnesses(String path) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());

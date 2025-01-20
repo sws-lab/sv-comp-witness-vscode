@@ -1,7 +1,7 @@
 import lsp.SVLanguageServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import witnesses.ProcessWitnesses;
+import witnesses.WitnessHandler;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -14,10 +14,10 @@ public class Main {
         SVLanguageServer languageServer = createLanguageServer();
         log.info("Language server launched.");
 
-        ProcessWitnesses processWitnesses = new ProcessWitnesses();
+        WitnessHandler witnessHandler = new WitnessHandler();
         try {
             // TODO: hardcoded values
-            processWitnesses.readAndConvertWitnesses(languageServer, "./examples/gob-n.c40.yml");
+            witnessHandler.readAndConvertWitnesses(languageServer, "./examples/gob-n.c40.yml");
         } catch (IOException | URISyntaxException e) {
             // TODO: proper error handling
             e.printStackTrace();

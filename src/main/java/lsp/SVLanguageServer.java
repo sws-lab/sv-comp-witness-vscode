@@ -52,7 +52,7 @@ public class SVLanguageServer implements LanguageServer, WorkspaceService, TextD
         serverCapabilities.setReferencesProvider(false);
         serverCapabilities.setHoverProvider(false);
 
-        serverCapabilities.setInlayHintProvider(true);
+        //serverCapabilities.setInlayHintProvider(true);
 
         CodeLensOptions cl = new CodeLensOptions();
         cl.setResolveProvider(false);

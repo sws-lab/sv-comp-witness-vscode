@@ -45,10 +45,10 @@ public class WitnessHandler {
                 range.setEnd(new Position(location.line(), location.column()));
                 Command command = new Command(invariant.value(), "");
                 CodeLens codeLens = new CodeLens(range, command, null);
-                InlayHint inlayHint = new InlayHint(new Position(location.line(), location.column()), Either.forLeft(invariant.value() + " "));
+                //InlayHint inlayHint = new InlayHint(new Position(location.line(), location.column()), Either.forLeft(invariant.value() + " "));
                 // TODO: fragile URI stuff
                 // TODO: hardcoded values
-                languageServer.addInlayHint(new URI("file://" + Path.of("").toAbsolutePath() + "/examples/safe-program-example.c"), inlayHint);
+                //languageServer.addInlayHint(new URI("file://" + Path.of("").toAbsolutePath() + "/examples/safe-program-example.c"), inlayHint);
                 languageServer.addCodeLens(new URI("file://" + Path.of("").toAbsolutePath() + "/examples/safe-program-example.c"), codeLens);
             }
         }

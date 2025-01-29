@@ -48,8 +48,8 @@ public class WitnessHandler {
                 InlayHint inlayHint = new InlayHint(new Position(location.line(), location.column()), Either.forLeft(invariant.value() + " "));
                 // TODO: fragile URI stuff
                 // TODO: hardcoded values
-                languageServer.addInlayHint(new URI("file://" + Path.of("").toAbsolutePath() + "/examples/n.c40.c"), inlayHint);
-                languageServer.addCodeLens(new URI("file://" + Path.of("").toAbsolutePath() + "/examples/n.c40.c"), codeLens);
+                languageServer.addInlayHint(new URI("file://" + Path.of("").toAbsolutePath() + "/examples/safe-program-example.c"), inlayHint);
+                languageServer.addCodeLens(new URI("file://" + Path.of("").toAbsolutePath() + "/examples/safe-program-example.c"), codeLens);
             }
         }
     }

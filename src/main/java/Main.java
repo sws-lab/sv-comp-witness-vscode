@@ -17,7 +17,7 @@ public class Main {
         WitnessHandler witnessHandler = new WitnessHandler();
         try {
             // TODO: hardcoded values
-            witnessHandler.readAndConvertWitnesses(languageServer, "./examples/gob-n.c40.yml");
+            witnessHandler.readAndConvertWitnesses(languageServer, "./examples/cpa-safe-program-example.witness.yml");
         } catch (IOException | URISyntaxException e) {
             // TODO: proper error handling
             e.printStackTrace();

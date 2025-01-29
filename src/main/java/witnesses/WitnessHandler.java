@@ -29,7 +29,7 @@ public class WitnessHandler {
         TypeFactory typeFactory = objectMapper.getTypeFactory();
         List<Witness> witnesses = objectMapper.readValue(new File(path), typeFactory.constructCollectionType(List.class, Witness.class));
 
-        log.info(witnesses);
+        log.debug(witnesses);
 
         return witnesses;
 

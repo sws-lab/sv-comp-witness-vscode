@@ -145,8 +145,6 @@ public class SVLanguageServer implements LanguageServer, WorkspaceService, TextD
                         String uri = params.getTextDocument().getUri();
                         URI decodedUri = new URI(URLDecoder.decode(uri, StandardCharsets.UTF_8));
                         if (this.codeLenses.containsKey(decodedUri)) {
-                            log.info("codelens");
-                            log.info(codeLenses.get(decodedUri));
                             return codeLenses.get(decodedUri);
                         } else return new ArrayList<>();
                     } catch (URISyntaxException e) {
@@ -170,7 +168,6 @@ public class SVLanguageServer implements LanguageServer, WorkspaceService, TextD
                         String uri = params.getTextDocument().getUri();
                         URI decodedUri = new URI(URLDecoder.decode(uri, StandardCharsets.UTF_8));
                         if (this.inlayHints.containsKey(decodedUri)) {
-                            log.info("inlayhint");
                             return inlayHints.get(decodedUri);
                         } else return new ArrayList<>();
                     } catch (URISyntaxException e) {

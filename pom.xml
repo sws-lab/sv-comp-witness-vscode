@@ -1,7 +1,7 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>goblint</groupId>
-    <artifactId>sv-comp-vscode</artifactId>
+    <artifactId>sv-comp-witness-vscode</artifactId>
     <version>0.0.1</version>
 
     <dependencies>

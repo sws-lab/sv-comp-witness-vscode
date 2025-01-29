@@ -7,7 +7,7 @@ import {LanguageClient, LanguageClientOptions, ServerOptions} from 'vscode-langu
 export function activate(context: vscode.ExtensionContext) {
 
 	let script = 'java';
-	let args = ['-jar', context.asAbsolutePath('sv-comp-vscode-0.0.1.jar')];
+	let args = ['-jar', context.asAbsolutePath('sv-comp-witness-vscode-0.0.1.jar')];
 
 	// Use this for communicating on stdio
 	let serverOptions: ServerOptions = {

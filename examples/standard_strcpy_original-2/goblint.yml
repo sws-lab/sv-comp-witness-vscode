@@ -1,0 +1,109 @@
+- entry_type: invariant_set
+  metadata:
+    format_version: "2.0"
+    uuid: f7109f41-eca2-4037-9e33-9f187cedc447
+    creation_time: 2024-11-30T13:17:08Z
+    producer:
+      name: Goblint
+      version: tags/svcomp25-0-g5512d834b
+      command_line: '''./goblint'' ''--conf'' ''conf/svcomp25.json'' ''--sets'' ''ana.specification''
+        ''../../sv-benchmarks/c/properties/no-overflow.prp'' ''--sets'' ''exp.architecture''
+        ''32bit'' ''../../sv-benchmarks/c/array-examples/standard_strcpy_original-2.i'''
+    task:
+      input_files:
+      - ../../sv-benchmarks/c/array-examples/standard_strcpy_original-2.i
+      input_file_hashes:
+        ../../sv-benchmarks/c/array-examples/standard_strcpy_original-2.i: 1d1a303ac3a0660bf920920173d22fca6c20b09d575ad3b8f2f9d91205d4f1f6
+      data_model: ILP32
+      language: C
+      specification: CHECK( init(main()), LTL(G ! overflow) )
+  content:
+  - invariant:
+      type: loop_invariant
+      location:
+        file_name: ../../sv-benchmarks/c/array-examples/standard_strcpy_original-2.i
+        line: 22
+        column: 3
+        function: main
+      value: 0 == i
+      format: c_expression
+  - invariant:
+      type: loop_invariant
+      location:
+        file_name: ../../sv-benchmarks/c/array-examples/standard_strcpy_original-2.i
+        line: 22
+        column: 3
+        function: main
+      value: i == 0
+      format: c_expression
+  - invariant:
+      type: loop_invariant
+      location:
+        file_name: ../../sv-benchmarks/c/array-examples/standard_strcpy_original-2.i
+        line: 22
+        column: 3
+        function: main
+      value: ((((((2 <= j && j <= 100000) && (-2LL + (long long )i) + (long long )j
+        >= 0LL) && (-2LL - (long long )i) + (long long )j >= 0LL) && (100000LL + (long
+        long )i) - (long long )j >= 0LL) && (100000LL - (long long )i) - (long long
+        )j >= 0LL) || (((((-1LL + (long long )i) + (long long )j >= 0LL && (-1LL -
+        (long long )i) + (long long )j >= 0LL) && (1LL + (long long )i) - (long long
+        )j >= 0LL) && (1LL - (long long )i) - (long long )j >= 0LL) && j == 1)) ||
+        (((((((0LL - (long long )i) + (long long )j >= 0LL && (long long )i + (long
+        long )j >= 0LL) && (0LL - (long long )i) - (long long )j >= 0LL) && (long
+        long )i - (long long )j >= 0LL) && 0 == j) && i == j) && j == 0)
+      format: c_expression
+  - invariant:
+      type: loop_invariant
+      location:
+        file_name: ../../sv-benchmarks/c/array-examples/standard_strcpy_original-2.i
+        line: 26
+        column: 3
+        function: main
+      value: j == 100000
+      format: c_expression
+  - invariant:
+      type: loop_invariant
+      location:
+        file_name: ../../sv-benchmarks/c/array-examples/standard_strcpy_original-2.i
+        line: 26
+        column: 3
+        function: main
+      value: ((((((2 <= i && i <= 100000) && (-100002LL + (long long )i) + (long long
+        )j >= 0LL) && (0LL - (long long )i) + (long long )j >= 0LL) && (99998LL +
+        (long long )i) - (long long )j >= 0LL) && (200000LL - (long long )i) - (long
+        long )j >= 0LL) || (((((-100001LL + (long long )i) + (long long )j >= 0LL
+        && (-99999LL - (long long )i) + (long long )j >= 0LL) && (99999LL + (long
+        long )i) - (long long )j >= 0LL) && (100001LL - (long long )i) - (long long
+        )j >= 0LL) && i == 1)) || ((((((-100000LL + (long long )i) + (long long )j
+        >= 0LL && (-100000LL - (long long )i) + (long long )j >= 0LL) && (100000LL
+        + (long long )i) - (long long )j >= 0LL) && (100000LL - (long long )i) - (long
+        long )j >= 0LL) && 0 == i) && i == 0)
+      format: c_expression
+  - invariant:
+      type: loop_invariant
+      location:
+        file_name: ../../sv-benchmarks/c/array-examples/standard_strcpy_original-2.i
+        line: 31
+        column: 3
+        function: main
+      value: j == 100000
+      format: c_expression
+  - invariant:
+      type: loop_invariant
+      location:
+        file_name: ../../sv-benchmarks/c/array-examples/standard_strcpy_original-2.i
+        line: 31
+        column: 3
+        function: main
+      value: ((((((2 <= i && i <= 100000) && (-100002LL + (long long )i) + (long long
+        )j >= 0LL) && (0LL - (long long )i) + (long long )j >= 0LL) && (99998LL +
+        (long long )i) - (long long )j >= 0LL) && (200000LL - (long long )i) - (long
+        long )j >= 0LL) || (((((-100001LL + (long long )i) + (long long )j >= 0LL
+        && (-99999LL - (long long )i) + (long long )j >= 0LL) && (99999LL + (long
+        long )i) - (long long )j >= 0LL) && (100001LL - (long long )i) - (long long
+        )j >= 0LL) && i == 1)) || ((((((-100000LL + (long long )i) + (long long )j
+        >= 0LL && (-100000LL - (long long )i) + (long long )j >= 0LL) && (100000LL
+        + (long long )i) - (long long )j >= 0LL) && (100000LL - (long long )i) - (long
+        long )j >= 0LL) && 0 == i) && i == 0)
+      format: c_expression

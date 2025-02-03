@@ -1,0 +1,50 @@
+- entry_type: invariant_set
+  metadata:
+    format_version: '2.0'
+    uuid: 5aa4605c-4c12-4cf8-82b1-231f9442b07e
+    creation_time: '2024-12-06T00:35:55+01:00'
+    producer:
+      name: Kojak
+      version: 0.3.0-dev-d790fec
+    task:
+      input_files:
+      - /tmp/vcloud_worker_vcloud-master_on_vcloud-master/run_dir_8b656cb5-c40b-4a92-a836-37e00648acc8/sv-benchmarks/c/array-examples/standard_strcpy_original-2.i
+      input_file_hashes:
+        ? /tmp/vcloud_worker_vcloud-master_on_vcloud-master/run_dir_8b656cb5-c40b-4a92-a836-37e00648acc8/sv-benchmarks/c/array-examples/standard_strcpy_original-2.i
+        : 1d1a303ac3a0660bf920920173d22fca6c20b09d575ad3b8f2f9d91205d4f1f6
+      specification: |+
+        CHECK( init(main()), LTL(G ! overflow) )
+
+      data_model: ILP32
+      language: C
+  content:
+  - invariant:
+      type: loop_invariant
+      location:
+        file_name: /tmp/vcloud_worker_vcloud-master_on_vcloud-master/run_dir_8b656cb5-c40b-4a92-a836-37e00648acc8/sv-benchmarks/c/array-examples/standard_strcpy_original-2.i
+        file_hash: 1d1a303ac3a0660bf920920173d22fca6c20b09d575ad3b8f2f9d91205d4f1f6
+        line: 31
+        column: 3
+        function: main
+      value: (0 <= (i + 2147483648))
+      format: c_expression
+  - invariant:
+      type: loop_invariant
+      location:
+        file_name: /tmp/vcloud_worker_vcloud-master_on_vcloud-master/run_dir_8b656cb5-c40b-4a92-a836-37e00648acc8/sv-benchmarks/c/array-examples/standard_strcpy_original-2.i
+        file_hash: 1d1a303ac3a0660bf920920173d22fca6c20b09d575ad3b8f2f9d91205d4f1f6
+        line: 26
+        column: 3
+        function: main
+      value: (0 <= (i + 2147483648))
+      format: c_expression
+  - invariant:
+      type: loop_invariant
+      location:
+        file_name: /tmp/vcloud_worker_vcloud-master_on_vcloud-master/run_dir_8b656cb5-c40b-4a92-a836-37e00648acc8/sv-benchmarks/c/array-examples/standard_strcpy_original-2.i
+        file_hash: 1d1a303ac3a0660bf920920173d22fca6c20b09d575ad3b8f2f9d91205d4f1f6
+        line: 22
+        column: 3
+        function: main
+      value: ((0 <= (j + 2147483648)) && (i == 0))
+      format: c_expression

@@ -1,0 +1,44 @@
+- entry_type: "invariant_set"
+  metadata:
+    format_version: "2.0"
+    uuid: "2b417704-08bb-3bc1-a43a-bd96bec8ded5"
+    creation_time: "2024-12-04T13:08:55+01:00"
+    producer:
+      name: "CPAchecker"
+      version: "3.1-svn-b24a086398+"
+    task:
+      input_files:
+      - "../../sv-benchmarks/c/array-examples/standard_strcpy_original-2.i"
+      input_file_hashes:
+        "../../sv-benchmarks/c/array-examples/standard_strcpy_original-2.i": "1d1a303ac3a0660bf920920173d22fca6c20b09d575ad3b8f2f9d91205d4f1f6"
+      specification: "CHECK( init(main()), LTL(G ! overflow) )"
+      data_model: "ILP32"
+      language: "C"
+  content:
+  - invariant:
+      type: "loop_invariant"
+      location:
+        file_name: "../../sv-benchmarks/c/array-examples/standard_strcpy_original-2.i"
+        line: 26
+        column: 3
+        function: "main"
+      value: "1"
+      format: "c_expression"
+  - invariant:
+      type: "loop_invariant"
+      location:
+        file_name: "../../sv-benchmarks/c/array-examples/standard_strcpy_original-2.i"
+        line: 31
+        column: 3
+        function: "main"
+      value: "1"
+      format: "c_expression"
+  - invariant:
+      type: "loop_invariant"
+      location:
+        file_name: "../../sv-benchmarks/c/array-examples/standard_strcpy_original-2.i"
+        line: 22
+        column: 3
+        function: "main"
+      value: "1"
+      format: "c_expression"

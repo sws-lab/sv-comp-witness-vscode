@@ -23,5 +23,5 @@ Install the extension into VS Code with `code --install-extension sv-comp-verifi
 ## Testing
 
 1. Open the project in VS Code after installing the extension.
-2. Open the file `examples/safe-program-example.c` in VS Code.
-3. The invariant should be shown above line 18.
+2. Open the file `standard_strcpy_original-2.i` in VS Code.
+3. The combined invariants should be shown above lines 22, 26, and 31.

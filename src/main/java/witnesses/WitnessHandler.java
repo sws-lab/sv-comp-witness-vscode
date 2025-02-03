@@ -17,8 +17,12 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class WitnessHandler {
 
@@ -71,8 +75,31 @@ public class WitnessHandler {
         return allWitnesses;
     }
 
+    public static List<Witness> filterWitnesses(List<Witness> witnesses) {
+        List<Witness> filteredWitnesses = new ArrayList<>();
+        Set<String> uniqueInvariants = new HashSet<>();
+        for (Witness witness : witnesses) {
+            List<Content> filteredContent = witness.content().stream()
+                    .filter(content -> {
+                        Invariant invariant = content.invariant();
+                        Location location = invariant.location();
+                        String fileName = Paths.get(location.file_name()).getFileName().toString();
+                        String key = fileName + ":" + location.line() + ":" + location.column() + ":" + invariant.value();
+
+                        // Skip if the value is "1" or if we've already seen this (duplicate)
+                        return !invariant.value().equals("1") && uniqueInvariants.add(key);
+                    })
+                    .collect(Collectors.toList());
+            // Only add witness if it has remaining content
+            if (!filteredContent.isEmpty()) {
+                filteredWitnesses.add(new Witness(witness.entry_type(), witness.metadata(), filteredContent));
+            }
+        }
+        return filteredWitnesses;
+    }
+
     public void readAndConvertWitnesses(SVLanguageServer languageServer, String directoryPath) throws IOException, URISyntaxException {
-        List<Witness> witnesses = readWitnessesFromDirectory(directoryPath);
+        List<Witness> witnesses = filterWitnesses(readWitnessesFromDirectory(directoryPath));
         convertWitness(languageServer, witnesses);
     }
 

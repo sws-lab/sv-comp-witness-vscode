@@ -1,6 +1,8 @@
 package witnesses.data;
 
-public record Location(String file_name, int line, int column, String function) {
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+public record Location(String file_name, @JsonIgnore String file_hash, int line, int column, String function) {
 
     @Override
     public String toString() {

@@ -3,10 +3,12 @@ package witnesses;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import lsp.SVLanguageServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.eclipse.lsp4j.*;
+import org.eclipse.lsp4j.CodeLens;
+import org.eclipse.lsp4j.Command;
+import org.eclipse.lsp4j.Position;
+import org.eclipse.lsp4j.Range;
 import witnesses.data.Content;
 import witnesses.data.Invariant;
 import witnesses.data.Location;
@@ -14,9 +16,6 @@ import witnesses.data.Witness;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -24,9 +23,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class WitnessHandler {
+public class WitnessReader {
 
-    private static final Logger log = LogManager.getLogger(WitnessHandler.class);
+    private static final Logger log = LogManager.getLogger(WitnessReader.class);
 
     private List<Witness> readWitness(String path) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
@@ -39,7 +38,8 @@ public class WitnessHandler {
 
     }
 
-    private void convertWitness(SVLanguageServer languageServer, List<Witness> witnesses) throws URISyntaxException {
+    private List<CodeLens> convertWitnessToCodeLenses(List<Witness> witnesses) {
+        List<CodeLens> codeLenses = new ArrayList<>();
         for (Witness witness : witnesses) {
             for (Content content : witness.content()) {
                 Invariant invariant = content.invariant();
@@ -50,13 +50,10 @@ public class WitnessHandler {
                 range.setEnd(new Position(location.line() - 1, location.column() - 1));
                 Command command = new Command(invariant.value(), "");
                 CodeLens codeLens = new CodeLens(range, command, null);
-                //InlayHint inlayHint = new InlayHint(new Position(location.line(), location.column()), Either.forLeft(invariant.value() + " "));
-                // TODO: fragile URI stuff
-                // TODO: hardcoded values
-                //languageServer.addInlayHint(new URI("file://" + Path.of("").toAbsolutePath() + "/examples/safe-program-example.c"), inlayHint);
-                languageServer.addCodeLens(new URI("file://" + Path.of("").toAbsolutePath() + "/examples/standard_strcpy_original-2.i"), codeLens);
+                codeLenses.add(codeLens);
             }
         }
+        return codeLenses;
     }
 
     private List<Witness> readWitnessesFromDirectory(String directoryPath) throws IOException {
@@ -98,9 +95,10 @@ public class WitnessHandler {
         return filteredWitnesses;
     }
 
-    public void readAndConvertWitnesses(SVLanguageServer languageServer, String directoryPath) throws IOException, URISyntaxException {
+    public List<CodeLens> readAndConvertWitnesses(String directoryPath) throws IOException {
+        log.info("Read witnesses and convert them to code lenses");
         List<Witness> witnesses = filterWitnesses(readWitnessesFromDirectory(directoryPath));
-        convertWitness(languageServer, witnesses);
+        return convertWitnessToCodeLenses(witnesses);
     }
 
 }

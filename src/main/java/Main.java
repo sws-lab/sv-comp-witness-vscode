@@ -1,38 +1,23 @@
-import lsp.SVLanguageServer;
+import lsp.WitnessLanguageServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import witnesses.WitnessHandler;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
+import witnesses.AnalysisManager;
+import witnesses.WitnessReader;
 
 public class Main {
 
     private static final Logger log = LogManager.getLogger(Main.class);
 
     public static void main(String[] args) {
-        SVLanguageServer languageServer = createLanguageServer();
-        log.info("Language server launched.");
-
-        WitnessHandler witnessHandler = new WitnessHandler();
-        try {
-            // TODO: hardcoded values
-            witnessHandler.readAndConvertWitnesses(languageServer, "./examples/standard_strcpy_original-2");
-        } catch (IOException | URISyntaxException e) {
-            // TODO: proper error handling
-            e.printStackTrace();
-        }
+        WitnessReader witnessReader = new WitnessReader();
+        AnalysisManager analysisManager = new AnalysisManager(witnessReader);
+        createLanguageServer(analysisManager);
     }
 
-    /**
-     * Method for creating and launching language server.
-     */
-
-    private static SVLanguageServer createLanguageServer() {
-        SVLanguageServer svLanguageServer = new SVLanguageServer();
-        svLanguageServer.launchOnStream(System.in, System.out);
-
-        return svLanguageServer;
+    private static void createLanguageServer(AnalysisManager analysisManager) {
+        WitnessLanguageServer witnessLanguageServer = new WitnessLanguageServer(analysisManager);
+        witnessLanguageServer.launchOnStream(System.in, System.out);
+        log.info("Language server launched.");
     }
 
 }

@@ -1,32 +1,49 @@
 package witnesses;
 
+import fmweckserver.FmWeckClient;
+import fm_weck.generated.FmWeckService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.lsp4j.CodeLens;
+import witnesses.data.Tool;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AnalysisManager {
     private final WitnessReader witnessReader;
+    private final FmWeckClient fmweckclient;
 
     private final Logger log = LogManager.getLogger(AnalysisManager.class);
 
-    public AnalysisManager(WitnessReader witnessReader) {
+    public AnalysisManager(WitnessReader witnessReader, FmWeckClient fmweckclient) {
         this.witnessReader = witnessReader;
+        this.fmweckclient = fmweckclient;
     }
 
-    public List<CodeLens> analyze() {
-        log.info("Starting analysis");
-        return readAndConvertWitnesses();
+    public List<CodeLens> analyze(URI fileUri, Tool tool) {
+        log.info("Starting analysis for tool: " + tool.name());
+        try {
+            // TODO: wrap into futures
+            FmWeckService.RunID runId = fmweckclient.startRun(fileUri, tool);
+            Thread.sleep(5000); // Optional: wait a bit before querying results
+            String witness = fmweckclient.waitOnRun(runId);
+            return readAndConvertWitnesses(witness);
+        } catch (Exception e) {
+            // TODO: proper error handling
+            e.printStackTrace();
+        } finally {
+            //fmweckclient.shutdown();
+        }
+        return new ArrayList<>();
     }
 
-    public List<CodeLens> readAndConvertWitnesses() {
+    public List<CodeLens> readAndConvertWitnesses(String witness) {
         List<CodeLens> codeLenses = new ArrayList<>();
         try {
-            // TODO: hardcoded value
-            codeLenses = witnessReader.readAndConvertWitnesses("./examples/standard_strcpy_original-2");
+            codeLenses = witnessReader.readAndConvertWitness(witness);
         } catch (IOException e) {
             // TODO: proper error handling
             e.printStackTrace();

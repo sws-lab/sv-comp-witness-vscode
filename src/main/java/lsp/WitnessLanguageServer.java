@@ -48,8 +48,7 @@ public class WitnessLanguageServer implements LanguageServer, WorkspaceService {
 
         //serverCapabilities.setInlayHintProvider(true);
 
-        CodeLensOptions cl = new CodeLensOptions();
-        cl.setResolveProvider(false);
+        CodeLensOptions cl = new CodeLensOptions(false);
         serverCapabilities.setCodeLensProvider(cl);
 
         return CompletableFuture.completedFuture(new InitializeResult(serverCapabilities));

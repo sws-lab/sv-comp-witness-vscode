@@ -41,6 +41,7 @@ public class WitnessReader {
     private List<CodeLens> convertWitnessToCodeLenses(List<Witness> witnesses) {
         List<CodeLens> codeLenses = new ArrayList<>();
         for (Witness witness : witnesses) {
+            // TODO: nullable content field
             for (Content content : witness.content()) {
                 Invariant invariant = content.invariant();
                 Location location = invariant.location();
@@ -98,6 +99,14 @@ public class WitnessReader {
     public List<CodeLens> readAndConvertWitnesses(String directoryPath) throws IOException {
         log.info("Read witnesses and convert them to code lenses");
         List<Witness> witnesses = filterWitnesses(readWitnessesFromDirectory(directoryPath));
+        return convertWitnessToCodeLenses(witnesses);
+    }
+
+    public List<CodeLens> readAndConvertWitness(String witness) throws IOException {
+        log.info("Read witnesses and convert them to code lenses");
+        ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
+        TypeFactory typeFactory = objectMapper.getTypeFactory();
+        List<Witness> witnesses = objectMapper.readValue(witness, typeFactory.constructCollectionType(List.class, Witness.class));
         return convertWitnessToCodeLenses(witnesses);
     }
 

@@ -1,0 +1,6 @@
+- name: cpachecker
+- name: goblint
+- name: uautomizer
+  version: svcomp24
+- name: ukojak
+  version: svcomp24

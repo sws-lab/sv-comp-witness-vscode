@@ -9,10 +9,10 @@ import org.eclipse.lsp4j.CodeLens;
 import org.eclipse.lsp4j.Command;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
-import witnesses.data.Content;
-import witnesses.data.Invariant;
-import witnesses.data.Location;
-import witnesses.data.Witness;
+import witnesses.data.yaml.Content;
+import witnesses.data.yaml.Invariant;
+import witnesses.data.yaml.Location;
+import witnesses.data.yaml.Witness;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package witnesses.data;
+package witnesses.data.yaml;
 
 public record Invariant(String type, Location location, String value, String format) {
 

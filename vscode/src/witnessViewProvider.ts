@@ -18,6 +18,7 @@ export class WitnessViewProvider implements vscode.WebviewViewProvider {
             (message) => {
                 switch (message.command) {
                     case 'analyze':
+                        message.fileUri = this.getActiveFileUri();
                         this.lc.sendNotification('custom/handleWebviewMessage', message);
                         break;
                 }
@@ -25,6 +26,15 @@ export class WitnessViewProvider implements vscode.WebviewViewProvider {
             null,
             this.context.subscriptions
         );
+    }
+
+    private getActiveFileUri() {
+        const editor = vscode.window.activeTextEditor;
+        if (editor && editor.document.languageId == 'c') {
+            return editor.document.uri.toString();
+        } else {
+            vscode.window.showWarningMessage('Please open a C file (.c, .h, .i) to analyze.');
+        }
     }
 
     private getWebviewContent(webviewView: vscode.WebviewView) : string {

@@ -1,46 +1,33 @@
 package file;
 
-import lsp.WitnessLanguageServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.services.TextDocumentService;
-import witnesses.AnalysisManager;
-import witnesses.ToolLoader;
-import witnesses.data.Tool;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class WitnessTextDocumentService implements TextDocumentService {
 
-    private final AnalysisManager analysisManager;
+    private final Map<URI, List<CodeLens>> codeLenses;
 
-    private final Map<URI, List<CodeLens>> codeLenses = new HashMap<>();
-    private final List<Tool> tools = ToolLoader.getTools();
 
     private static final Logger log = LogManager.getLogger(WitnessTextDocumentService.class);
 
-    public WitnessTextDocumentService(AnalysisManager analysisManager) {
-        this.analysisManager = analysisManager;
+    public WitnessTextDocumentService(Map<URI, List<CodeLens>> codeLenses) {
+        this.codeLenses = codeLenses;
     }
 
     @Override
     public void didOpen(DidOpenTextDocumentParams params) {
-        // TODO: what's the best place for tool iteration?
-        for (Tool tool : tools) {
-            TextDocumentItem doc = params.getTextDocument();
-            URI fileUri = URI.create(doc.getUri());
-            log.debug("File opened: " + fileUri);
-            codeLenses.put(fileUri, analysisManager.analyze(fileUri, tool));
-        }
+        // TODO
 
     }
 
@@ -56,13 +43,7 @@ public class WitnessTextDocumentService implements TextDocumentService {
 
     @Override
     public void didSave(DidSaveTextDocumentParams params) {
-        for (Tool tool : tools) {
-            TextDocumentIdentifier doc = params.getTextDocument();
-            URI fileUri = URI.create(doc.getUri());
-            log.debug("File saved: " + fileUri);
-            codeLenses.put(fileUri, analysisManager.analyze(fileUri, tool));
-
-        }
+        // TODO
     }
 
     @Override

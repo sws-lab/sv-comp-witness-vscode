@@ -50,24 +50,25 @@ public class FmWeckClient {
                 .build();
     }
 
-    public FmWeckService.RunID startRun(URI fileUri, Tool tool) {
+    public FmWeckService.RunID startRun(AnalyzeMessageParams message, Tool tool) {
         // Prepare the request
         FmWeckService.RunInfo request;
         try {
+            Path filePath = Path.of(URI.create(message.fileUri()));
             if (tool.version() == null)
                 // TODO: hardcoded values
                 request = FmWeckService.RunInfo.newBuilder()
                         .setTool(getTool(tool.name()))
-                        .setProperty(getProperty("no-overflow"))
-                        .setDataModel("LP64")
-                        .setCProgram(ByteString.copyFrom(Files.readAllBytes(Path.of(fileUri))))
+                        .setProperty(getProperty(message.property()))
+                        .setDataModel(message.dataModel())
+                        .setCProgram(ByteString.copyFrom(Files.readAllBytes(filePath)))
                         .build();
             else
                 request = FmWeckService.RunInfo.newBuilder()
                         .setTool(getTool(tool.name(), tool.version()))
-                        .setProperty(getProperty("no-overflow"))
-                        .setDataModel("LP64")
-                        .setCProgram(ByteString.copyFrom(Files.readAllBytes(Path.of(fileUri))))
+                        .setProperty(getProperty(message.property()))
+                        .setDataModel(message.dataModel())
+                        .setCProgram(ByteString.copyFrom(Files.readAllBytes(filePath)))
                         .build();
         } catch (IOException e) {
             //TODO: proper error handling

@@ -1,7 +1,7 @@
 package lsp;
 
 import file.WitnessTextDocumentService;
-import fmweckserver.WitnessMessageParams;
+import fmweckserver.AnalyzeMessageParams;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.lsp4j.*;
@@ -11,11 +11,16 @@ import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
 import witnesses.AnalysisManager;
+import witnesses.ToolLoader;
+import witnesses.data.run.Tool;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -27,10 +32,16 @@ public class WitnessLanguageServer implements LanguageServer, WorkspaceService {
     private final TextDocumentService textDocumentService;
     private final ExecutorService lspThreadPool = Executors.newCachedThreadPool();
 
+
+    private final AnalysisManager analysisManager;
+    private final Map<URI, List<CodeLens>> codeLenses = new HashMap<>();
+    private final List<Tool> tools = ToolLoader.getTools();
+
     private static final Logger log = LogManager.getLogger(WitnessLanguageServer.class);
 
     public WitnessLanguageServer(AnalysisManager analysisManager) {
-        this.textDocumentService = new WitnessTextDocumentService(analysisManager);
+        this.textDocumentService = new WitnessTextDocumentService(codeLenses);
+        this.analysisManager = analysisManager;
     }
 
     @Override
@@ -124,8 +135,11 @@ public class WitnessLanguageServer implements LanguageServer, WorkspaceService {
     }
 
     @JsonNotification(value="custom/handleWebviewMessage", useSegment = false)
-    public void handleWebviewMessage(WitnessMessageParams message) {
-        log.info("Analyze button was clicked in VS Code panel with message: " + message);
+    public void handleWebviewMessage(AnalyzeMessageParams message) {
+        for (Tool tool : tools) {
+            URI fileUri = URI.create(message.fileUri());
+            codeLenses.put(fileUri, analysisManager.analyze(message, tool));
+        }
     }
 
 }

@@ -6,17 +6,13 @@ import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.services.TextDocumentService;
 
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class WitnessTextDocumentService implements TextDocumentService {
 
     private final Map<URI, List<CodeLens>> codeLenses;
+    private final Set<URI> changedFiles = new HashSet<>();
 
     private static final Logger log = LogManager.getLogger(WitnessTextDocumentService.class);
 
@@ -27,12 +23,12 @@ public class WitnessTextDocumentService implements TextDocumentService {
     @Override
     public void didOpen(DidOpenTextDocumentParams params) {
         // TODO
-
     }
 
     @Override
     public void didChange(DidChangeTextDocumentParams params) {
-        // TODO
+        URI fileUri = URI.create(params.getTextDocument().getUri());
+        changedFiles.add(fileUri);
     }
 
     @Override
@@ -42,24 +38,21 @@ public class WitnessTextDocumentService implements TextDocumentService {
 
     @Override
     public void didSave(DidSaveTextDocumentParams params) {
-        // TODO
+        URI fileUri = URI.create(params.getTextDocument().getUri());
+        if (changedFiles.contains(fileUri)) {
+            changedFiles.remove(fileUri);
+            codeLenses.remove(fileUri);
+        }
     }
 
     @Override
     public CompletableFuture<List<? extends CodeLens>> codeLens(CodeLensParams params) {
         return CompletableFuture.supplyAsync(
                 () -> {
-                    try {
-                        String uri = params.getTextDocument().getUri();
-                        URI decodedUri = new URI(URLDecoder.decode(uri, StandardCharsets.UTF_8));
-                        if (codeLenses.containsKey(decodedUri)) {
-                            return codeLenses.get(decodedUri);
-                        } else return new ArrayList<>();
-                    } catch (URISyntaxException e) {
-                        // TODO: proper error handling
-                        e.printStackTrace();
-                    }
-                    return new ArrayList<>();
+                    URI fileUri = URI.create(params.getTextDocument().getUri());
+                    if (codeLenses.containsKey(fileUri)) {
+                        return codeLenses.get(fileUri);
+                    } else return new ArrayList<>();
                 });
     }
 }

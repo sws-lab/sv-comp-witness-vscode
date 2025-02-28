@@ -1,10 +1,12 @@
 package lsp;
 
 import file.WitnessTextDocumentService;
+import fmweckserver.WitnessMessageParams;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.Launcher;
+import org.eclipse.lsp4j.jsonrpc.services.JsonNotification;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
@@ -12,6 +14,8 @@ import witnesses.AnalysisManager;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -50,6 +54,11 @@ public class WitnessLanguageServer implements LanguageServer, WorkspaceService {
 
         CodeLensOptions cl = new CodeLensOptions(false);
         serverCapabilities.setCodeLensProvider(cl);
+
+        List<String> commands = new ArrayList<>();
+        commands.add("custom/handleWebviewMessage");
+        serverCapabilities.setExecuteCommandProvider(new ExecuteCommandOptions(commands));
+
 
         return CompletableFuture.completedFuture(new InitializeResult(serverCapabilities));
     }
@@ -113,4 +122,10 @@ public class WitnessLanguageServer implements LanguageServer, WorkspaceService {
     public void didChangeWatchedFiles(DidChangeWatchedFilesParams params) {
         // TODO
     }
+
+    @JsonNotification(value="custom/handleWebviewMessage", useSegment = false)
+    public void handleWebviewMessage(WitnessMessageParams message) {
+        log.info("Analyze button was clicked in VS Code panel with message: " + message);
+    }
+
 }

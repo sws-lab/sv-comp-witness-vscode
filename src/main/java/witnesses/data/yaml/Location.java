@@ -1,4 +1,4 @@
-package witnesses.data;
+package witnesses.data.yaml;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

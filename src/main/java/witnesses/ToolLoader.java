@@ -3,7 +3,7 @@ package witnesses;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import witnesses.data.Tool;
+import witnesses.data.run.Tool;
 
 import java.io.IOException;
 import java.util.List;

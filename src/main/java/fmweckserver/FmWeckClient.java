@@ -7,7 +7,7 @@ import io.grpc.ManagedChannel;
 import io.grpc.netty.NettyChannelBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import witnesses.data.Tool;
+import witnesses.data.run.Tool;
 
 import java.io.IOException;
 import java.net.URI;

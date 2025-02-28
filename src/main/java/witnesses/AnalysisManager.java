@@ -5,7 +5,7 @@ import fm_weck.generated.FmWeckService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.lsp4j.CodeLens;
-import witnesses.data.Tool;
+import witnesses.data.run.Tool;
 
 import java.io.IOException;
 import java.net.URI;

@@ -18,7 +18,6 @@ public class WitnessTextDocumentService implements TextDocumentService {
 
     private final Map<URI, List<CodeLens>> codeLenses;
 
-
     private static final Logger log = LogManager.getLogger(WitnessTextDocumentService.class);
 
     public WitnessTextDocumentService(Map<URI, List<CodeLens>> codeLenses) {

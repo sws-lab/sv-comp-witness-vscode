@@ -12,7 +12,7 @@ export class WitnessViewProvider implements vscode.WebviewViewProvider {
             enableScripts: true,
         };
 
-        webviewView.webview.html = this.getWebviewContent(webviewView);
+        webviewView.webview.html = this.getWebviewContent();
 
         webviewView.webview.onDidReceiveMessage(
             (message) => {
@@ -37,7 +37,7 @@ export class WitnessViewProvider implements vscode.WebviewViewProvider {
         }
     }
 
-    private getWebviewContent(webviewView: vscode.WebviewView) : string {
+    private getWebviewContent() : string {
         return `
             <html>
                 <head>

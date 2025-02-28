@@ -1,8 +1,6 @@
 package witnesses.data.yaml;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import witnesses.data.yaml.Content;
-import witnesses.data.yaml.MetaData;
 
 import java.util.List;
 

@@ -139,6 +139,7 @@ public class WitnessLanguageServer implements LanguageServer, WorkspaceService {
         for (Tool tool : tools) {
             URI fileUri = URI.create(message.fileUri());
             codeLenses.put(fileUri, analysisManager.analyze(message, tool));
+            client.refreshCodeLenses();
         }
     }
 

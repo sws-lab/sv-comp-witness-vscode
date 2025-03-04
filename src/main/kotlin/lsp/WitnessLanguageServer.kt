@@ -10,7 +10,7 @@ import org.eclipse.lsp4j.services.LanguageServer
 import org.eclipse.lsp4j.services.TextDocumentService
 import org.eclipse.lsp4j.services.WorkspaceService
 import witnesses.AnalysisManager
-import witnesses.ToolLoader
+import witnesses.data.run.ToolLoader
 import witnesses.data.run.Tool
 import java.io.InputStream
 import java.io.OutputStream
@@ -27,7 +27,7 @@ class WitnessLanguageServer(private val analysisManager: AnalysisManager) : Lang
     private val lspThreadPool: ExecutorService = Executors.newCachedThreadPool()
     private val codeLenses: MutableMap<URI?, List<CodeLens>> = HashMap<URI?, List<CodeLens>>()
     private val textDocumentService: TextDocumentService = WitnessTextDocumentService(codeLenses)
-    private val tools: MutableList<Tool> = ToolLoader.getTools()
+    private val tools: List<Tool> = ToolLoader.tools
 
     override fun initialize(initializeParams: InitializeParams?): CompletableFuture<InitializeResult?> {
         val serverCapabilities = ServerCapabilities().apply {

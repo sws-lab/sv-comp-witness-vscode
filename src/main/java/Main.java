@@ -4,7 +4,6 @@ import lsp.WitnessLanguageServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import witnesses.AnalysisManager;
-import witnesses.WitnessReader;
 
 public class Main {
 

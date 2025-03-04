@@ -13,13 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AnalysisManager {
-    private final WitnessReader witnessReader;
     private final FmWeckClient fmweckclient;
 
     private final Logger log = LogManager.getLogger(AnalysisManager.class);
 
-    public AnalysisManager(WitnessReader witnessReader, FmWeckClient fmweckclient) {
-        this.witnessReader = witnessReader;
+    public AnalysisManager(FmWeckClient fmweckclient) {
         this.fmweckclient = fmweckclient;
     }
 
@@ -43,7 +41,7 @@ public class AnalysisManager {
     public List<CodeLens> readAndConvertWitnesses(String witness) {
         List<CodeLens> codeLenses = new ArrayList<>();
         try {
-            codeLenses = witnessReader.readAndConvertWitness(witness);
+            codeLenses = WitnessReader.readAndConvertWitness(witness);
         } catch (IOException e) {
             // TODO: proper error handling
             e.printStackTrace();

@@ -1,4 +1,4 @@
-package witnesses.data;
+package witnesses.data.yaml;
 
 public record Content(Invariant invariant) {
 

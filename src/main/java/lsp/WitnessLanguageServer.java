@@ -1,17 +1,26 @@
 package lsp;
 
 import file.WitnessTextDocumentService;
+import fmweckserver.AnalyzeMessageParams;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.Launcher;
+import org.eclipse.lsp4j.jsonrpc.services.JsonNotification;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
 import witnesses.AnalysisManager;
+import witnesses.ToolLoader;
+import witnesses.data.run.Tool;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,10 +32,16 @@ public class WitnessLanguageServer implements LanguageServer, WorkspaceService {
     private final TextDocumentService textDocumentService;
     private final ExecutorService lspThreadPool = Executors.newCachedThreadPool();
 
+
+    private final AnalysisManager analysisManager;
+    private final Map<URI, List<CodeLens>> codeLenses = new HashMap<>();
+    private final List<Tool> tools = ToolLoader.getTools();
+
     private static final Logger log = LogManager.getLogger(WitnessLanguageServer.class);
 
     public WitnessLanguageServer(AnalysisManager analysisManager) {
-        this.textDocumentService = new WitnessTextDocumentService(analysisManager);
+        this.textDocumentService = new WitnessTextDocumentService(codeLenses);
+        this.analysisManager = analysisManager;
     }
 
     @Override
@@ -50,6 +65,11 @@ public class WitnessLanguageServer implements LanguageServer, WorkspaceService {
 
         CodeLensOptions cl = new CodeLensOptions(false);
         serverCapabilities.setCodeLensProvider(cl);
+
+        List<String> commands = new ArrayList<>();
+        commands.add("custom/handleWebviewMessage");
+        serverCapabilities.setExecuteCommandProvider(new ExecuteCommandOptions(commands));
+
 
         return CompletableFuture.completedFuture(new InitializeResult(serverCapabilities));
     }
@@ -113,4 +133,14 @@ public class WitnessLanguageServer implements LanguageServer, WorkspaceService {
     public void didChangeWatchedFiles(DidChangeWatchedFilesParams params) {
         // TODO
     }
+
+    @JsonNotification(value="custom/handleWebviewMessage", useSegment = false)
+    public void handleWebviewMessage(AnalyzeMessageParams message) {
+        for (Tool tool : tools) {
+            URI fileUri = URI.create(message.fileUri());
+            codeLenses.put(fileUri, analysisManager.analyze(message, tool));
+            client.refreshCodeLenses();
+        }
+    }
+
 }

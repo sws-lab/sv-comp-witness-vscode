@@ -1,14 +1,14 @@
 package witnesses;
 
-import fmweckserver.FmWeckClient;
 import fm_weck.generated.FmWeckService;
+import fmweckserver.AnalyzeMessageParams;
+import fmweckserver.FmWeckClient;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.lsp4j.CodeLens;
-import witnesses.data.Tool;
+import witnesses.data.run.Tool;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,11 +23,11 @@ public class AnalysisManager {
         this.fmweckclient = fmweckclient;
     }
 
-    public List<CodeLens> analyze(URI fileUri, Tool tool) {
+    public List<CodeLens> analyze(AnalyzeMessageParams message, Tool tool) {
         log.info("Starting analysis for tool: " + tool.name());
         try {
             // TODO: wrap into futures
-            FmWeckService.RunID runId = fmweckclient.startRun(fileUri, tool);
+            FmWeckService.RunID runId = fmweckclient.startRun(message, tool);
             Thread.sleep(5000); // Optional: wait a bit before querying results
             String witness = fmweckclient.waitOnRun(runId);
             return readAndConvertWitnesses(witness);

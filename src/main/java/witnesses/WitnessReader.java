@@ -27,18 +27,7 @@ public class WitnessReader {
 
     private static final Logger log = LogManager.getLogger(WitnessReader.class);
 
-    private List<Witness> readWitness(String path) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
-        TypeFactory typeFactory = objectMapper.getTypeFactory();
-        List<Witness> witnesses = objectMapper.readValue(new File(path), typeFactory.constructCollectionType(List.class, Witness.class));
-
-        log.debug(witnesses);
-
-        return witnesses;
-
-    }
-
-    private List<CodeLens> convertWitnessToCodeLenses(List<Witness> witnesses) {
+    private static List<CodeLens> convertWitnessToCodeLenses(List<Witness> witnesses) {
         List<CodeLens> codeLenses = new ArrayList<>();
         for (Witness witness : witnesses) {
             // TODO: nullable content field
@@ -55,22 +44,6 @@ public class WitnessReader {
             }
         }
         return codeLenses;
-    }
-
-    private List<Witness> readWitnessesFromDirectory(String directoryPath) throws IOException {
-        File directory = new File(directoryPath);
-        List<Witness> allWitnesses = new ArrayList<>();
-        if (directory.exists() && directory.isDirectory()) {
-            File[] yamlFiles = directory.listFiles((dir, name) -> name.endsWith(".yml"));
-            if (yamlFiles != null) {
-                for (File yamlFile : yamlFiles) {
-                    allWitnesses.addAll(readWitness(yamlFile.getAbsolutePath()));
-                }
-            }
-        } else {
-            throw new IOException("Invalid directory path: " + directoryPath);
-        }
-        return allWitnesses;
     }
 
     public static List<Witness> filterWitnesses(List<Witness> witnesses) {
@@ -96,13 +69,7 @@ public class WitnessReader {
         return filteredWitnesses;
     }
 
-    public List<CodeLens> readAndConvertWitnesses(String directoryPath) throws IOException {
-        log.info("Read witnesses and convert them to code lenses");
-        List<Witness> witnesses = filterWitnesses(readWitnessesFromDirectory(directoryPath));
-        return convertWitnessToCodeLenses(witnesses);
-    }
-
-    public List<CodeLens> readAndConvertWitness(String witness) throws IOException {
+    public static List<CodeLens> readAndConvertWitness(String witness) throws IOException {
         log.info("Read witnesses and convert them to code lenses");
         ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
         TypeFactory typeFactory = objectMapper.getTypeFactory();

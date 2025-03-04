@@ -5,6 +5,7 @@ import fmweckserver.AnalyzeMessageParams
 import org.eclipse.lsp4j.*
 import org.eclipse.lsp4j.jsonrpc.Launcher
 import org.eclipse.lsp4j.jsonrpc.services.JsonNotification
+import org.eclipse.lsp4j.services.LanguageClient
 import org.eclipse.lsp4j.services.LanguageServer
 import org.eclipse.lsp4j.services.TextDocumentService
 import org.eclipse.lsp4j.services.WorkspaceService
@@ -18,6 +19,8 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+
+typealias WitnessLanguageClient = LanguageClient
 
 class WitnessLanguageServer(private val analysisManager: AnalysisManager) : LanguageServer, WorkspaceService {
     private var client: WitnessLanguageClient? = null

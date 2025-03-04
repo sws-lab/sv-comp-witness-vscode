@@ -16,8 +16,7 @@ public class Main {
         FmWeckClient fmweckclient = new FmWeckClient("localhost", PORT);
         FmWeckServer fmWeckServer = new FmWeckServer();
         fmWeckServer.startFmWeckServer(PORT);
-        WitnessReader witnessReader = new WitnessReader();
-        AnalysisManager analysisManager = new AnalysisManager(witnessReader, fmweckclient);
+        AnalysisManager analysisManager = new AnalysisManager(fmweckclient);
         createLanguageServer(analysisManager);
     }
 

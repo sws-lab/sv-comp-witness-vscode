@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Iterator;
 
 public class FmWeckClient {
     private final ManagedChannel channel;
@@ -52,19 +51,19 @@ public class FmWeckClient {
 
     public FmWeckService.RunID startRun(AnalyzeMessageParams message, Tool tool) {
         // Prepare the request
-        FmWeckService.RunInfo request;
+        FmWeckService.RunRequest request;
         try {
             Path filePath = Path.of(URI.create(message.fileUri()));
             if (tool.version() == null)
                 // TODO: hardcoded values
-                request = FmWeckService.RunInfo.newBuilder()
+                request = FmWeckService.RunRequest.newBuilder()
                         .setTool(getTool(tool.name()))
                         .setProperty(getProperty(message.property()))
                         .setDataModel(message.dataModel())
                         .setCProgram(ByteString.copyFrom(Files.readAllBytes(filePath)))
                         .build();
             else
-                request = FmWeckService.RunInfo.newBuilder()
+                request = FmWeckService.RunRequest.newBuilder()
                         .setTool(getTool(tool.name(), tool.version()))
                         .setProperty(getProperty(message.property()))
                         .setDataModel(message.dataModel())
@@ -87,7 +86,7 @@ public class FmWeckClient {
         // Create a WaitParameters request
         FmWeckService.WaitParameters waitRequest = FmWeckService.WaitParameters.newBuilder()
                 .setRunId(runId)
-                .setTimelimit(60)  // Adjust timeout if needed
+                .setTimeout(60) // TODO: Adjust timeout if needed
                 .build();
         log.info("Wait on run request: " + waitRequest);
 
@@ -95,19 +94,26 @@ public class FmWeckClient {
         log.info("Waiting for results...");
 
         try {
-            Iterator<FmWeckService.File> it = blockingStub.waitOnRun(waitRequest);
+            FmWeckService.WaitRunResult waitRunResult = blockingStub.waitOnRun(waitRequest);
+            FmWeckService.RunResult runResult = waitRunResult.getRunResult();
+            // TODO: handle other outcomes (timeout, error)
 
-            if (!it.hasNext()) {
-                log.warn("No files received from server!");
-            }
-
-            while (it.hasNext()) {
-                FmWeckService.File file = it.next();
-                log.info("Received file: " + file.getName());
-                log.debug("File content: " + file.getFile().toStringUtf8());
-                if (file.getName().equals("witness.yml")) {
-                    return file.getFile().toStringUtf8();
+            if (runResult.getSuccess()) {
+                log.info("RunResult was successful");
+                for (FmWeckService.File file : runResult.getFilesList()) {
+                    String fileName = file.getName();
+                    log.debug("Received file: " + fileName);
+                    log.debug("File content: " + file.getFile().toStringUtf8());
+                    if (fileName.equals("witness.yml")) {
+                        return file.getFile().toStringUtf8();
+                    }
                 }
+                // TODO: handle case where no files were received
+            } else {
+                // TODO: notify user about failed analysis
+                // TODO: proper error handling
+                log.error("Run was unsuccessful! " + runResult.getOutput());
+                throw new RuntimeException();
             }
         } catch (Exception e) {
             log.error("Error while fetching results: " + e.getMessage(), e);

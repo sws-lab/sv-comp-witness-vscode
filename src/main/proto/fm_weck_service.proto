@@ -13,16 +13,19 @@ syntax = "proto3";
 
 service FmWeckRemote {
   // Runs a verification task for a given C program.
-  rpc startRun(RunInfo) returns (RunID) {}
+  rpc startRun(RunRequest) returns (RunID) {}
 
   // Cancels a previously started run.
-  rpc cancelRun(RunID) returns (Empty) {}
+  rpc cancelRun(CancelRunRequest) returns (CancelRunResult) {}
+
+  // Cleans up files of a finished run.
+  rpc cleanupRun(RunID) returns (CleanUpResponse) {}
 
   // Gets the result of a previously started run using its unique ID.
-  rpc waitOnRun(WaitParameters) returns (stream File) {}
+  rpc waitOnRun(WaitParameters) returns (WaitRunResult) {}
 
   // Query for a number of result files.
-  rpc queryFiles(stream FileName) returns (stream File) {}
+  rpc queryFiles(FileQuery) returns (stream File) {}
 }
 
 message ToolType {
@@ -40,11 +43,67 @@ message Property {
   }
 }
 
-message RunInfo {
+message RunRequest {
   ToolType tool = 1;
   Property property = 2;
   bytes c_program = 4;
   string data_model = 5;
+}
+
+message RunResult {
+  RunID run_id = 1;
+  // Whether the run was successful or terminated with an error
+  bool success = 2;
+  // The output produced by fm-weck
+  string output = 3;
+  // List of files produced by the run; may be empty
+  repeated string filenames = 4;
+  // List of files produced by the run; may be empty
+  repeated File files = 5;
+}
+
+message WaitRunResult {
+  // Whether the request has timed out or not
+  oneof result {
+    bool timeout = 1;
+    ErrorCode error = 2;
+    RunResult run_result = 3;
+  }
+}
+
+message CancelRunRequest {
+  RunID run_id = 1;
+  // Timeout in seconds to wait for completion of the cancellation
+  uint32 timeout = 2;
+  // If true, the run is cleaned up on the server side
+  optional bool cleanup_on_success = 3;
+}
+
+message CancelRunResult {
+  oneof result {
+    // Whether the could be canceled completely
+    // or is still shutting down.
+    // If True, then the run is canceled on the server side, but complete shutdown may take some time.
+    // Call waitOnRun if the termination must be confirmed.
+    bool timeout = 1;
+    ErrorCode error = 2;
+    RunResult run_result = 3;
+  }
+}
+
+enum ErrorCode {
+  // The run is not terminated yet
+  EC_RUN_NOT_TERMINATED = 0;
+  EC_RUN_NOT_FOUND = 1;
+  EC_RUN_CANCELLED = 2;
+}
+
+message CleanUpResponse {
+  // If cleanup was successful, this field is true
+  // Then no errors are reported.
+  bool success = 1;
+  // If success is false, this field contains the error code
+  optional ErrorCode error = 2;
 }
 
 message RunID {
@@ -52,17 +111,18 @@ message RunID {
 }
 
 message WaitParameters {
-  int32 timelimit = 1;
+  //Timeout in seconds to wait for the run to finish
+  uint32 timeout = 1;
   RunID run_id = 2;
 }
 
-message FileName {
-  oneof FileName {
-    string name = 1;
-    string name_pattern = 2;
-  }
-
+message FileQuery {
+  // If the run_id does not exist, the server will return an empty stream.
   RunID run_id = 3;
+
+  // Non existent files are ignored.
+  repeated string filenames = 1;
+  repeated string name_patterns = 2;
 }
 
 message File {
@@ -71,6 +131,5 @@ message File {
 }
 
 message Empty {}
-
 
 option java_package = "fm_weck.generated";

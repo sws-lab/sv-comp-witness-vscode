@@ -5,6 +5,8 @@ import org.apache.logging.log4j.Logger
 import java.io.IOException
 
 class FmWeckServer {
+    lateinit var process : Process
+
     private val log: Logger = LogManager.getLogger(FmWeckServer::class.java)
 
     // TODO: implement proper shut-down
@@ -19,7 +21,7 @@ class FmWeckServer {
         )
         processBuilder.redirectErrorStream(true)
         try {
-            processBuilder.start()
+            process = processBuilder.start()
             log.info("fm-weck server started on port $port")
             // TODO: redirect server output to IDE output-log
         } catch (e: IOException) {

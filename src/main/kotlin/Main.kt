@@ -15,9 +15,13 @@ object Main {
     fun main(args: Array<String>) {
         val fmWeckClient = FmWeckClient("localhost", PORT)
         val fmWeckServer = FmWeckServer()
-        fmWeckServer.startFmWeckServer(PORT)
-        val analysisManager = AnalysisManager(fmWeckClient)
-        createLanguageServer(analysisManager)
+        runCatching {
+            fmWeckServer.startFmWeckServer(PORT)
+            val analysisManager = AnalysisManager(fmWeckClient)
+            createLanguageServer(analysisManager)
+        }.onFailure {
+            fmWeckServer.process.destroy()
+        }
     }
 
     private fun createLanguageServer(analysisManager: AnalysisManager) {

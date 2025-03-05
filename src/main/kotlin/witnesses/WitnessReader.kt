@@ -57,14 +57,16 @@ object WitnessReader {
 
     @JvmStatic
     @Throws(IOException::class)
-    fun readAndConvertWitness(witness: String?): List<CodeLens> {
+    fun readAndConvertWitness(witnessStrings: List<String>): List<CodeLens> {
         log.info("Read witnesses and convert them to code lenses")
         val objectMapper = ObjectMapper(YAMLFactory())
-        val witnesses = objectMapper.readValue<List<Witness>>(
-            witness, objectMapper.typeFactory.constructCollectionType(
-                List::class.java, Witness::class.java
+        val witnesses = witnessStrings.flatMap { witness ->
+            objectMapper.readValue<List<Witness>>(
+                witness, objectMapper.typeFactory.constructCollectionType(
+                    List::class.java, Witness::class.java
+                )
             )
-        )
+        }
         return convertWitnessToCodeLenses(witnesses)
     }
 }

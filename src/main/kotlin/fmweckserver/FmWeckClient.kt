@@ -60,7 +60,7 @@ class FmWeckClient(host: String?, port: Int) {
         return response
     }
 
-    fun waitOnRun(runId: FmWeckService.RunID?): String {
+    fun waitOnRun(runId: FmWeckService.RunID?): List<String> {
         // Create a WaitParameters request
         val waitRequest = FmWeckService.WaitParameters.newBuilder()
             .setRunId(runId)
@@ -77,15 +77,19 @@ class FmWeckClient(host: String?, port: Int) {
         // TODO: handle other outcomes (timeout, error)
         if (runResult.success) {
             log.info("RunResult was successful")
-            for (file in runResult.filesList) {
-                val fileName: String = file.getName()
-                log.debug("Received file: $fileName")
-                log.debug("File content: " + file.file.toStringUtf8())
-                if (fileName == "witness.yml") {
-                    return file.file.toStringUtf8()
-                } else TODO("unimplemented: cases where no yaml files were received")
-            }
-            TODO("unimplemented: cases where no files were received")
+            val fileQueryRequest = FmWeckService.FileQuery.newBuilder()
+                .setRunId(runId)
+                .addAllNamePatterns(listOf("*.yml"))
+                .build()
+            log.info("Wait on file query request: $fileQueryRequest")
+            val fileQueryResult = blockingStub.queryFiles(fileQueryRequest)
+            return fileQueryResult.asSequence().map { file ->
+                val fileContent = file.file.toStringUtf8()
+                log.debug("Received file: ${file.name}")
+                log.debug("File content: $fileContent")
+                fileContent
+            }.toList()
+            // TODO: notify user about not receiving any files
         } else {
             // TODO: notify user about failed analysis
             log.error("Run was unsuccessful! " + runResult.getOutput())

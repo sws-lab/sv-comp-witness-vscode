@@ -19,17 +19,8 @@ class AnalysisManager(private val fmWeckClient: FmWeckClient) {
             val runId = fmWeckClient.startRun(message, tool)
             Thread.sleep(5000) // Optional: wait a bit before querying results
             val witness = fmWeckClient.waitOnRun(runId)
-            readAndConvertWitnesses(witness)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            TODO("proper error handling")
-        }
-
-
-    fun readAndConvertWitnesses(witness: String?): List<CodeLens> =
-        try {
             WitnessReader.readAndConvertWitness(witness)
-        } catch (e: IOException) {
+        } catch (e: Exception) {
             e.printStackTrace()
             TODO("proper error handling")
         }

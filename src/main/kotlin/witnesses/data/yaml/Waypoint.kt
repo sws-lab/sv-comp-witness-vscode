@@ -1,9 +1,9 @@
 package witnesses.data.yaml
 
 @JvmRecord
-data class Invariant(
+data class Waypoint(
     val type: String,
+    val action: String,
     val location: Location,
-    val value: String,
-    val format: String,
+    val constraint: Constraint?
 )

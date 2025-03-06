@@ -8,7 +8,6 @@ import org.eclipse.lsp4j.CodeLens
 import org.eclipse.lsp4j.Command
 import org.eclipse.lsp4j.Position
 import org.eclipse.lsp4j.Range
-import witnesses.data.yaml.Content
 import witnesses.data.yaml.Witness
 import java.io.IOException
 import java.nio.file.Paths
@@ -18,14 +17,15 @@ object WitnessReader {
 
     private fun convertWitnessToCodeLenses(witnesses: List<Witness>): List<CodeLens> {
         return witnesses.flatMap { it.content }.map { content ->
-            // TODO: nullable content field
-            val invariant = content.invariant
-            val location = invariant.location
-            // Position is zero-based as opposed to witnesses, where min value is 1
-            val zeroPos = Position(location.line - 1, location.column - 1)
-            val range = Range(zeroPos, zeroPos)
-            val command = Command(invariant.value, "")
-            CodeLens(range, command, null)
+            if (content.invariant != null) {
+                val invariant = content.invariant
+                val location = invariant.location
+                // Position is zero-based as opposed to witnesses, where min value is 1
+                val zeroPos = Position(location.line - 1, location.column?.minus(1) ?: 0)
+                val range = Range(zeroPos, zeroPos)
+                val command = Command(invariant.value, "")
+                CodeLens(range, command, null)
+            } else TODO("unimplemented")
         }
     }
 
@@ -34,9 +34,9 @@ object WitnessReader {
         val uniqueInvariants: MutableSet<String?> = HashSet<String?>()
         for (witness in witnesses) {
             val filteredContent = witness.content
-                .filter { content: Content? ->
-                    val invariant = content!!.invariant
-                    val location = invariant.location
+                .filter { content ->
+                    val invariant = content.invariant
+                    val location = invariant!!.location
                     val fileName = Paths.get(location.file_name).fileName.toString()
                     val key = "$fileName:${location.line}:${location.column}:${invariant.value}"
                     invariant.value != "1" && uniqueInvariants.add(key)

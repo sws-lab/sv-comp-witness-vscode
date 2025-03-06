@@ -42,7 +42,6 @@ message Property {
     File property_file = 2;
   }
 }
-
 message RunRequest {
   ToolType tool = 1;
   Property property = 2;
@@ -58,8 +57,6 @@ message RunResult {
   string output = 3;
   // List of files produced by the run; may be empty
   repeated string filenames = 4;
-  // List of files produced by the run; may be empty
-  repeated File files = 5;
 }
 
 message WaitRunResult {

@@ -51,6 +51,7 @@ class WitnessLanguageServer(private val analysisManager: AnalysisManager) : Lang
         return CompletableFuture.completedFuture<InitializeResult?>(InitializeResult(serverCapabilities))
     }
 
+    // TODO: stop fm-weck server process when language server shuts down, as vscode will then restart extension and another fm-weck server will be started
     override fun shutdown(): CompletableFuture<Any?> {
         return CompletableFuture.completedFuture<Any?>(null)
     }

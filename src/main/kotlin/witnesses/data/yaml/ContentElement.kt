@@ -1,7 +1,7 @@
 package witnesses.data.yaml
 
 @JvmRecord
-data class Content(
+data class ContentElement(
     val invariant: Invariant?,
     val segment: List<Segment>?
 )

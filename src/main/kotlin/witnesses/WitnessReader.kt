@@ -41,11 +41,11 @@ object WitnessReader {
     }
 
     private fun convertWitnessToCodeLenses(witnesses: List<Witness>): List<CodeLens> {
-        return witnesses.flatMap { it.content }.flatMap { content ->
-            if (content.invariant != null)
-                listOf(convertCorrectnessWitness(content.invariant))
+        return witnesses.flatMap { it.content }.flatMap { contentElement ->
+            if (contentElement.invariant != null)
+                listOf(convertCorrectnessWitness(contentElement.invariant))
             else
-                content.segment!!.map { segment ->
+                contentElement.segment!!.map { segment ->
                     convertViolationWitness(segment.waypoint)
                 }
         }

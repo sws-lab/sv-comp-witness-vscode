@@ -9,5 +9,5 @@ data class Witness(
     val entry_type: String?,
     @JsonIgnore
     val metadata: MetaData?,
-    val content: List<Content>
+    val content: List<ContentElement>
 )

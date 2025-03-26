@@ -6,6 +6,7 @@ import c.invariantAST.Node.Companion.constant
 import c.invariantAST.Node.Companion.variable
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import kotlin.test.assertNotEquals
 
 class CInvariantAstTest {
 
@@ -29,10 +30,16 @@ class CInvariantAstTest {
         legal("x <= y", binary(variable("x"), "<=", variable("y")))
         legal("x > y", binary(variable("x"), ">", variable("y")))
         legal("x >= y", binary(variable("x"), ">=", variable("y")))
+        legalNonEqual("x < y", binary(variable("x"), "<=", variable("y")))
     }
 
     private fun legal(input: String, expectedAst: Node) {
         val actualAst = CInvariantAst.createAst(input)
         assertEquals(expectedAst, actualAst)
+    }
+
+    private fun legalNonEqual(input: String, nonExpectedAst: Node) {
+        val actualAst = CInvariantAst.createAst(input)
+        assertNotEquals(nonExpectedAst, actualAst)
     }
 }

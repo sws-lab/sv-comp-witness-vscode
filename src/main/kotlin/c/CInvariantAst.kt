@@ -36,7 +36,7 @@ private class StatementVisitor : InvariantCBaseVisitor<Expression>() {
 
     override fun visitRelationalExpression(ctx: InvariantCParser.RelationalExpressionContext): Expression {
         var node = visit(ctx.primaryExpression().first())
-        for (expressionContext in ctx.primaryExpression()) {
+        for (expressionContext in ctx.primaryExpression().drop(1)) {
             node = BinaryExpression(node, ctx.op.text, visit(expressionContext))
         }
         return node

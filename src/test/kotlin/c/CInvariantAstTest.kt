@@ -31,7 +31,18 @@ class CInvariantAstTest {
         legal("x > y", binary(variable("x"), ">", variable("y")))
         legal("x >= y", binary(variable("x"), ">=", variable("y")))
         legalNonEqual("x < y", binary(variable("x"), "<=", variable("y")))
+        legal("x == 0", binary(variable("x"), "==", constant("0")))
+        legal("0 != y", binary(constant("0"), "!=", variable("y")))
     }
+
+    @Test
+    fun test_logical() {
+        val `x LT 0` = binary(variable("x"), "<", constant("0"))
+        val `y LT 0` = binary(variable("y"), "<", constant("0"))
+        legal("x < 0 && y < 0", binary(`x LT 0`, "&&", `y LT 0`))
+        legal("x < 0 || y < 0", binary(`x LT 0`, "||", `y LT 0`))
+    }
+
 
     private fun legal(input: String, expectedAst: Node) {
         val actualAst = CInvariantAst.createAst(input)

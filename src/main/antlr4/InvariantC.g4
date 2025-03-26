@@ -1,15 +1,27 @@
 grammar InvariantC;
 
 invariant
-    : expression
+    : expression EOF
     ;
 
 expression
-    : relationalExpression
+    : logicalOrExpression
     ;
 
 relationalExpression
-    : primaryExpression (op=('<' | '>' | '<=' | '>=') primaryExpression)*
+    : primaryExpression (op+=('<' | '>' | '<=' | '>=') primaryExpression)*
+    ;
+
+equalityExpression
+    : relationalExpression (op+=('==' | '!=') relationalExpression)*
+    ;
+
+logicalAndExpression
+    : equalityExpression (op+='&&' equalityExpression)*
+    ;
+
+logicalOrExpression
+    : logicalAndExpression (op+='||' logicalAndExpression)*
     ;
 
 primaryExpression

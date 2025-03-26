@@ -8,9 +8,12 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import kotlin.test.assertNotEquals
 
-class CInvariantAstTest {
+object CInvariantAstTest {
 
-    private val invariant = "(((i == 0) && (j == 0)) || ((i == 0) && (1 <= j)))"
+    private val `x LT 0` = binary(variable("x"), "<", constant("0"))
+    private val `y LT 0` = binary(variable("y"), "<", constant("0"))
+    private val `i EQ 0` = binary(variable("i"), "==", constant("0"))
+    private val `j EQ 0` = binary(variable("j"), "==", constant("0"))
 
     @Test
     fun test_variable_constant() {
@@ -37,10 +40,38 @@ class CInvariantAstTest {
 
     @Test
     fun test_logical() {
-        val `x LT 0` = binary(variable("x"), "<", constant("0"))
-        val `y LT 0` = binary(variable("y"), "<", constant("0"))
         legal("x < 0 && y < 0", binary(`x LT 0`, "&&", `y LT 0`))
         legal("x < 0 || y < 0", binary(`x LT 0`, "||", `y LT 0`))
+    }
+
+    @Test
+    fun test_parentheses() {
+        legal("(x)", variable("x"))
+        legal("(x) < (y)", binary(variable("x"), "<", variable("y")))
+        legal("(x < y)", binary(variable("x"), "<", variable("y")))
+        legal("(x < 0) && (y < 0)", binary(`x LT 0`, "&&", `y LT 0`))
+        legal("(x < 0 || y < 0)", binary(`x LT 0`, "||", `y LT 0`))
+        legal("((x < 0) && (y < 0))", binary(`x LT 0`, "&&", `y LT 0`))
+        legal(
+            "(x < 0) && ((y < 0) || x > 0)",
+            binary(
+                `x LT 0`,
+                "&&",
+                binary(
+                    `y LT 0`,
+                    "||",
+                    binary(variable("x"), ">", constant("0"))
+                )
+            )
+        )
+        legal(
+            "(((i == 0) && (j == 0)) || ((i == 0) && (1 <= j)))",
+            binary(
+                binary(`i EQ 0`, "&&", `j EQ 0`),
+                "||",
+                binary(`i EQ 0`, "&&", binary(constant("1"), "<=", variable("j")))
+            )
+        )
     }
 
 

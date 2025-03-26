@@ -3,10 +3,7 @@ package c
 import InvariantCBaseVisitor
 import InvariantCLexer
 import InvariantCParser
-import c.invariantAST.Const
-import c.invariantAST.Node
-import c.invariantAST.Statement
-import c.invariantAST.Var
+import c.invariantAST.*
 import org.antlr.v4.runtime.BailErrorStrategy
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
@@ -30,17 +27,25 @@ object CInvariantAst {
 
 }
 
-private class StatementVisitor : InvariantCBaseVisitor<Statement>() {
-    override fun visitInvariant(ctx: InvariantCParser.InvariantContext): Statement =
-        visitStatements(ctx.statements())
+private class StatementVisitor : InvariantCBaseVisitor<Expression>() {
+    override fun visitInvariant(ctx: InvariantCParser.InvariantContext): Expression =
+        visitExpression(ctx.expression())
 
-    override fun visitStatements(ctx: InvariantCParser.StatementsContext): Statement =
-        visit(ctx.statement())
+    override fun visitExpression(ctx: InvariantCParser.ExpressionContext): Expression =
+        visitRelationalExpression(ctx.relationalExpression())
 
-    override fun visitIdent(ctx: InvariantCParser.IdentContext): Statement =
+    override fun visitRelationalExpression(ctx: InvariantCParser.RelationalExpressionContext): Expression {
+        var node = visit(ctx.primaryExpression().first())
+        for (expressionContext in ctx.primaryExpression()) {
+            node = BinaryExpression(node, ctx.op.text, visit(expressionContext))
+        }
+        return node
+    }
+
+    override fun visitIdent(ctx: InvariantCParser.IdentContext) =
         Var(ctx.Identifier().text)
 
-    override fun visitCons(ctx: InvariantCParser.ConsContext): Statement =
+    override fun visitCons(ctx: InvariantCParser.ConsContext) =
         Const(ctx.Constant().text)
 
 }

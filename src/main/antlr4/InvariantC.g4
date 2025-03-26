@@ -1,14 +1,18 @@
 grammar InvariantC;
 
 invariant
-    : statements
+    : expression
     ;
 
-statements
-    : statement
+expression
+    : relationalExpression
     ;
 
-statement
+relationalExpression
+    : primaryExpression (op=('<' | '>' | '<=' | '>=') primaryExpression)*
+    ;
+
+primaryExpression
     : Identifier #ident
     | Constant   #cons
     ;

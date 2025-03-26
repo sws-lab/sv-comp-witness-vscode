@@ -25,8 +25,9 @@ logicalOrExpression
     ;
 
 primaryExpression
-    : Identifier #ident
-    | Constant   #cons
+    : Identifier         #ident
+    | Constant           #cons
+    | '(' expression ')' #parens
     ;
 
 Less

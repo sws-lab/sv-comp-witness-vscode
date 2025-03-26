@@ -50,6 +50,8 @@ private class StatementVisitor : InvariantCBaseVisitor<Expression>() {
     override fun visitCons(ctx: InvariantCParser.ConsContext) =
         Const(ctx.Constant().text)
 
+    override fun visitParens(ctx: InvariantCParser.ParensContext): Expression =
+        visit(ctx.expression())
 
     private fun visitBinary(ctx: List<ParserRuleContext>, ops: List<Token>) : Expression {
         var node = visit(ctx.first())

@@ -3,6 +3,7 @@ package c
 import c.invariantAST.Node
 import c.invariantAST.Node.Companion.binary
 import c.invariantAST.Node.Companion.constant
+import c.invariantAST.Node.Companion.unary
 import c.invariantAST.Node.Companion.variable
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -64,12 +65,32 @@ object CInvariantAstTest {
                 )
             )
         )
+    }
+
+    @Test
+    fun test_tool_invariants() {
         legal(
             "(((i == 0) && (j == 0)) || ((i == 0) && (1 <= j)))",
             binary(
                 binary(`i EQ 0`, "&&", `j EQ 0`),
                 "||",
                 binary(`i EQ 0`, "&&", binary(constant("1"), "<=", variable("j")))
+            )
+        )
+        legal(
+            "(-1LL + (long long )A) + (long long )B >= 0LL",
+            binary(
+                binary(
+                    binary(
+                        unary("-", constant("1LL")),
+                        "+",
+                        unary("longlong", variable("A"))
+                    ),
+                    "+",
+                    unary("longlong", variable("B"))
+                ),
+                ">=",
+                constant("0LL"),
             )
         )
     }

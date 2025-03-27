@@ -20,12 +20,12 @@ object CInvariantAst {
 
         val tree = parser.invariant()
         println(tree.toStringTree(parser))
-        return StatementVisitor().visit(tree)
+        return ExpressionVisitor().visit(tree)
     }
 
 }
 
-private class StatementVisitor : InvariantCBaseVisitor<Expression>() {
+private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
     override fun visitInvariant(ctx: InvariantCParser.InvariantContext) =
         visitExpression(ctx.expression())
 

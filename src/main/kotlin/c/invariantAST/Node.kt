@@ -1,6 +1,6 @@
 package c.invariantAST
 
-open class Node : AbstractNode() {
+abstract class Node : AbstractNode() {
     companion object {
 
         fun variable(name: String) = Var(name)
@@ -11,4 +11,6 @@ open class Node : AbstractNode() {
 
         fun unary(op: String, exp: Expression) = UnaryExpression(op, exp)
     }
+
+    abstract fun <T> accept(visitor: InvariantAstVisitor<T>): T
 }

@@ -8,8 +8,26 @@ expression
     : logicalOrExpression
     ;
 
+unaryExpression
+    : op=('&' | '*' | '+' | '-' | '~' | '!') castExpression #unary
+    | primaryExpression                                     #unarybase
+    ;
+
+castExpression
+    : '(' op=typeName ')' castExpression  #cast
+    | unaryExpression                     #castbase
+    ;
+
+multiplicativeExpression
+    : castExpression (op+=('*' | '/' | '%') castExpression)*
+    ;
+
+additiveExpression
+    : multiplicativeExpression (op+=('+' | '-') multiplicativeExpression)*
+    ;
+
 relationalExpression
-    : primaryExpression (op+=('<' | '>' | '<=' | '>=') primaryExpression)*
+    : additiveExpression (op+=('<' | '>' | '<=' | '>=') additiveExpression)*
     ;
 
 equalityExpression
@@ -22,6 +40,22 @@ logicalAndExpression
 
 logicalOrExpression
     : logicalAndExpression (op+='||' logicalAndExpression)*
+    ;
+
+specifierQualifierList
+    : ('void'
+       | 'char'
+       | 'short'
+       | 'int'
+       | 'long'
+       | 'float'
+       | 'double'
+       | 'signed'
+       | 'unsigned') specifierQualifierList?
+    ;
+
+typeName
+    : specifierQualifierList
     ;
 
 primaryExpression

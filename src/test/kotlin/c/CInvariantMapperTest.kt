@@ -1,13 +1,12 @@
 package c
 
-import c.CInvariantEvaluator.collectMapping
 import c.invariantAST.Node.Companion.variable
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 object CInvariantMapperTest {
 
-    fun create_mapping(test: String): VariableMapping = collectMapping(CInvariantAst.createAst(test))
+    private fun create_mapping(test: String): VariableMapping = collectMapping(CInvariantAst.createAst(test))
 
     @Test
     fun test_mapping_only_conjunctions() {

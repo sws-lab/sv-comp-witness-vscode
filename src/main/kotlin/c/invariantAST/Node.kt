@@ -7,9 +7,11 @@ abstract class Node : AbstractNode() {
 
         fun constant(value: String) = Const(value)
 
-        fun binary(left: Expression, op: String, right: Expression) = BinaryExpression(left, op, right)
+        fun binary(left: Expression, op: String, right: Expression, str: String) =
+            BinaryExpression(left, op, right, str)
 
-        fun unary(op: String, exp: Expression) = UnaryExpression(op, exp)
+        fun unary(op: String, exp: Expression, str: String) =
+            UnaryExpression(op, exp, str)
     }
 
     abstract fun <T> accept(visitor: InvariantAstVisitor<T>): T

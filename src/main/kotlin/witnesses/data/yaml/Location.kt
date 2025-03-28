@@ -2,7 +2,6 @@ package witnesses.data.yaml
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 
-@JvmRecord
 data class Location(
     val file_name: String,
     @JsonIgnore

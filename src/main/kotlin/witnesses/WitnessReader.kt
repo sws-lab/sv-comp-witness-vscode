@@ -1,7 +1,9 @@
 package witnesses
 
+import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.eclipse.lsp4j.CodeLens
@@ -12,8 +14,6 @@ import witnesses.data.yaml.Invariant
 import witnesses.data.yaml.Location
 import witnesses.data.yaml.Waypoint
 import witnesses.data.yaml.Witness
-import java.io.IOException
-import java.nio.file.Paths
 
 object WitnessReader {
     private val log: Logger = LogManager.getLogger(WitnessReader::class.java)
@@ -51,16 +51,11 @@ object WitnessReader {
         }
     }
 
-    @JvmStatic
-    @Throws(IOException::class)
     fun readWitnessFromYaml(witnessStrings: List<String>): List<Witness> {
-        val objectMapper = ObjectMapper(YAMLFactory())
+        val objectMapper = ObjectMapper(YAMLFactory()).registerKotlinModule()
+        val typeRef = object : TypeReference<List<Witness>>() {}
         return witnessStrings.flatMap { witness ->
-            objectMapper.readValue<List<Witness>>(
-                witness, objectMapper.typeFactory.constructCollectionType(
-                    List::class.java, Witness::class.java
-                )
-            )
+            objectMapper.readValue(witness, typeRef)
         }
     }
 

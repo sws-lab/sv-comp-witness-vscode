@@ -1,0 +1,56 @@
+package c
+
+import c.invariantAST.*
+
+typealias VariableMapping = MutableMap<Var, MutableList<String>>
+
+object CInvariantEvaluator {
+    fun collectVariables(invariantASt: Node): Set<Var> = object : InvariantAstVisitor<Set<Var>>() {
+
+        override fun visit(variable: Var): Set<Var> =
+            setOf(variable)
+
+        override fun visit(constant: Const): Set<Var> =
+            setOf()
+
+        override fun visit(binop: BinaryExpression): Set<Var> {
+            return visit(binop.left) + visit(binop.right)
+        }
+
+        override fun visit(unop: UnaryExpression): Set<Var> {
+            return visit(unop.exp)
+        }
+    }.visit(invariantASt)
+
+    fun collectMapping(invariantASt: Node): VariableMapping = object : InvariantAstVisitor<VariableMapping>() {
+
+        override fun visit(variable: Var): VariableMapping =
+            mutableMapOf()
+
+        override fun visit(constant: Const): VariableMapping =
+            mutableMapOf()
+
+        override fun visit(binop: BinaryExpression): VariableMapping {
+            if (binop.op == "&&") {
+                return (visit(binop.left).toList() + visit(binop.right).toList())
+                    .groupBy { (k, _) -> k }
+                    .mapValues { (_, vs) ->
+                        vs.map { (_, v) -> v }
+                            .reduce { a, b -> (a + b).toMutableList() }
+                    }.toMutableMap()
+            } else {
+                val mapping: VariableMapping = mutableMapOf()
+                val vars = collectVariables(binop.left) + collectVariables(binop.right)
+                val str = binop.str
+                vars.forEach { variable ->
+                    mapping.computeIfAbsent(variable) { mutableListOf() }.add(str)
+                }
+                return mapping
+            }
+        }
+
+        override fun visit(unop: UnaryExpression): VariableMapping =
+            mutableMapOf()
+
+    }.visit(invariantASt)
+}

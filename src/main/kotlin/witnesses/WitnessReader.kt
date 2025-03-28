@@ -1,5 +1,7 @@
 package witnesses
 
+import c.CInvariantAst
+import c.collectMapping
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
@@ -59,9 +61,23 @@ object WitnessReader {
         }
     }
 
+    fun addConjunctionDecompositionMaps(witnesses: List<Witness>): List<Witness> {
+        // TODO: would it be possible to do this during deserialization to prevent looping through the witnesses?
+        witnesses.forEach { witness ->
+            witness.content.forEach { contentElement ->
+                if (contentElement.invariant != null) {
+                    contentElement.invariant.decomposedConjunctionMap =
+                        collectMapping(CInvariantAst.createAst(contentElement.invariant.value))
+                }
+            }
+        }
+        return witnesses
+    }
+
     fun readAndConvertWitness(witnessStrings: List<String>): List<CodeLens> {
         log.info("Read witnesses and convert them to code lenses")
         val witnesses = readWitnessFromYaml(witnessStrings)
-        return convertWitnessToCodeLenses(witnesses)
+        val witnessesWithMap = addConjunctionDecompositionMaps(witnesses)
+        return convertWitnessToCodeLenses(witnessesWithMap)
     }
 }

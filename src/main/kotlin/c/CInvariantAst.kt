@@ -19,7 +19,6 @@ object CInvariantAst {
         }
 
         val tree = parser.invariant()
-        println(tree.toStringTree(parser))
         return ExpressionVisitor().visit(tree)
     }
 

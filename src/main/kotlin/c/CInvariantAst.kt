@@ -29,7 +29,7 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
         visitExpression(ctx.expression())
 
     override fun visitExpression(ctx: InvariantCParser.ExpressionContext) =
-        visitLogicalOrExpression(ctx.logicalOrExpression())
+        visitConditionalExpression(ctx.conditionalExpression())
 
     override fun visitUnary(ctx: InvariantCParser.UnaryContext) =
         UnaryExpression(ctx.op.text, visit(ctx.castExpression()), ctx.text)
@@ -49,17 +49,38 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
     override fun visitAdditiveExpression(ctx: InvariantCParser.AdditiveExpressionContext) =
         visitBinary(ctx.multiplicativeExpression(), ctx.op, ctx.text)
 
-    override fun visitRelationalExpression(ctx: InvariantCParser.RelationalExpressionContext) =
+    override fun visitShiftExpression(ctx: InvariantCParser.ShiftExpressionContext) =
         visitBinary(ctx.additiveExpression(), ctx.op, ctx.text)
+
+    override fun visitRelationalExpression(ctx: InvariantCParser.RelationalExpressionContext) =
+        visitBinary(ctx.shiftExpression(), ctx.op, ctx.text)
 
     override fun visitEqualityExpression(ctx: InvariantCParser.EqualityExpressionContext) =
         visitBinary(ctx.relationalExpression(), ctx.op, ctx.text)
 
-    override fun visitLogicalAndExpression(ctx: InvariantCParser.LogicalAndExpressionContext) =
+    override fun visitAndExpression(ctx: InvariantCParser.AndExpressionContext) =
         visitBinary(ctx.equalityExpression(), ctx.op, ctx.text)
+
+    override fun visitExclusiveOrExpression(ctx: InvariantCParser.ExclusiveOrExpressionContext) =
+        visitBinary(ctx.andExpression(), ctx.op, ctx.text)
+
+    override fun visitInclusiveOrExpression(ctx: InvariantCParser.InclusiveOrExpressionContext) =
+        visitBinary(ctx.exclusiveOrExpression(), ctx.op, ctx.text)
+
+    override fun visitLogicalAndExpression(ctx: InvariantCParser.LogicalAndExpressionContext) =
+        visitBinary(ctx.inclusiveOrExpression(), ctx.op, ctx.text)
 
     override fun visitLogicalOrExpression(ctx: InvariantCParser.LogicalOrExpressionContext) =
         visitBinary(ctx.logicalAndExpression(), ctx.op, ctx.text)
+
+    override fun visitConditionalExpression(ctx: InvariantCParser.ConditionalExpressionContext): Expression {
+        val cond = visitLogicalOrExpression(ctx.logicalOrExpression())
+        if (ctx.t_exp == null || ctx.f_exp == null)
+            return cond
+        val trueBranch = visit(ctx.t_exp)
+        val falseBranch = visit(ctx.f_exp)
+        return TernaryExpression(cond, trueBranch, falseBranch, ctx.text)
+    }
 
     override fun visitIdent(ctx: InvariantCParser.IdentContext) =
         Var(ctx.Identifier().text)

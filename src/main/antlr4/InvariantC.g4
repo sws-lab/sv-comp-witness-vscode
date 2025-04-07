@@ -5,7 +5,7 @@ invariant
     ;
 
 expression
-    : logicalOrExpression
+    : conditionalExpression
     ;
 
 unaryExpression
@@ -26,20 +26,40 @@ additiveExpression
     : multiplicativeExpression (op+=('+' | '-') multiplicativeExpression)*
     ;
 
+shiftExpression
+    : additiveExpression (op+=('<<' | '>>') additiveExpression)*
+    ;
+
 relationalExpression
-    : additiveExpression (op+=('<' | '>' | '<=' | '>=') additiveExpression)*
+    : shiftExpression (op+=('<' | '>' | '<=' | '>=') shiftExpression)*
     ;
 
 equalityExpression
     : relationalExpression (op+=('==' | '!=') relationalExpression)*
     ;
 
+andExpression
+    : equalityExpression (op+='&' equalityExpression)*
+    ;
+
+exclusiveOrExpression
+    : andExpression (op+='^' andExpression)*
+    ;
+
+inclusiveOrExpression
+    : exclusiveOrExpression (op+='|' exclusiveOrExpression)*
+    ;
+
 logicalAndExpression
-    : equalityExpression (op+='&&' equalityExpression)*
+    : inclusiveOrExpression (op+='&&' inclusiveOrExpression)*
     ;
 
 logicalOrExpression
     : logicalAndExpression (op+='||' logicalAndExpression)*
+    ;
+
+conditionalExpression
+    : logicalOrExpression ('?' t_exp=conditionalExpression ':' f_exp=conditionalExpression)?
     ;
 
 specifierQualifierList
@@ -51,7 +71,8 @@ specifierQualifierList
        | 'float'
        | 'double'
        | 'signed'
-       | 'unsigned') specifierQualifierList?
+       | 'unsigned'
+       | '__int128') specifierQualifierList?
     ;
 
 typeName

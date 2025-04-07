@@ -3,6 +3,7 @@ package c
 import c.invariantAST.Node
 import c.invariantAST.Node.Companion.binary
 import c.invariantAST.Node.Companion.constant
+import c.invariantAST.Node.Companion.ternary
 import c.invariantAST.Node.Companion.unary
 import c.invariantAST.Node.Companion.variable
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -41,8 +42,20 @@ object CInvariantAstTest {
 
     @Test
     fun test_logical() {
+        legal("x && y", binary(variable("x"), "&&", variable("y"), "x&&y"))
+        legal("x || y", binary(variable("x"), "||", variable("y"), "x||y"))
         legal("x < 0 && y < 0", binary(`x LT 0`, "&&", `y LT 0`, "x<0&&y<0"))
         legal("x < 0 || y < 0", binary(`x LT 0`, "||", `y LT 0`, "x<0||y<0"))
+        legal("x & y", binary(variable("x"), "&", variable("y"), "x&y"))
+        legal("x ^ y", binary(variable("x"), "^", variable("y"), "x^y"))
+        legal("x | y", binary(variable("x"), "|", variable("y"), "x|y"))
+    }
+
+    @Test
+    fun test_arithmetic() {
+        legal("x * y", binary(variable("x"), "*", variable("y"), "x*y"))
+        legal("x / y", binary(variable("x"), "/", variable("y"), "x/y"))
+        legal("x % y", binary(variable("x"), "%", variable("y"), "x%y"))
     }
 
     @Test
@@ -67,6 +80,33 @@ object CInvariantAstTest {
                 "(x<0)&&((y<0)||x>0)"
             )
         )
+    }
+
+    @Test
+    fun test_ternary() {
+        legal(
+            "x > 0 ? 1 : 0",
+            ternary(
+                binary(variable("x"), ">", constant("0"), "x>0"),
+                constant("1"),
+                constant("0"),
+                "x>0?1:0"
+            )
+        )
+    }
+
+    @Test
+    fun test_cast_types() {
+        // TODO properly
+        CInvariantAst.createAst("((__int128) 2 * a)")
+        CInvariantAst.createAst("(unsigned __int128) 1")
+    }
+
+    @Test
+    fun test_all_other_operations() {
+        // TODO properly
+        CInvariantAst.createAst("((unsigned __int128) 1 << 64)")
+        CInvariantAst.createAst("((k % ((unsigned __int128) 1 << 64)) + ((unsigned __int128) 1 << 64))")
     }
 
     @Test
@@ -112,6 +152,55 @@ object CInvariantAstTest {
         )
     }
 
+    @Test
+    fun test_parsing_real_tool_invariants() {
+        // utaipan.2024-12-05_21-21-41.files/SV-COMP25_no-overflow/ArraysOfVariableLength6.yml/witness.yml
+        CInvariantAst.createAst(
+            "((((i >= 0) ? (i / 4294967296) : ((i / 4294967296) - 1)) <= 0) && (0 <= (i + 2147483648)))"
+        )
+        // utaipan.2024-12-05_21-21-41.files/SV-COMP25_unreach-call/sqrt1-ll_valuebound50.yml/witness.yml
+        CInvariantAst.createAst(
+            "((t == (1 + ((__int128) 2 * a))) && (((((__int128) a * a) + 1) + ((__int128) 2 * a)) == s))"
+        )
+        // utaipan.2024-12-05_21-21-41.files/SV-COMP25_no-overflow/geo2-ll_unwindbound1.yml/witness.yml
+        CInvariantAst.createAst(
+            "((((((((((y == z) " +
+                    "&& (0 <= (k + 2147483648))) " +
+                    "&& (k <= 2147483647)) " +
+                    "&& (2 <= ((k >= 0) ? (k % ((unsigned __int128) 1 << 64)) : ((k % ((unsigned __int128) 1 << 64)) + ((unsigned __int128) 1 << 64))))) " +
+                    "&& (0 <= ((__int128) 2147483647 + x))) " +
+                    "&& (x == ((long long) z + 1))) " +
+                    "&& (counter == 1)) " +
+                    "&& (y <= 2147483647)) " +
+                    "&& (2 == c)) || ((((((((0 <= (k + 2147483648)) " +
+                    "&& (z <= 2147483647)) " +
+                    "&& (0 <= (z + 2147483648))) " +
+                    "&& (c == 1)) " +
+                    "&& (k <= 2147483647)) " +
+                    "&& (x == 1)) " +
+                    "&& (y == 1)) " +
+                    "&& (counter == 0)))"
+        )
+        // utaipan.2024-12-05_21-21-41.files/SV-COMP25_unreach-call/bin-suffix-5.yml/witness.yml
+        CInvariantAst.createAst(
+            "(5 == (x & 5))"
+        )
+        // utaipan.2024-12-05_21-21-41.files/SV-COMP25_unreach-call/double_req_bl_1092b.yml/witness.yml
+        CInvariantAst.createAst(
+            "(0 == (i1 | i0))"
+        )
+        // utaipan.2024-12-05_21-21-41.files/SV-COMP25_unreach-call/hardness_floatingpointinfluence_no-floats_file-9.yml/witness.yml
+        CInvariantAst.createAst(
+            "(((((var_1_12 <= 16) || ((64 == var_1_9) " +
+                    "&& (var_1_11 == var_1_10))) " +
+                    "&& (var_1_14 == var_1_12)) " +
+                    "&& ((var_1_12 == last_1_var_1_12) || (((last_1_var_1_1 + last_1_var_1_12) % 4294967296) < 10))) || (((((10 == last_1_var_1_1) " +
+                    "&& (var_1_1 == 10)) " +
+                    "&& (1 == var_1_12)) " +
+                    "&&!((10 << var_1_12) < (var_1_14 * var_1_3))) " +
+                    "&& (last_1_var_1_12 == 1)))"
+        )
+    }
 
     private fun legal(input: String, expectedAst: Node) {
         val actualAst = CInvariantAst.createAst(input)

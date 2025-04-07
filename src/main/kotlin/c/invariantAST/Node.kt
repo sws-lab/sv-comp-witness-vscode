@@ -12,6 +12,9 @@ abstract class Node : AbstractNode() {
 
         fun unary(op: String, exp: Expression, str: String) =
             UnaryExpression(op, exp, str)
+
+        fun ternary(fst: Expression, snd: Expression, thrd: Expression, str: String) =
+            TernaryExpression(fst, snd, thrd, str)
     }
 
     abstract fun <T> accept(visitor: InvariantAstVisitor<T>): T

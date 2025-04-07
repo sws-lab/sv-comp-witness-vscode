@@ -19,6 +19,10 @@ fun collectVariables(invariantASt: Node): Set<Var> = object : InvariantAstVisito
     override fun visit(unop: UnaryExpression): Set<Var> {
         return visit(unop.exp)
     }
+
+    override fun visit(ternop: TernaryExpression): Set<Var> {
+        return visit(ternop.fst) + visit(ternop.snd) + visit(ternop.thrd)
+    }
 }.visit(invariantASt)
 
 fun collectMapping(invariantASt: Node): VariableMapping = object : InvariantAstVisitor<VariableMapping>() {
@@ -51,4 +55,7 @@ fun collectMapping(invariantASt: Node): VariableMapping = object : InvariantAstV
     override fun visit(unop: UnaryExpression): VariableMapping =
         mutableMapOf()
 
+    override fun visit(ternop: TernaryExpression): VariableMapping {
+        TODO("Not yet implemented")
+    }
 }.visit(invariantASt)

@@ -3,7 +3,9 @@ package c.invariantAST
 import com.google.common.collect.Iterables
 import com.google.common.collect.Lists
 import java.util.*
+import kotlinx.serialization.Serializable
 
+@Serializable
 abstract class AbstractNode {
     protected open val abstractNodeList: List<AbstractNode>
         get() = emptyList()

@@ -2,10 +2,8 @@ package witnesses
 
 import c.CInvariantAst
 import c.collectMapping
-import com.fasterxml.jackson.core.type.TypeReference
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import com.charleskorn.kaml.Yaml
+import kotlinx.serialization.decodeFromString
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.eclipse.lsp4j.CodeLens
@@ -54,10 +52,15 @@ object WitnessReader {
     }
 
     fun readWitnessFromYaml(witnessStrings: List<String>): List<Witness> {
-        val objectMapper = ObjectMapper(YAMLFactory()).registerKotlinModule()
-        val typeRef = object : TypeReference<List<Witness>>() {}
+        val serializer = Yaml(
+            serializersModule = Yaml.default.serializersModule,
+            configuration = Yaml.default.configuration.copy(
+                strictMode = false,
+                codePointLimit = Int.MAX_VALUE,
+            )
+        )
         return witnessStrings.flatMap { witness ->
-            objectMapper.readValue(witness, typeRef)
+            serializer.decodeFromString<List<Witness>>(witness)
         }
     }
 

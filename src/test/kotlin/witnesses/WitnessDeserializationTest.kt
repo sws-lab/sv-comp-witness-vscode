@@ -39,8 +39,8 @@ object WitnessDeserializationTest {
                     null
                 )
             )
-            val expected = listOf(Witness("invariant_set", null, contentList))
-            assertEquals(actual, expected)
+            val expected = listOf(Witness("invariant_set", contentList))
+            assertEquals(expected, actual)
         }
     }
 
@@ -70,8 +70,8 @@ object WitnessDeserializationTest {
                     null
                 )
             )
-            val expected = listOf(Witness("invariant_set", null, contentList))
-            assertEquals(actual, expected)
+            val expected = listOf(Witness("invariant_set", contentList))
+            assertEquals(expected, actual)
         }
     }
 

@@ -31,11 +31,29 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
     override fun visitExpression(ctx: InvariantCParser.ExpressionContext) =
         visitConditionalExpression(ctx.conditionalExpression())
 
+    override fun visitSqbracket(ctx: InvariantCParser.SqbracketContext) =
+        UnaryExpression("[]", visit(ctx.expression()), ctx.text)
+
+    override fun visitDotarrow(ctx: InvariantCParser.DotarrowContext): Expression {
+        return UnaryExpression(ctx.op.text, Var(ctx.Identifier().text), ctx.text)
+    }
+
     override fun visitUnary(ctx: InvariantCParser.UnaryContext) =
         UnaryExpression(ctx.op.text, visit(ctx.castExpression()), ctx.text)
 
     override fun visitUnarybase(ctx: InvariantCParser.UnarybaseContext) =
         visit(ctx.primaryExpression())
+
+    override fun visitPostfix(ctx: InvariantCParser.PostfixContext): Expression {
+        if (ctx.postfixExpression() == null || ctx.postfixExpression().isEmpty())
+            return visit(ctx.primaryExpression())
+        // TODO: how to split the text??
+        var node = PostfixExpression(visit(ctx.primaryExpression()), visit(ctx.postfixExpression().first()), ctx.text)
+        for (exp in ctx.postfixExpression().drop(1)) {
+            node = PostfixExpression(node, visit(exp), ctx.text)
+        }
+        return node
+    }
 
     override fun visitCast(ctx: InvariantCParser.CastContext) =
         UnaryExpression(ctx.typeName().text, visit(ctx.castExpression()), ctx.text)
@@ -92,10 +110,22 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
         visit(ctx.expression())
 
     override fun visitSpecifierQualifierList(ctx: InvariantCParser.SpecifierQualifierListContext) =
-        visit(ctx.specifierQualifierList())
+        TODO("irrelevant")
 
     override fun visitTypeName(ctx: InvariantCParser.TypeNameContext) =
-        visitSpecifierQualifierList(ctx.specifierQualifierList())
+        TODO("irrelevant")
+
+    override fun visitPointer(ctx: InvariantCParser.PointerContext): Expression {
+        TODO("irrelevant")
+    }
+
+    override fun visitTypeQualifierList(ctx: InvariantCParser.TypeQualifierListContext): Expression {
+        TODO("irrelevant")
+    }
+
+    override fun visitAbstractDeclarator(ctx: InvariantCParser.AbstractDeclaratorContext): Expression {
+        TODO("irrelevant")
+    }
 
     private fun visitBinary(ctx: List<ParserRuleContext>, ops: List<Token>, str: String): Expression {
         var node = visit(ctx.first())

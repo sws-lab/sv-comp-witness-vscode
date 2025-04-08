@@ -8,14 +8,20 @@ expression
     : conditionalExpression
     ;
 
+postfixExpression
+    : '[' expression ']'          #sqbracket
+    | op=('.' | '->') Identifier  #dotarrow
+    ;
+
 unaryExpression
     : op=('&' | '*' | '+' | '-' | '~' | '!') castExpression #unary
     | primaryExpression                                     #unarybase
     ;
 
 castExpression
-    : '(' op=typeName ')' castExpression  #cast
-    | unaryExpression                     #castbase
+    : primaryExpression (postfixExpression)* #postfix
+    | '(' op=typeName ')' castExpression     #cast
+    | unaryExpression                        #castbase
     ;
 
 multiplicativeExpression
@@ -62,21 +68,64 @@ conditionalExpression
     : logicalOrExpression ('?' t_exp=conditionalExpression ':' f_exp=conditionalExpression)?
     ;
 
+typeSpecifier
+    : 'void'
+    | 'char'
+    | 'short'
+    | 'int'
+    | 'long'
+    | 'float'
+    | 'double'
+    | 'signed'
+    | 'unsigned'
+    | '_Bool'
+    | '_Complex'
+    | '__m128'
+    | '__m128d'
+    | '__m128i'
+    | '__extension__' '(' ('__m128' | '__m128d' | '__m128i') ')'
+    | structOrUnionSpecifier
+    | typedefName
+    ;
+
+structOrUnionSpecifier
+    : structOrUnion Identifier
+    ;
+
+structOrUnion
+    : 'struct'
+    | 'union'
+    ;
+
 specifierQualifierList
-    : ('void'
-       | 'char'
-       | 'short'
-       | 'int'
-       | 'long'
-       | 'float'
-       | 'double'
-       | 'signed'
-       | 'unsigned'
-       | '__int128') specifierQualifierList?
+    : (typeSpecifier | typeQualifier) specifierQualifierList?
+    ;
+
+typeQualifier
+    : 'const'
+    | 'restrict'
+    | 'volatile'
+    | '_Atomic'
+    ;
+
+pointer
+    : (op+=('*' | '^') typeQualifierList?)+ // ^ - Blocks language extension
+    ;
+
+typeQualifierList
+    : typeQualifier+
     ;
 
 typeName
-    : specifierQualifierList
+    : specifierQualifierList abstractDeclarator?
+    ;
+
+abstractDeclarator
+    : pointer
+    ;
+
+typedefName
+    : Identifier
     ;
 
 primaryExpression
@@ -307,5 +356,13 @@ fragment OctalEscapeSequence
 
 fragment HexadecimalEscapeSequence
     : '\\x' HexadecimalDigit+
+    ;
+
+Whitespace
+    : [ \t]+ -> channel(HIDDEN)
+    ;
+
+Newline
+    : ('\r' '\n'? | '\n') -> channel(HIDDEN)
     ;
 

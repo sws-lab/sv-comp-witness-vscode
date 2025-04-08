@@ -15,6 +15,9 @@ abstract class Node : AbstractNode() {
 
         fun ternary(fst: Expression, snd: Expression, thrd: Expression, str: String) =
             TernaryExpression(fst, snd, thrd, str)
+
+        fun postfix(exp: Expression, postfixExp: Expression, str: String) =
+            PostfixExpression(exp, postfixExp, str)
     }
 
     abstract fun <T> accept(visitor: InvariantAstVisitor<T>): T

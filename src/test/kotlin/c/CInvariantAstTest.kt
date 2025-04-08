@@ -100,6 +100,8 @@ object CInvariantAstTest {
         // TODO properly
         CInvariantAst.createAst("((__int128) 2 * a)")
         CInvariantAst.createAst("(unsigned __int128) 1")
+        CInvariantAst.createAst("len == (vuint32_t const   )4U")
+        CInvariantAst.createAst("locks_len == (vsize_t )7")
     }
 
     @Test
@@ -107,6 +109,7 @@ object CInvariantAstTest {
         // TODO properly
         CInvariantAst.createAst("((unsigned __int128) 1 << 64)")
         CInvariantAst.createAst("((k % ((unsigned __int128) 1 << 64)) + ((unsigned __int128) 1 << 64))")
+        CInvariantAst.createAst("a.b.c.d")
     }
 
     @Test
@@ -153,7 +156,31 @@ object CInvariantAstTest {
     }
 
     @Test
-    fun test_parsing_real_tool_invariants() {
+    fun test_parsing_goblint_invariants() {
+        // goblint.2024-11-29_20-22-51.files/SV-COMP25_no-data-race/13-privatized_68-pfscan_protected_loop_minimal_interval_true.yml/witness.yml
+        CInvariantAst.createAst("0 <= pqb.occupied")
+        CInvariantAst.createAst("0 <= qp->occupied")
+        CInvariantAst.createAst("qp->occupied <= 1000")
+        CInvariantAst.createAst("qp == & pqb")
+        // goblint.2024-11-29_20-22-51.files/SV-COMP25_no-data-race/28-race_reach_75-tricky_address2_racefree.yml/witness.yml
+        CInvariantAst.createAst("p == & a[i]")
+        // goblint.2024-11-29_20-22-51.files/SV-COMP25_no-data-race/17_szymanski.yml/witness.yml
+        CInvariantAst.createAst("arg == (void *)0")
+        // goblint.2024-11-29_20-22-51.files/SV-COMP25_no-data-race/28-race_reach_19-callback_racing.yml/witness.yml
+        // CInvariantAst.createAst("callback == (int (*)())(& bar)")
+        // goblint.2024-11-29_20-22-51.files/SV-COMP25_no-data-race/arraylock.yml/witness.yml
+        CInvariantAst.createAst("lock.flags == & flags[0]")
+        CInvariantAst.createAst("lock->flags == & flags[0]")
+        CInvariantAst.createAst("len == (vuint32_t const   )4U")
+        // goblint.2024-11-29_20-22-51.files/SV-COMP25_no-overflow/aws_priority_queue_pop_harness.yml/witness.yml
+        CInvariantAst.createAst("((struct aws_array_list *)buf)->alloc == 0 || (unsigned long )(((struct aws_array_list *)buf)->alloc)->impl == 0UL")
+        // goblint.2024-11-29_20-22-51.files/SV-COMP25_no-data-race/hmcslock.yml/witness.yml
+        CInvariantAst.createAst("locks_len == (vsize_t )7")
+
+    }
+
+    @Test
+    fun test_parsing_utaipan_invariants() {
         // utaipan.2024-12-05_21-21-41.files/SV-COMP25_no-overflow/ArraysOfVariableLength6.yml/witness.yml
         CInvariantAst.createAst(
             "((((i >= 0) ? (i / 4294967296) : ((i / 4294967296) - 1)) <= 0) && (0 <= (i + 2147483648)))"

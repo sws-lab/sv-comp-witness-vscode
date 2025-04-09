@@ -8,19 +8,26 @@ expression
     : conditionalExpression
     ;
 
+postfixSecondExpression
+    : op='[' expression ']'       #sqBracket
+    | op=('.' | '->') Identifier  #dotArrow
+    ;
+
 postfixExpression
-    : '[' expression ']'          #sqbracket
-    | op=('.' | '->') Identifier  #dotarrow
+    : primaryExpression (postfixSecondExpression)*
     ;
 
 unaryExpression
-    : op=('&' | '*' | '+' | '-' | '~' | '!') castExpression #unary
-    | primaryExpression                                     #unarybase
+    : op+=('++' | '--' | 'sizeof')* (
+      postfixExpression
+      | unaryOp=('&' | '*' | '+' | '-' | '~' | '!') castExpression
+      | unaryOp=('sizeof' | '_Alignof') '(' typeName ')'
+      | unaryOp='&&' Identifier // GCC extension address of label
+    )
     ;
 
 castExpression
-    : primaryExpression (postfixExpression)* #postfix
-    | '(' op=typeName ')' castExpression     #cast
+    : '(' op=typeName ')' castExpression     #cast
     | unaryExpression                        #castbase
     ;
 

@@ -24,9 +24,6 @@ fun collectVariables(invariantASt: Node): Set<Var> = object : InvariantAstVisito
         return visit(ternop.fst) + visit(ternop.snd) + visit(ternop.thrd)
     }
 
-    override fun visit(postfix: PostfixExpression): Set<Var> {
-        return visit(postfix.expression) + visit(postfix.postfixExpression)
-    }
 }.visit(invariantASt)
 
 fun collectMapping(invariantASt: Node): VariableMapping = object : InvariantAstVisitor<VariableMapping>() {
@@ -63,7 +60,4 @@ fun collectMapping(invariantASt: Node): VariableMapping = object : InvariantAstV
         TODO("Not yet implemented")
     }
 
-    override fun visit(postfix: PostfixExpression): VariableMapping {
-        TODO("Not yet implemented")
-    }
 }.visit(invariantASt)

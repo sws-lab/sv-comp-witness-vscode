@@ -31,28 +31,52 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
     override fun visitExpression(ctx: InvariantCParser.ExpressionContext) =
         visitConditionalExpression(ctx.conditionalExpression())
 
-    override fun visitSqbracket(ctx: InvariantCParser.SqbracketContext) =
-        UnaryExpression("[]", visit(ctx.expression()), ctx.text)
+    override fun visitPostfixExpression(ctx: InvariantCParser.PostfixExpressionContext): Expression {
+        var node = visit(ctx.primaryExpression())
+        for (exp in ctx.postfixSecondExpression()) {
+            when (exp) {
+                is InvariantCParser.SqBracketContext ->
+                    node = BinaryExpression(node, "[]", visit(exp.expression()), ctx.text)
 
-    override fun visitDotarrow(ctx: InvariantCParser.DotarrowContext): Expression {
-        return UnaryExpression(ctx.op.text, Var(ctx.Identifier().text), ctx.text)
-    }
-
-    override fun visitUnary(ctx: InvariantCParser.UnaryContext) =
-        UnaryExpression(ctx.op.text, visit(ctx.castExpression()), ctx.text)
-
-    override fun visitUnarybase(ctx: InvariantCParser.UnarybaseContext) =
-        visit(ctx.primaryExpression())
-
-    override fun visitPostfix(ctx: InvariantCParser.PostfixContext): Expression {
-        if (ctx.postfixExpression() == null || ctx.postfixExpression().isEmpty())
-            return visit(ctx.primaryExpression())
-        // TODO: how to split the text??
-        var node = PostfixExpression(visit(ctx.primaryExpression()), visit(ctx.postfixExpression().first()), ctx.text)
-        for (exp in ctx.postfixExpression().drop(1)) {
-            node = PostfixExpression(node, visit(exp), ctx.text)
+                is InvariantCParser.DotArrowContext ->
+                    node = BinaryExpression(node, exp.op.text, Var(exp.Identifier().text), ctx.text)
+            }
         }
         return node
+    }
+
+    override fun visitUnaryExpression(ctx: InvariantCParser.UnaryExpressionContext): Expression {
+        // TODO: chatGPT generated code: do better
+        // Start by evaluating the "core" of the unary expression
+        val baseExpr: Expression = when {
+            ctx.postfixExpression() != null -> {
+                visit(ctx.postfixExpression())
+            }
+
+            ctx.castExpression() != null -> {
+                val unaryOp = ctx.unaryOp.text
+                val expr = visit(ctx.castExpression())
+                UnaryExpression(unaryOp, expr, ctx.text)
+            }
+
+            ctx.typeName() != null -> {
+                Type(ctx.text)
+            }
+
+            ctx.Identifier() != null -> {
+                val label = ctx.Identifier().text
+                UnaryExpression("&&", Var(label), ctx.text)
+            }
+
+            else -> throw RuntimeException("Unexpected unary expression structure: ${ctx.text}")
+        }
+
+        // Apply any prefix operators in reverse (closest to base applies first)
+        return ctx.op.foldRight(baseExpr) { opToken, acc ->
+            val op = opToken.text
+            // TODO: concatenate for str
+            UnaryExpression(op, acc, op)
+        }
     }
 
     override fun visitCast(ctx: InvariantCParser.CastContext) =

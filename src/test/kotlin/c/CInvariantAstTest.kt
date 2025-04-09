@@ -187,6 +187,8 @@ object CInvariantAstTest {
         // goblint.2024-11-29_20-22-51.files/SV-COMP25_no-overflow/cut-1.yml/witness.yml
         CInvariantAst.createAst("linelen == return_value_strlen\$1")
         CInvariantAst.createAst("tmp_if_expr\$7 == (_Bool)0")
+        // goblint.2024-11-29_20-22-51.files/SV-COMP25_no-overflow/uname-1.yml/witness.yml
+        CInvariantAst.createAst("(char)0 == uts->sysname[sizeof(uts->sysname) - 1UL]")
     }
 
     @Test

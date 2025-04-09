@@ -97,11 +97,28 @@ object CInvariantAstTest {
 
     @Test
     fun test_cast_types() {
-        // TODO properly
-        CInvariantAst.createAst("((__int128) 2 * a)")
-        CInvariantAst.createAst("(unsigned __int128) 1")
-        CInvariantAst.createAst("len == (vuint32_t const   )4U")
-        CInvariantAst.createAst("locks_len == (vsize_t )7")
+        legal(
+            "((__int128) 2 * a)",
+            binary(
+                unary("__int128", constant("2"), "(__int128)2"),
+                "*",
+                variable("a"),
+                "(__int128)2*a"
+            ),
+        )
+        legal(
+            "(unsigned __int128) 1",
+            unary("unsigned__int128", constant("1"), "(unsigned__int128)1"), // TODO: typenames
+        )
+        legal(
+            "len == (vuint32_t const   )4U",
+            binary(
+                variable("len"),
+                "==",
+                unary("vuint32_tconst", constant("4U"), "(vuint32_tconst)4U"),
+                "len==(vuint32_tconst)4U"
+            ),
+        )
     }
 
     @Test
@@ -109,7 +126,42 @@ object CInvariantAstTest {
         // TODO properly
         CInvariantAst.createAst("((unsigned __int128) 1 << 64)")
         CInvariantAst.createAst("((k % ((unsigned __int128) 1 << 64)) + ((unsigned __int128) 1 << 64))")
-        CInvariantAst.createAst("a.b.c.d")
+    }
+
+    @Test
+    fun test_postfix_expressions() {
+        legal("pqb.occupied", binary(variable("pqb"), ".", variable("occupied"), "pqb.occupied"))
+        legal("qp->occupied", binary(variable("qp"), "->", variable("occupied"), "qp->occupied"))
+        legal(
+            "a.b.c", binary(
+                binary(variable("a"), ".", variable("b"), "a.b.c"),
+                ".",
+                variable("c"), "a.b.c"
+            )
+        )
+    }
+
+    @Test
+    fun test_pointers() {
+        legal("& pqb", unary("&", variable("pqb"), "&pqb"))
+        legal("(void *)0", unary("void*", constant("0"), "(void*)0"))
+        val `((struct aws_array_list ptr)buf)` =
+            unary("structaws_array_list*", variable("buf"), "(structaws_array_list*)buf")
+        legal("((struct aws_array_list *)buf)", `((struct aws_array_list ptr)buf)`)
+        legal(
+            "(((struct aws_array_list *)buf)->alloc)->impl",
+            binary(
+                binary(
+                    `((struct aws_array_list ptr)buf)`,
+                    "->",
+                    variable("alloc"),
+                    "((structaws_array_list*)buf)->alloc"
+                ),
+                "->",
+                variable("impl"),
+                "(((structaws_array_list*)buf)->alloc)->impl",
+            )
+        )
     }
 
     @Test
@@ -181,9 +233,11 @@ object CInvariantAstTest {
         CInvariantAst.createAst("\"Multi-call invocation\" == infomap[1].node")
         CInvariantAst.createAst("\"sha512sum\" == infomap[5].program")
         // goblint.2024-11-29_20-22-51.files/SV-COMP25_no-overflow/du-1.yml/witness.yml
-        CInvariantAst.createAst("(((1ULL <= val && frac <= 10U) && \"%llu.%u%c\" == fmt) && (val <= 17592186044415ULL\n" +
-                "        || val <= 18014398509481983ULL)) || ((0U == frac && \"%llu\" == fmt) && frac\n" +
-                "        == 0U)")
+        CInvariantAst.createAst(
+            "(((1ULL <= val && frac <= 10U) && \"%llu.%u%c\" == fmt) && (val <= 17592186044415ULL\n" +
+                    "        || val <= 18014398509481983ULL)) || ((0U == frac && \"%llu\" == fmt) && frac\n" +
+                    "        == 0U)"
+        )
         // goblint.2024-11-29_20-22-51.files/SV-COMP25_no-overflow/cut-1.yml/witness.yml
         CInvariantAst.createAst("linelen == return_value_strlen\$1")
         CInvariantAst.createAst("tmp_if_expr\$7 == (_Bool)0")
@@ -221,13 +275,9 @@ object CInvariantAstTest {
                     "&& (counter == 0)))"
         )
         // utaipan.2024-12-05_21-21-41.files/SV-COMP25_unreach-call/bin-suffix-5.yml/witness.yml
-        CInvariantAst.createAst(
-            "(5 == (x & 5))"
-        )
+        CInvariantAst.createAst("(5 == (x & 5))")
         // utaipan.2024-12-05_21-21-41.files/SV-COMP25_unreach-call/double_req_bl_1092b.yml/witness.yml
-        CInvariantAst.createAst(
-            "(0 == (i1 | i0))"
-        )
+        CInvariantAst.createAst("(0 == (i1 | i0))")
         // utaipan.2024-12-05_21-21-41.files/SV-COMP25_unreach-call/hardness_floatingpointinfluence_no-floats_file-9.yml/witness.yml
         CInvariantAst.createAst(
             "(((((var_1_12 <= 16) || ((64 == var_1_9) " +

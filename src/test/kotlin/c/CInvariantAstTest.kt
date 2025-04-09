@@ -176,7 +176,17 @@ object CInvariantAstTest {
         CInvariantAst.createAst("((struct aws_array_list *)buf)->alloc == 0 || (unsigned long )(((struct aws_array_list *)buf)->alloc)->impl == 0UL")
         // goblint.2024-11-29_20-22-51.files/SV-COMP25_no-data-race/hmcslock.yml/witness.yml
         CInvariantAst.createAst("locks_len == (vsize_t )7")
-
+        // goblint.2024-11-29_20-22-51.files/SV-COMP25_no-overflow/comm_3args_ok.yml/witness.yml
+        CInvariantAst.createAst("\"[\" == infomap[0].program")
+        CInvariantAst.createAst("\"Multi-call invocation\" == infomap[1].node")
+        CInvariantAst.createAst("\"sha512sum\" == infomap[5].program")
+        // goblint.2024-11-29_20-22-51.files/SV-COMP25_no-overflow/du-1.yml/witness.yml
+        CInvariantAst.createAst("(((1ULL <= val && frac <= 10U) && \"%llu.%u%c\" == fmt) && (val <= 17592186044415ULL\n" +
+                "        || val <= 18014398509481983ULL)) || ((0U == frac && \"%llu\" == fmt) && frac\n" +
+                "        == 0U)")
+        // goblint.2024-11-29_20-22-51.files/SV-COMP25_no-overflow/cut-1.yml/witness.yml
+        CInvariantAst.createAst("linelen == return_value_strlen\$1")
+        CInvariantAst.createAst("tmp_if_expr\$7 == (_Bool)0")
     }
 
     @Test

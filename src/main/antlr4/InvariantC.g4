@@ -131,6 +131,7 @@ typedefName
 primaryExpression
     : Identifier         #ident
     | Constant           #cons
+    | StringLiteral+     #string
     | '(' expression ')' #parens
     ;
 
@@ -189,6 +190,7 @@ Identifier
 fragment IdentifierNondigit
     : Nondigit
     | UniversalCharacterName
+    | '$'
     //|   // other implementation-defined characters...
     ;
 
@@ -356,6 +358,28 @@ fragment OctalEscapeSequence
 
 fragment HexadecimalEscapeSequence
     : '\\x' HexadecimalDigit+
+    ;
+
+StringLiteral
+    : EncodingPrefix? '"' SCharSequence? '"'
+    ;
+
+fragment EncodingPrefix
+    : 'u8'
+    | 'u'
+    | 'U'
+    | 'L'
+    ;
+
+fragment SCharSequence
+    : SChar+
+    ;
+
+fragment SChar
+    : ~["\\\r\n]
+    | EscapeSequence
+    | '\\\n'   // Added line
+    | '\\\r\n' // Added line
     ;
 
 Whitespace

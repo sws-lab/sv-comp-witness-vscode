@@ -106,6 +106,9 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
     override fun visitCons(ctx: InvariantCParser.ConsContext) =
         Const(ctx.Constant().text)
 
+    override fun visitString(ctx: InvariantCParser.StringContext) =
+        Const(ctx.text)
+
     override fun visitParens(ctx: InvariantCParser.ParensContext): Expression =
         visit(ctx.expression())
 

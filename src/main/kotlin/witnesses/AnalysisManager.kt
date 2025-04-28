@@ -18,6 +18,7 @@ import witnesses.data.yaml.Invariant
 import witnesses.data.yaml.Location
 import witnesses.data.yaml.Waypoint
 import witnesses.data.yaml.Witness
+import java.net.URI
 
 class AnalysisManager(private val fmWeckClient: FmWeckClient) {
 
@@ -36,6 +37,8 @@ class AnalysisManager(private val fmWeckClient: FmWeckClient) {
         }
 
         log.info("Invariant mapping: $mapping")
+
+        buildProgramWithTypes(message)
         return lenses
     }
 
@@ -92,6 +95,18 @@ class AnalysisManager(private val fmWeckClient: FmWeckClient) {
             (location.column?.minus(1) ?: 0).coerceAtLeast(0)
         )
         return Range(zeroPos, zeroPos)
+    }
+
+    private fun buildProgramWithTypes(message: AnalyzeMessageParams) {
+        val fileName = URI.create(message.fileUri).toString() // TODO: this is in the wrong format
+        val variableTypes = getVariableTypesForProgram(
+            fileName,
+            "variableTypes.json"
+        )[fileName]
+        println("VariableTypes for the file: $variableTypes")
+        mapping.forEach { (line, invariant) ->
+
+        }
     }
 
 }

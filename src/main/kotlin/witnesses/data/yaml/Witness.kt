@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Witness(
-    val entry_type: String? = null,
+    val entry_type: String,
     val content: List<ContentElement>
 )

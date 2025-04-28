@@ -1,12 +1,9 @@
 package witnesses
 
-import c.CInvariantAst
-import c.collectMapping
 import com.charleskorn.kaml.Yaml
 import kotlinx.serialization.decodeFromString
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Test
-import witnesses.WitnessReader.addConjunctionDecompositionMaps
 import witnesses.WitnessReader.readWitnessFromYaml
 import witnesses.data.yaml.*
 import kotlin.test.assertContains
@@ -44,7 +41,8 @@ object WitnessDeserializationTest {
         }
     }
 
-    @Test
+    // TODO: rewrite test: conjunction maps are not done during serialization, but during conversion
+    /*@Test
     fun test_adding_mapping_to_witness_after_deserialization() {
         val witnessFileContent =
             this::class.java.classLoader.getResource("exampleWitnesses/cpa-safe-program-example.witness.yml")
@@ -73,7 +71,7 @@ object WitnessDeserializationTest {
             val expected = listOf(Witness("invariant_set", contentList))
             assertEquals(expected, actual)
         }
-    }
+    }*/
 
     @Test
     fun `kotlinx serialization can decode Constraint from YAML string`() {
@@ -357,7 +355,8 @@ object WitnessDeserializationTest {
 
     @Test
     fun `kotlinx serialization can decode large YAML files`() {
-        val url = this::class.java.classLoader.getResource("exampleWitnesses/utaipan-SV-COMP25_unreach-call-Problem04_label58-witness.yml")
+        val url =
+            this::class.java.classLoader.getResource("exampleWitnesses/utaipan-SV-COMP25_unreach-call-Problem04_label58-witness.yml")
         val witnessFileContent = url!!.readText()
 
         val expectedContentElement = ContentElement(

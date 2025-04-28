@@ -92,7 +92,7 @@ class FmWeckClient(host: String?, port: Int) {
             // TODO: notify user about not receiving any files
         } else {
             // TODO: notify user about failed analysis
-            log.error("Run was unsuccessful! " + runResult.getOutput())
+            log.error("Run was unsuccessful! $runResult")
             TODO("proper error handling")
         }
     }

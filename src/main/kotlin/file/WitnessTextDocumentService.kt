@@ -6,10 +6,10 @@ import java.net.URI
 import java.util.concurrent.CompletableFuture
 
 class WitnessTextDocumentService(
-    private val codeLenses: MutableMap<URI?, List<CodeLens>>
+    private val codeLenses: MutableMap<URI, List<CodeLens>>
 ) : TextDocumentService {
 
-    private val changedFiles: MutableSet<URI?> = HashSet<URI?>()
+    private val changedFiles: MutableSet<URI?> = HashSet()
 
     override fun didOpen(params: DidOpenTextDocumentParams?) {
         // TODO
@@ -32,8 +32,8 @@ class WitnessTextDocumentService(
     }
 
     override fun codeLens(params: CodeLensParams): CompletableFuture<List<CodeLens>> {
-        return CompletableFuture.supplyAsync<List<CodeLens>> {
-            codeLenses[URI.create(params.textDocument.uri)] ?: ArrayList<CodeLens>()
+        return CompletableFuture.supplyAsync {
+            codeLenses[URI.create(params.textDocument.uri)] ?: ArrayList()
         }
     }
 

@@ -1,22 +1,16 @@
 package witnesses.data.run
 
-import com.charleskorn.kaml.Yaml
-import com.charleskorn.kaml.decodeFromStream
-import java.io.IOException
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 
 object ToolLoader {
     val tools: List<Tool> = try {
-        val serializer = Yaml(
-            serializersModule = Yaml.default.serializersModule,
-            configuration = Yaml.default.configuration.copy(
-                strictMode = false,
-                codePointLimit = Int.MAX_VALUE,
-            )
+        val objectMapper = ObjectMapper(YAMLFactory())
+        objectMapper.readValue(
+            ToolLoader::class.java.getClassLoader().getResourceAsStream("tools.yml"),
+            objectMapper.typeFactory.constructCollectionType(List::class.java, Tool::class.java)
         )
-        serializer.decodeFromStream<List<Tool>>(
-            ToolLoader::class.java.getClassLoader().getResourceAsStream("tools.yml")!!
-        )
-    } catch (e: IOException) {
+    } catch (e: Throwable) {
         e.printStackTrace()
         TODO("proper error handling")
     }

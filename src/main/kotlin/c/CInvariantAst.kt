@@ -7,7 +7,7 @@ import c.invariantAST.*
 import org.antlr.v4.runtime.*
 
 object CInvariantAst {
-    fun createAst(program: String): Node {
+    fun createAst(program: String): Expression {
         val lexer = InvariantCLexer(CharStreams.fromString(program)).apply {
             removeErrorListeners()
             //addErrorListener(ExceptionErrorListener())

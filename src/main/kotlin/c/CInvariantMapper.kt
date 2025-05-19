@@ -45,16 +45,21 @@ fun collectMapping(invariantASt: Node): VariableMapping = object : InvariantAstV
         } else {
             val mapping: VariableMapping = mutableMapOf()
             val vars = collectVariables(binop.left) + collectVariables(binop.right)
-            val str = binop.str
             vars.forEach { variable ->
-                mapping.computeIfAbsent(variable) { mutableListOf() }.add(str)
+                mapping.computeIfAbsent(variable) { mutableListOf() }.add(binop.str)
             }
             return mapping
         }
     }
 
-    override fun visit(unop: UnaryExpression): VariableMapping =
-        mutableMapOf()
+    override fun visit(unop: UnaryExpression): VariableMapping {
+        val mapping: VariableMapping = mutableMapOf()
+        val vars = collectVariables(unop)
+        vars.forEach { variable ->
+            mapping.computeIfAbsent(variable) { mutableListOf() }.add(unop.str)
+        }
+        return mapping
+    }
 
     override fun visit(ternop: TernaryExpression): VariableMapping {
         TODO("Not yet implemented")

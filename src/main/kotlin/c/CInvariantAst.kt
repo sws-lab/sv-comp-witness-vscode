@@ -5,6 +5,7 @@ import InvariantCLexer
 import InvariantCParser
 import c.invariantAST.*
 import org.antlr.v4.runtime.*
+import org.antlr.v4.runtime.misc.Interval
 
 object CInvariantAst {
     fun createAst(program: String): Expression {
@@ -36,10 +37,10 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
         for (exp in ctx.postfixSecondExpression()) {
             when (exp) {
                 is InvariantCParser.SqBracketContext ->
-                    node = BinaryExpression(node, "[]", visit(exp.expression()), ctx.text)
+                    node = BinaryExpression(node, "[]", visit(exp.expression()), ctx.originalText())
 
                 is InvariantCParser.DotArrowContext ->
-                    node = BinaryExpression(node, exp.op.text, Var(exp.Identifier().text), ctx.text)
+                    node = BinaryExpression(node, exp.op.text, Var(exp.Identifier().text), ctx.originalText())
             }
         }
         return node
@@ -56,16 +57,16 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
             ctx.castExpression() != null -> {
                 val unaryOp = ctx.unaryOp.text
                 val expr = visit(ctx.castExpression())
-                UnaryExpression(unaryOp, expr, ctx.text)
+                UnaryExpression(unaryOp, expr, ctx.originalText())
             }
 
             ctx.typeName() != null -> {
-                Type(ctx.text)
+                Type(ctx.typeName().originalText())
             }
 
             ctx.Identifier() != null -> {
                 val label = ctx.Identifier().text
-                UnaryExpression("&&", Var(label), ctx.text)
+                UnaryExpression("&&", Var(label), ctx.originalText())
             }
 
             else -> throw RuntimeException("Unexpected unary expression structure: ${ctx.text}")
@@ -80,40 +81,40 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
     }
 
     override fun visitCast(ctx: InvariantCParser.CastContext) =
-        UnaryExpression(ctx.typeName().text, visit(ctx.castExpression()), ctx.text)
+        UnaryExpression(ctx.typeName().originalText(), visit(ctx.castExpression()), ctx.originalText())
 
     override fun visitCastbase(ctx: InvariantCParser.CastbaseContext) =
         visit(ctx.unaryExpression())
 
     override fun visitMultiplicativeExpression(ctx: InvariantCParser.MultiplicativeExpressionContext) =
-        visitBinary(ctx.castExpression(), ctx.op, ctx.text)
+        visitBinary(ctx.castExpression(), ctx.op, ctx.originalText())
 
     override fun visitAdditiveExpression(ctx: InvariantCParser.AdditiveExpressionContext) =
-        visitBinary(ctx.multiplicativeExpression(), ctx.op, ctx.text)
+        visitBinary(ctx.multiplicativeExpression(), ctx.op, ctx.originalText())
 
     override fun visitShiftExpression(ctx: InvariantCParser.ShiftExpressionContext) =
-        visitBinary(ctx.additiveExpression(), ctx.op, ctx.text)
+        visitBinary(ctx.additiveExpression(), ctx.op, ctx.originalText())
 
     override fun visitRelationalExpression(ctx: InvariantCParser.RelationalExpressionContext) =
-        visitBinary(ctx.shiftExpression(), ctx.op, ctx.text)
+        visitBinary(ctx.shiftExpression(), ctx.op, ctx.originalText())
 
     override fun visitEqualityExpression(ctx: InvariantCParser.EqualityExpressionContext) =
-        visitBinary(ctx.relationalExpression(), ctx.op, ctx.text)
+        visitBinary(ctx.relationalExpression(), ctx.op, ctx.originalText())
 
     override fun visitAndExpression(ctx: InvariantCParser.AndExpressionContext) =
-        visitBinary(ctx.equalityExpression(), ctx.op, ctx.text)
+        visitBinary(ctx.equalityExpression(), ctx.op, ctx.originalText())
 
     override fun visitExclusiveOrExpression(ctx: InvariantCParser.ExclusiveOrExpressionContext) =
-        visitBinary(ctx.andExpression(), ctx.op, ctx.text)
+        visitBinary(ctx.andExpression(), ctx.op, ctx.originalText())
 
     override fun visitInclusiveOrExpression(ctx: InvariantCParser.InclusiveOrExpressionContext) =
-        visitBinary(ctx.exclusiveOrExpression(), ctx.op, ctx.text)
+        visitBinary(ctx.exclusiveOrExpression(), ctx.op, ctx.originalText())
 
     override fun visitLogicalAndExpression(ctx: InvariantCParser.LogicalAndExpressionContext) =
-        visitBinary(ctx.inclusiveOrExpression(), ctx.op, ctx.text)
+        visitBinary(ctx.inclusiveOrExpression(), ctx.op, ctx.originalText())
 
     override fun visitLogicalOrExpression(ctx: InvariantCParser.LogicalOrExpressionContext) =
-        visitBinary(ctx.logicalAndExpression(), ctx.op, ctx.text)
+        visitBinary(ctx.logicalAndExpression(), ctx.op, ctx.originalText())
 
     override fun visitConditionalExpression(ctx: InvariantCParser.ConditionalExpressionContext): Expression {
         val cond = visitLogicalOrExpression(ctx.logicalOrExpression())
@@ -121,7 +122,7 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
             return cond
         val trueBranch = visit(ctx.t_exp)
         val falseBranch = visit(ctx.f_exp)
-        return TernaryExpression(cond, trueBranch, falseBranch, ctx.text)
+        return TernaryExpression(cond, trueBranch, falseBranch, ctx.originalText())
     }
 
     override fun visitIdent(ctx: InvariantCParser.IdentContext) =
@@ -136,10 +137,10 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
     override fun visitParens(ctx: InvariantCParser.ParensContext): Expression =
         visit(ctx.expression())
 
-    override fun visitSpecifierQualifierList(ctx: InvariantCParser.SpecifierQualifierListContext) =
+    override fun visitTypeName(ctx: InvariantCParser.TypeNameContext): Type =
         TODO("irrelevant")
 
-    override fun visitTypeName(ctx: InvariantCParser.TypeNameContext) =
+    override fun visitSpecifierQualifierList(ctx: InvariantCParser.SpecifierQualifierListContext) =
         TODO("irrelevant")
 
     override fun visitPointer(ctx: InvariantCParser.PointerContext): Expression {
@@ -162,3 +163,5 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
         return node
     }
 }
+
+fun ParserRuleContext.originalText(): String = start.inputStream.getText(Interval.of(start.startIndex, stop.stopIndex))

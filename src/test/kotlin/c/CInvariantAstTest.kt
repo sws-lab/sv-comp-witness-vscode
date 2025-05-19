@@ -12,10 +12,10 @@ import kotlin.test.assertNotEquals
 
 object CInvariantAstTest {
 
-    private val `x LT 0` = binary(variable("x"), "<", constant("0"), "x<0")
-    private val `y LT 0` = binary(variable("y"), "<", constant("0"), "y<0")
-    private val `i EQ 0` = binary(variable("i"), "==", constant("0"), "i==0")
-    private val `j EQ 0` = binary(variable("j"), "==", constant("0"), "j==0")
+    private val `x LT 0` = binary(variable("x"), "<", constant("0"), "x < 0")
+    private val `y LT 0` = binary(variable("y"), "<", constant("0"), "y < 0")
+    private val `i EQ 0` = binary(variable("i"), "==", constant("0"), "i == 0")
+    private val `j EQ 0` = binary(variable("j"), "==", constant("0"), "j == 0")
 
     @Test
     fun test_variable_constant() {
@@ -31,41 +31,41 @@ object CInvariantAstTest {
 
     @Test
     fun test_comparison() {
-        legal("x < y", binary(variable("x"), "<", variable("y"), "x<y"))
-        legal("x <= y", binary(variable("x"), "<=", variable("y"), "x<=y"))
-        legal("x > y", binary(variable("x"), ">", variable("y"), "x>y"))
-        legal("x >= y", binary(variable("x"), ">=", variable("y"), "x>=y"))
-        legalNonEqual("x < y", binary(variable("x"), "<=", variable("y"), "x<y"))
-        legal("x == 0", binary(variable("x"), "==", constant("0"), "x==0"))
-        legal("0 != y", binary(constant("0"), "!=", variable("y"), "0!=y"))
+        legal("x < y", binary(variable("x"), "<", variable("y"), "x < y"))
+        legal("x <= y", binary(variable("x"), "<=", variable("y"), "x <= y"))
+        legal("x > y", binary(variable("x"), ">", variable("y"), "x > y"))
+        legal("x >= y", binary(variable("x"), ">=", variable("y"), "x >= y"))
+        legalNonEqual("x < y", binary(variable("x"), "<=", variable("y"), "x < y"))
+        legal("x == 0", binary(variable("x"), "==", constant("0"), "x == 0"))
+        legal("0 != y", binary(constant("0"), "!=", variable("y"), "0 != y"))
     }
 
     @Test
     fun test_logical() {
-        legal("x && y", binary(variable("x"), "&&", variable("y"), "x&&y"))
-        legal("x || y", binary(variable("x"), "||", variable("y"), "x||y"))
-        legal("x < 0 && y < 0", binary(`x LT 0`, "&&", `y LT 0`, "x<0&&y<0"))
-        legal("x < 0 || y < 0", binary(`x LT 0`, "||", `y LT 0`, "x<0||y<0"))
-        legal("x & y", binary(variable("x"), "&", variable("y"), "x&y"))
-        legal("x ^ y", binary(variable("x"), "^", variable("y"), "x^y"))
-        legal("x | y", binary(variable("x"), "|", variable("y"), "x|y"))
+        legal("x && y", binary(variable("x"), "&&", variable("y"), "x && y"))
+        legal("x || y", binary(variable("x"), "||", variable("y"), "x || y"))
+        legal("x < 0 && y < 0", binary(`x LT 0`, "&&", `y LT 0`, "x < 0 && y < 0"))
+        legal("x < 0 || y < 0", binary(`x LT 0`, "||", `y LT 0`, "x < 0 || y < 0"))
+        legal("x & y", binary(variable("x"), "&", variable("y"), "x & y"))
+        legal("x ^ y", binary(variable("x"), "^", variable("y"), "x ^ y"))
+        legal("x | y", binary(variable("x"), "|", variable("y"), "x | y"))
     }
 
     @Test
     fun test_arithmetic() {
-        legal("x * y", binary(variable("x"), "*", variable("y"), "x*y"))
-        legal("x / y", binary(variable("x"), "/", variable("y"), "x/y"))
-        legal("x % y", binary(variable("x"), "%", variable("y"), "x%y"))
+        legal("x * y", binary(variable("x"), "*", variable("y"), "x * y"))
+        legal("x / y", binary(variable("x"), "/", variable("y"), "x / y"))
+        legal("x % y", binary(variable("x"), "%", variable("y"), "x % y"))
     }
 
     @Test
     fun test_parentheses() {
         legal("(x)", variable("x"))
-        legal("(x) < (y)", binary(variable("x"), "<", variable("y"), "(x)<(y)"))
-        legal("(x < y)", binary(variable("x"), "<", variable("y"), "x<y"))
-        legal("(x < 0) && (y < 0)", binary(`x LT 0`, "&&", `y LT 0`, "(x<0)&&(y<0)"))
-        legal("(x < 0 || y < 0)", binary(`x LT 0`, "||", `y LT 0`, "x<0||y<0"))
-        legal("((x < 0) && (y < 0))", binary(`x LT 0`, "&&", `y LT 0`, "(x<0)&&(y<0)"))
+        legal("(x) < (y)", binary(variable("x"), "<", variable("y"), "(x) < (y)"))
+        legal("(x < y)", binary(variable("x"), "<", variable("y"), "x < y"))
+        legal("(x < 0) && (y < 0)", binary(`x LT 0`, "&&", `y LT 0`, "(x < 0) && (y < 0)"))
+        legal("(x < 0 || y < 0)", binary(`x LT 0`, "||", `y LT 0`, "x < 0 || y < 0"))
+        legal("((x < 0) && (y < 0))", binary(`x LT 0`, "&&", `y LT 0`, "(x < 0) && (y < 0)"))
         legal(
             "(x < 0) && ((y < 0) || x > 0)",
             binary(
@@ -74,10 +74,10 @@ object CInvariantAstTest {
                 binary(
                     `y LT 0`,
                     "||",
-                    binary(variable("x"), ">", constant("0"), "x>0"),
-                    "(y<0)||x>0"
+                    binary(variable("x"), ">", constant("0"), "x > 0"),
+                    "(y < 0) || x > 0"
                 ),
-                "(x<0)&&((y<0)||x>0)"
+                "(x < 0) && ((y < 0) || x > 0)"
             )
         )
     }
@@ -87,10 +87,10 @@ object CInvariantAstTest {
         legal(
             "x > 0 ? 1 : 0",
             ternary(
-                binary(variable("x"), ">", constant("0"), "x>0"),
+                binary(variable("x"), ">", constant("0"), "x > 0"),
                 constant("1"),
                 constant("0"),
-                "x>0?1:0"
+                "x > 0 ? 1 : 0"
             )
         )
     }
@@ -100,23 +100,23 @@ object CInvariantAstTest {
         legal(
             "((__int128) 2 * a)",
             binary(
-                unary("__int128", constant("2"), "(__int128)2"),
+                unary("__int128", constant("2"), "(__int128) 2"),
                 "*",
                 variable("a"),
-                "(__int128)2*a"
+                "(__int128) 2 * a"
             ),
         )
         legal(
             "(unsigned __int128) 1",
-            unary("unsigned__int128", constant("1"), "(unsigned__int128)1"), // TODO: typenames
+            unary("unsigned __int128", constant("1"), "(unsigned __int128) 1"),
         )
         legal(
             "len == (vuint32_t const   )4U",
             binary(
                 variable("len"),
                 "==",
-                unary("vuint32_tconst", constant("4U"), "(vuint32_tconst)4U"),
-                "len==(vuint32_tconst)4U"
+                unary("vuint32_t const", constant("4U"), "(vuint32_t const   )4U"),
+                "len == (vuint32_t const   )4U"
             ),
         )
     }
@@ -143,10 +143,10 @@ object CInvariantAstTest {
 
     @Test
     fun test_pointers() {
-        legal("& pqb", unary("&", variable("pqb"), "&pqb"))
-        legal("(void *)0", unary("void*", constant("0"), "(void*)0"))
+        legal("&pqb", unary("&", variable("pqb"), "&pqb"))
+        legal("(void *)0", unary("void *", constant("0"), "(void *)0"))
         val `((struct aws_array_list ptr)buf)` =
-            unary("structaws_array_list*", variable("buf"), "(structaws_array_list*)buf")
+            unary("struct aws_array_list *", variable("buf"), "(struct aws_array_list *)buf")
         legal("((struct aws_array_list *)buf)", `((struct aws_array_list ptr)buf)`)
         legal(
             "(((struct aws_array_list *)buf)->alloc)->impl",
@@ -155,11 +155,11 @@ object CInvariantAstTest {
                     `((struct aws_array_list ptr)buf)`,
                     "->",
                     variable("alloc"),
-                    "((structaws_array_list*)buf)->alloc"
+                    "((struct aws_array_list *)buf)->alloc"
                 ),
                 "->",
                 variable("impl"),
-                "(((structaws_array_list*)buf)->alloc)->impl",
+                "(((struct aws_array_list *)buf)->alloc)->impl",
             )
         )
     }
@@ -169,7 +169,7 @@ object CInvariantAstTest {
         legal(
             "(((i == 0) && (j == 0)) || ((i == 0) && (1 <= j)))",
             binary(
-                binary(`i EQ 0`, "&&", `j EQ 0`, "(i==0)&&(j==0)"),
+                binary(`i EQ 0`, "&&", `j EQ 0`, "(i == 0) && (j == 0)"),
                 "||",
                 binary(
                     `i EQ 0`,
@@ -178,14 +178,13 @@ object CInvariantAstTest {
                         constant("1"),
                         "<=",
                         variable("j"),
-                        "1<=j"
+                        "1 <= j"
                     ),
-                    "(i==0)&&(1<=j)"
+                    "(i == 0) && (1 <= j)"
                 ),
-                "((i==0)&&(j==0))||((i==0)&&(1<=j))"
+                "((i == 0) && (j == 0)) || ((i == 0) && (1 <= j))"
             )
         )
-        // TODO: separate typeNames with space: e.g. longlong -> long long
         legal(
             "(-1LL + (long long )A) + (long long )B >= 0LL",
             binary(
@@ -193,16 +192,16 @@ object CInvariantAstTest {
                     binary(
                         unary("-", constant("1LL"), "-1LL"),
                         "+",
-                        unary("longlong", variable("A"), "(longlong)A"),
-                        "-1LL+(longlong)A"
+                        unary("long long", variable("A"), "(long long )A"),
+                        "-1LL + (long long )A"
                     ),
                     "+",
-                    unary("longlong", variable("B"), "(longlong)B"),
-                    "(-1LL+(longlong)A)+(longlong)B"
+                    unary("long long", variable("B"), "(long long )B"),
+                    "(-1LL + (long long )A) + (long long )B"
                 ),
                 ">=",
                 constant("0LL"),
-                "(-1LL+(longlong)A)+(longlong)B>=0LL"
+                "(-1LL + (long long )A) + (long long )B >= 0LL"
             )
         )
     }

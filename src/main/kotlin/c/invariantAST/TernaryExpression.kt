@@ -13,7 +13,7 @@ data class TernaryExpression(val fst: Expression, val snd: Expression, val thrd:
         )
     }
 
-    override fun toCode() = "${fst.toCode()}?${snd.toCode()}:${thrd.toCode()}"
+    override fun toCode() = "${fst.toCode()} ? ${snd.toCode()} : ${thrd.toCode()}"
 
     override fun toValue() = str
 

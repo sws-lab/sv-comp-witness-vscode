@@ -24,7 +24,7 @@ data class UnaryExpression(val op: String, val exp: Expression, val str: String)
             }
 
             if (oppositeOp != null) {
-                return BinaryExpression(inner.left, oppositeOp, inner.right, "${inner.left.toCode()}$oppositeOp${inner.right.toCode()}")
+                return BinaryExpression(inner.left, oppositeOp, inner.right, "${inner.left.toCode()} $oppositeOp ${inner.right.toCode()}")
             }
         }
 

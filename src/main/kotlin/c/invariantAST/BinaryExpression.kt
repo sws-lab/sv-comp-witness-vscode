@@ -11,7 +11,7 @@ data class BinaryExpression(val left: Expression, val op: String, val right: Exp
         // Commutative ops: order operands consistently
         if (op in setOf("==", "!=", "+", "*", "&", "|", "&&", "||")) {
             if (l is Const && r !is Const || r !is Const && r.hashCode() < l.hashCode()) {
-                return BinaryExpression(r, op, l, "${r.toCode()}$op${l.toCode()}")
+                return BinaryExpression(r, op, l, "${r.toCode()} $op ${l.toCode()}")
             }
         }
 
@@ -24,13 +24,13 @@ data class BinaryExpression(val left: Expression, val op: String, val right: Exp
                 ">=" -> Triple("<=", r, l)
                 else -> Triple(op, l, r) // fallback
             }
-            return BinaryExpression(newLeft, newOp, newRight, "${newLeft.toCode()}$newOp${newRight.toCode()}")
+            return BinaryExpression(newLeft, newOp, newRight, "${newLeft.toCode()} $newOp ${newRight.toCode()}")
         }
 
-        return BinaryExpression(l, op, r, "${l.toCode()}$op${r.toCode()}")
+        return BinaryExpression(l, op, r, "${l.toCode()} $op ${r.toCode()}")
     }
 
-    override fun toCode() = "${left.toCode()}$op${right.toCode()}"
+    override fun toCode() = "${left.toCode()} $op ${right.toCode()}"
 
     override fun toValue() = str
 }

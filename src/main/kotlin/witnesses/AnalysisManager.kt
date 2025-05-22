@@ -1,8 +1,5 @@
 package witnesses
 
-import c.CInvariantAst
-import c.VariableTypeHandler.getVariableTypesForProgram
-import c.collectMapping
 import fmweckserver.AnalyzeMessageParams
 import fmweckserver.FmWeckClient
 import org.apache.logging.log4j.LogManager
@@ -11,7 +8,10 @@ import org.eclipse.lsp4j.CodeLens
 import org.eclipse.lsp4j.Command
 import org.eclipse.lsp4j.Position
 import org.eclipse.lsp4j.Range
+import witnesses.WitnessComparison.decomposeInvariantByConjunctions
+import witnesses.WitnessComparison.findAgreeableTools
 import witnesses.WitnessReader.readWitnessFromYaml
+import witnesses.data.invariant.InvariantConf
 import witnesses.data.run.Tool
 import witnesses.data.run.ToolLoader
 import witnesses.data.yaml.Invariant
@@ -22,26 +22,25 @@ import witnesses.data.yaml.Witness
 class AnalysisManager(private val fmWeckClient: FmWeckClient) {
 
     private val tools: List<Tool> = ToolLoader.tools
-    private val mapping: MutableMap<Int, MutableList<Invariant>> = mutableMapOf()
 
     private val log: Logger = LogManager.getLogger(AnalysisManager::class.java)
 
     fun analyze(message: AnalyzeMessageParams): MutableList<CodeLens> {
         val lenses = mutableListOf<CodeLens>()
+        val witnesses = mutableListOf<Witness>()
 
         tools.forEach { tool ->
             val witnessStrings = runTool(message, tool)
-            val witnesses = readWitnessFromYaml(witnessStrings)
-            lenses.addAll(convert(witnesses))
+            witnesses.addAll(readWitnessFromYaml(witnessStrings))
         }
 
-        log.info("Invariant mapping: $mapping")
+        lenses.addAll(convert(witnesses))
         return lenses
     }
 
     private fun runTool(message: AnalyzeMessageParams, tool: Tool): List<String> {
         try {
-            log.info("Starting analysis for tool: " + tool.name)
+            log.info("Starting analysis for tool " + tool.name)
             // TODO: wrap into futures
             val runId = fmWeckClient.startRun(message, tool)
             Thread.sleep(5000) // Optional: wait a bit before querying results
@@ -52,26 +51,32 @@ class AnalysisManager(private val fmWeckClient: FmWeckClient) {
         }
     }
 
-    private fun convert(witnesses: List<Witness>): List<CodeLens> =
-        witnesses
-            .flatMap { it.content }
-            .flatMap { contentElement ->
-                if (contentElement.invariant != null) {
-                    val invariant = contentElement.invariant
-                    invariant.decomposedConjunctionMap =
-                        collectMapping(CInvariantAst.createAst(contentElement.invariant.value))
-                    // TODO: combine (currently only builds the map)
-                    mapping.getOrPut(invariant.location.line) { mutableListOf() }.add(invariant)
-                    listOf(convertCorrectnessWitness(invariant))
-                } else
-                    contentElement.segment!!.map { segment ->
-                        convertViolationWitness(segment.waypoint)
-                    }
+    private fun convert(witnesses: List<Witness>): List<CodeLens> {
+        val correctnessInvariants = mutableListOf<Pair<Invariant, Witness>>()
+        val violationCodeLenses = mutableListOf<CodeLens>()
+        for (witness in witnesses) {
+            for (content in witness.content) {
+                content.invariant?.let { invariant ->
+                    correctnessInvariants += invariant to witness
+                }
+                content.segment?.mapTo(violationCodeLenses) {
+                    convertViolationWitness(it.waypoint)
+                }
             }
+        }
+        correctnessInvariants.map { (invariant, witness) ->
+            decomposeInvariantByConjunctions(invariant, witness)
+        }
+        val findAgreeableTools = findAgreeableTools()
+        val correctnessCodeLenses = findAgreeableTools.map { (invariantConf, _) ->
+            convertCorrectnessWitness(invariantConf)
+        }
+        return correctnessCodeLenses + violationCodeLenses
+    }
 
-    private fun convertCorrectnessWitness(invariant: Invariant): CodeLens {
-        val range = rangeFromLocation(invariant.location)
-        val command = Command(invariant.value, "")
+    private fun convertCorrectnessWitness(invariantConf: InvariantConf): CodeLens {
+        val range = rangeFromLocation(invariantConf.invariant.location)
+        val command = Command(invariantConf.invariant.normValue, "showInvariantInfo", listOf(invariantConf.toString()))
         return CodeLens(range, command, null)
     }
 

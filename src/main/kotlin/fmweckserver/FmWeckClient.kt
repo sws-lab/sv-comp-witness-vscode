@@ -52,11 +52,11 @@ class FmWeckClient(host: String?, port: Int) {
                 TODO("proper error handling")
             }
 
-        log.info("Start run request: $request")
+        log.info("Start run request: tool=${request.tool.toolId}, property=${request.property.propertyId}, data model=${request.dataModel}")
 
         // Send request and get response
-        val response: FmWeckService.RunID? = blockingStub.startRun(request)
-        log.info("Received response: $response")
+        val response: FmWeckService.RunID = blockingStub.startRun(request)
+        log.info("Received response: run_id=${response.runId}")
         return response
     }
 
@@ -66,7 +66,7 @@ class FmWeckClient(host: String?, port: Int) {
             .setRunId(runId)
             .setTimeout(60) // TODO: Adjust timeout if needed
             .build()
-        log.info("Wait on run request: $waitRequest")
+        log.info("Wait on run request: timeout=${waitRequest.timeout}, run_id=${waitRequest.runId.runId}")
 
         // Fetch the output using a blocking call
         log.info("Waiting for results...")
@@ -81,7 +81,7 @@ class FmWeckClient(host: String?, port: Int) {
                 .setRunId(runId)
                 .addAllNamePatterns(listOf("*.yml"))
                 .build()
-            log.info("Wait on file query request: $fileQueryRequest")
+            log.info("Wait on file query request: name_patterns=${fileQueryRequest.namePatternsList}, run_id=${fileQueryRequest.runId.runId}")
             val fileQueryResult = blockingStub.queryFiles(fileQueryRequest)
             return fileQueryResult.asSequence().map { file ->
                 val fileContent = file.file.toStringUtf8()

@@ -11,7 +11,7 @@ import org.eclipse.lsp4j.Range
 import witnesses.WitnessComparison.decomposeInvariantByConjunctions
 import witnesses.WitnessComparison.findAgreeableTools
 import witnesses.WitnessReader.readWitnessFromYaml
-import witnesses.data.invariant.InvariantConf
+import witnesses.data.invariant.EqualInvariantGroup
 import witnesses.data.run.Tool
 import witnesses.data.run.ToolLoader
 import witnesses.data.yaml.Invariant
@@ -74,9 +74,14 @@ class AnalysisManager(private val fmWeckClient: FmWeckClient) {
         return correctnessCodeLenses + violationCodeLenses
     }
 
-    private fun convertCorrectnessWitness(invariantConf: InvariantConf): CodeLens {
-        val range = rangeFromLocation(invariantConf.invariant.location)
-        val command = Command(invariantConf.invariant.normValue, "showInvariantInfo", listOf(invariantConf.toString()))
+    private fun convertCorrectnessWitness(equalInvariantGroup: EqualInvariantGroup): CodeLens {
+        val range = rangeFromLocation(equalInvariantGroup.location)
+        val command =
+            Command(
+                equalInvariantGroup.shortestInvariantString,
+                "showInvariantInfo",
+                listOf(equalInvariantGroup.toString())
+            )
         return CodeLens(range, command, null)
     }
 

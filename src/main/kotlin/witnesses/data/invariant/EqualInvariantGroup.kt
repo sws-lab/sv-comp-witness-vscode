@@ -1,9 +1,11 @@
 package witnesses.data.invariant
 
 import witnesses.data.yaml.Invariant
+import witnesses.data.yaml.Location
 
-data class InvariantConf(
-    val invariant: Invariant,
+data class EqualInvariantGroup(
+    val shortestInvariantString: String,
+    val location: Location,
     val allInvariants: List<Invariant>
 ) {
     override fun toString(): String {

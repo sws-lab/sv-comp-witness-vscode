@@ -2,7 +2,7 @@ package witnesses
 
 import c.CInvariantAst
 import c.collectMapping
-import witnesses.data.invariant.InvariantConf
+import witnesses.data.invariant.EqualInvariantGroup
 import witnesses.data.yaml.Invariant
 import witnesses.data.yaml.Witness
 
@@ -43,11 +43,12 @@ object WitnessComparison {
         return a.normValue == b.normValue // TODO: replace with solver queries
     }
 
-    private fun mapImplicationsToConf(implMap: Map<Invariant, Set<Invariant>>): Map<InvariantConf, Set<InvariantConf>> {
+    private fun mapImplicationsToConf(implMap: Map<Invariant, Set<Invariant>>): Map<EqualInvariantGroup, Set<EqualInvariantGroup>> {
         val valueToConf = implMap.keys
             .groupBy { it.normValue }
             .mapValues { (_, invList) ->
-                InvariantConf(invList.first(), invList)
+                val first = invList.first()
+                EqualInvariantGroup(first.normValue!!, first.location, invList)
             }
 
         // Helper to get InvariantConf from Invariant
@@ -56,7 +57,7 @@ object WitnessComparison {
         // Fold original implication map from Invariant     -> Set<Invariant>
         //                               into InvariantConf -> Set<InvariantConf>
         return implMap.entries
-            .fold(mutableMapOf<InvariantConf, MutableSet<InvariantConf>>()) { acc, (key, implied) ->
+            .fold(mutableMapOf<EqualInvariantGroup, MutableSet<EqualInvariantGroup>>()) { acc, (key, implied) ->
                 val keyConf = toConf(key)
                 val impliedConfs = implied.map { toConf(it) }.toSet()
                 acc.getOrPut(keyConf) { mutableSetOf() }.addAll(impliedConfs)

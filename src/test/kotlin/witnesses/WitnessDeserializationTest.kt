@@ -5,6 +5,7 @@ import kotlinx.serialization.decodeFromString
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Test
 import witnesses.WitnessReader.readWitnessFromYaml
+import witnesses.data.run.Tool
 import witnesses.data.yaml.*
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -36,7 +37,13 @@ object WitnessDeserializationTest {
                     null
                 )
             )
-            val expected = listOf(Witness("invariant_set", contentList))
+            val expected = listOf(
+                Witness(
+                    "invariant_set",
+                    MetaData(Tool("CPAchecker", "2.2.1-svn")),
+                    contentList
+                )
+            )
             assertEquals(expected, actual)
         }
     }
@@ -289,6 +296,10 @@ object WitnessDeserializationTest {
         @Language("yaml")
         val yaml = """
             entry_type: "invariant_set"
+            metadata:
+              producer:
+                name: "CPAchecker"
+                version: "4.0"
             content:
             - invariant:
                 type: loop_invariant
@@ -314,6 +325,12 @@ object WitnessDeserializationTest {
 
         val expected = Witness(
             entry_type = "invariant_set",
+            metadata = MetaData(
+                Tool(
+                    name = "CPAchecker",
+                    version = "4.0",
+                )
+            ),
             content = listOf(
                 ContentElement(
                     invariant = Invariant(
@@ -378,7 +395,13 @@ object WitnessDeserializationTest {
         )
 
         val expected =
-            listOf(Witness(entry_type = "violation_sequence", content = emptyList()))
+            listOf(
+                Witness(
+                    entry_type = "violation_sequence",
+                    metadata = MetaData(Tool("Taipan", "0.3.0-dev-d790fec")),
+                    content = emptyList()
+                )
+            )
 
         val serializer = Yaml(
             serializersModule = Yaml.default.serializersModule,

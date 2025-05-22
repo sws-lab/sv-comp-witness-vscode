@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import {LanguageClient, LanguageClientOptions, ServerOptions} from 'vscode-languageclient/node';
 import {WitnessViewProvider} from './witnessViewProvider';
+import {InvariantInfoProvider} from "./invariantInfoProvider";
 
 // This method is called when your extension is activated
 export function activate(context: vscode.ExtensionContext) {
@@ -32,6 +33,14 @@ export function activate(context: vscode.ExtensionContext) {
 		context.subscriptions.push(
 			vscode.window.registerWebviewViewProvider('witnessPanel', new WitnessViewProvider(context, lc))
 		);
+
+        const invariantProvider = new InvariantInfoProvider();
+        context.subscriptions.push(
+            vscode.window.registerWebviewViewProvider('invariantInfoView', invariantProvider)
+        );
+        vscode.commands.registerCommand('showInvariantInfo', (data: string) => {
+            invariantProvider.setData(data);
+        });
 	}).catch(error => {
 		console.error("Error starting language client:", error);
 	});

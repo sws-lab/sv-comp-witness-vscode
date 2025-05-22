@@ -50,8 +50,21 @@
           "id": "witnessPanel",
           "name": "run analyzers"
         }
+      ],
+      "explorer": [
+        {
+          "type": "webview",
+          "id": "invariantInfoView",
+          "name": "Invariant Info"
+        }
       ]
-    }
+    },
+    "commands": [
+      {
+        "command": "showInvariantInfo",
+        "title": "Show Invariant Info"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "cp ../target/sv-comp-witness-vscode-0.0.1.jar sv-comp-witness-vscode-0.0.1.jar && npm run package",

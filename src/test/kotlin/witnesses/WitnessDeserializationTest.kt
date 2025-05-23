@@ -32,7 +32,6 @@ object WitnessDeserializationTest {
                         ),
                         value = "s <= i*255 && 0 <= i && i <= 255 && n <= 255",
                         format = "c_expression",
-                        decomposedConjunctionMap = null
                     ),
                     null
                 )
@@ -48,14 +47,13 @@ object WitnessDeserializationTest {
         }
     }
 
-    // TODO: rewrite test: conjunction maps are not done during serialization, but during conversion
-    /*@Test
+    @Test
     fun test_adding_mapping_to_witness_after_deserialization() {
         val witnessFileContent =
             this::class.java.classLoader.getResource("exampleWitnesses/cpa-safe-program-example.witness.yml")
                 ?.readText()
         if (witnessFileContent != null) {
-            val actual = addConjunctionDecompositionMaps(readWitnessFromYaml(listOf(witnessFileContent)))
+            val actual = readWitnessFromYaml(listOf(witnessFileContent))
             val contentList: List<ContentElement> = listOf(
                 ContentElement(
                     Invariant(
@@ -69,16 +67,20 @@ object WitnessDeserializationTest {
                         ),
                         value = "s <= i*255 && 0 <= i && i <= 255 && n <= 255",
                         format = "c_expression",
-                        decomposedConjunctionMap =
-                            collectMapping(CInvariantAst.createAst("s <= i*255 && 0 <= i && i <= 255 && n <= 255"))
                     ),
                     null
                 )
             )
-            val expected = listOf(Witness("invariant_set", contentList))
+            val expected = listOf(
+                Witness(
+                    "invariant_set",
+                    MetaData(Tool("CPAchecker", "2.2.1-svn")),
+                    contentList
+                )
+            )
             assertEquals(expected, actual)
         }
-    }*/
+    }
 
     @Test
     fun `kotlinx serialization can decode Constraint from YAML string`() {

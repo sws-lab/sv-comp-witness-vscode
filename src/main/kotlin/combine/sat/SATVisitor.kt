@@ -3,67 +3,117 @@ package combine.sat
 import c.invariantAST.*
 import io.ksmt.KContext
 import io.ksmt.expr.KExpr
-import io.ksmt.sort.KArithSort
 import io.ksmt.sort.KBoolSort
-import io.ksmt.sort.KSort
+import io.ksmt.sort.KIntSort
 import io.ksmt.utils.mkConst
 
-abstract class TypedInvariantAstVisitor<T> {
-    abstract fun visit(variable: Var): T
-    abstract fun visit(constant: Const): T
-    abstract fun visit(binop: BinaryExpression): T
-    abstract fun visit(unop: UnaryExpression): T
-    abstract fun visit(ternop: TernaryExpression): T
+fun createSMTArithExpr(invariantAst: Expression, ctx: KContext, typeEnv: Map<String, CType>): KExpr<KIntSort> {
+    return when (invariantAst) {
+        is Var -> getVarSort(ctx, typeEnv, invariantAst.name)
+        is Const -> ctx.mkIntNum(invariantAst.value)
+        is BinaryExpression -> {
+            when (invariantAst.op) {
+                "+" -> ctx.mkArithAdd(
+                    createSMTArithExpr(invariantAst.left, ctx, typeEnv),
+                    createSMTArithExpr(invariantAst.right, ctx, typeEnv)
+                )
 
-    fun visit(expr: Expression): T = when (expr) {
-        is Var -> visit(expr)
-        is Const -> visit(expr)
-        is BinaryExpression -> visit(expr)
-        is UnaryExpression -> visit(expr)
-        is TernaryExpression -> visit(expr)
-        is Type -> error("Unsupported node type: Type")
+                "-" -> ctx.mkArithSub(
+                    createSMTArithExpr(invariantAst.left, ctx, typeEnv),
+                    createSMTArithExpr(invariantAst.right, ctx, typeEnv)
+                )
+
+                "*" -> ctx.mkArithMul(
+                    createSMTArithExpr(invariantAst.left, ctx, typeEnv),
+                    createSMTArithExpr(invariantAst.right, ctx, typeEnv)
+                )
+
+                "/" -> ctx.mkArithDiv(
+                    createSMTArithExpr(invariantAst.left, ctx, typeEnv),
+                    createSMTArithExpr(invariantAst.right, ctx, typeEnv)
+                )
+
+                ">", "<", ">=", "<=", "!=", "==", "&&", "||" ->
+                    convertBoolExprToIntExpr(createSMTBoolExpr(invariantAst, ctx, typeEnv), ctx)
+
+                else -> error("Unsupported SMTArith expression: ${invariantAst.toValue()}")
+            }
+        }
+
+        is UnaryExpression ->
+            when (invariantAst.op) {
+                "-" -> ctx.mkArithUnaryMinus(createSMTArithExpr(invariantAst.exp, ctx, typeEnv))
+                "!" -> convertBoolExprToIntExpr(createSMTBoolExpr(invariantAst, ctx, typeEnv), ctx)
+                else -> error("Unsupported SMTBool expression: ${invariantAst.toValue()}")
+            }
+
+        else -> error("Unsupported SMTArith expression: ${invariantAst.toValue()}")
     }
 }
 
-fun createSAT(invariantAst: Expression, ctx: KContext, typeEnv: Map<String, CType>): KExpr<out KSort> {
-    return object : TypedInvariantAstVisitor<KExpr<out KSort>>() {
-        override fun visit(variable: Var) = getVarSort(ctx, typeEnv, variable.name)
+fun createSMTBoolExpr(invariantAst: Expression, ctx: KContext, typeEnv: Map<String, CType>): KExpr<KBoolSort> {
+    return when (invariantAst) {
+        is Var -> convertIntExprToBoolExpr(getVarSort(ctx, typeEnv, invariantAst.name), ctx)
+        is Const -> convertIntExprToBoolExpr(ctx.mkIntNum(invariantAst.value), ctx)
+        is BinaryExpression -> {
+            when (invariantAst.op) {
+                ">" -> ctx.mkArithGt(
+                    createSMTArithExpr(invariantAst.left, ctx, typeEnv),
+                    createSMTArithExpr(invariantAst.right, ctx, typeEnv)
+                )
 
-        override fun visit(constant: Const) = ctx.mkIntNum(constant.value)
+                "<" -> ctx.mkArithLt(
+                    createSMTArithExpr(invariantAst.left, ctx, typeEnv),
+                    createSMTArithExpr(invariantAst.right, ctx, typeEnv)
+                )
 
-        override fun visit(binop: BinaryExpression): KExpr<out KSort> {
-            val left = visit(binop.left)
-            val right = visit(binop.right)
+                ">=" -> ctx.mkArithGe(
+                    createSMTArithExpr(invariantAst.left, ctx, typeEnv),
+                    createSMTArithExpr(invariantAst.right, ctx, typeEnv)
+                )
 
-            return when (binop.op) {
-                ">" -> ctx.mkArithGt(left as KExpr<KArithSort>, right as KExpr<KArithSort>)
-                "<" -> ctx.mkArithLt(left as KExpr<KArithSort>, right as KExpr<KArithSort>)
-                ">=" -> ctx.mkArithGe(left as KExpr<KArithSort>, right as KExpr<KArithSort>)
-                "<=" -> ctx.mkArithLe(left as KExpr<KArithSort>, right as KExpr<KArithSort>)
-                "==" -> ctx.mkEq(left as KExpr<KArithSort>, right as KExpr<KArithSort>)
-                "!=" -> ctx.mkNot(ctx.mkEq(left as KExpr<KArithSort>, right as KExpr<KArithSort>))
-                "&&" -> ctx.mkAnd(left as KExpr<KBoolSort>, right as KExpr<KBoolSort>)
-                "||" -> ctx.mkOr(left as KExpr<KBoolSort>, right as KExpr<KBoolSort>)
-                "+" -> ctx.mkArithAdd(left as KExpr<KArithSort>, right as KExpr<KArithSort>)
-                "-" -> ctx.mkArithSub(left as KExpr<KArithSort>, right as KExpr<KArithSort>)
-                "*" -> ctx.mkArithMul(left as KExpr<KArithSort>, right as KExpr<KArithSort>)
-                "/" -> ctx.mkArithDiv(left as KExpr<KArithSort>, right as KExpr<KArithSort>)
-                else -> error("Unsupported binary operator: ${binop.op}")
+                "<=" -> ctx.mkArithLe(
+                    createSMTArithExpr(invariantAst.left, ctx, typeEnv),
+                    createSMTArithExpr(invariantAst.right, ctx, typeEnv)
+                )
+
+                "==" -> ctx.mkEq(
+                    createSMTArithExpr(invariantAst.left, ctx, typeEnv),
+                    createSMTArithExpr(invariantAst.right, ctx, typeEnv)
+                )
+
+                "!=" -> ctx.mkNot(
+                    ctx.mkEq(
+                        createSMTArithExpr(invariantAst.left, ctx, typeEnv),
+                        createSMTArithExpr(invariantAst.right, ctx, typeEnv)
+                    )
+                )
+
+                "&&" -> ctx.mkAnd(
+                    createSMTBoolExpr(invariantAst.left, ctx, typeEnv),
+                    createSMTBoolExpr(invariantAst.right, ctx, typeEnv)
+                )
+
+                "||" -> ctx.mkOr(
+                    createSMTBoolExpr(invariantAst.left, ctx, typeEnv),
+                    createSMTBoolExpr(invariantAst.right, ctx, typeEnv)
+                )
+
+                "+", "-", "*", "/" -> convertIntExprToBoolExpr(createSMTArithExpr(invariantAst, ctx, typeEnv), ctx)
+
+                else -> error("Unsupported SMTBool expression: ${invariantAst.toValue()}")
             }
         }
 
-        override fun visit(unop: UnaryExpression): KExpr<*> {
-            val expr = visit(unop.exp)
-            return when (unop.op) {
-                "!" -> ctx.mkNot(expr as KExpr<KBoolSort>)
-                "-" -> ctx.mkArithUnaryMinus(expr as KExpr<KArithSort>)
-                else -> error("Unsupported unary operator: ${unop.op}")
+        is UnaryExpression ->
+            when (invariantAst.op) {
+                "!" -> ctx.mkNot(createSMTBoolExpr(invariantAst.exp, ctx, typeEnv))
+                "-" -> convertIntExprToBoolExpr(createSMTArithExpr(invariantAst, ctx, typeEnv), ctx)
+                else -> error("Unsupported SMTBool expression: ${invariantAst.toValue()}")
             }
-        }
 
-        override fun visit(ternop: TernaryExpression): KExpr<KSort> = error("Ternary expressions not supported")
-
-    }.visit(invariantAst)
+        else -> error("Unsupported SMTBool expression: ${invariantAst.toValue()}")
+    }
 }
 
 enum class CType {
@@ -80,10 +130,16 @@ enum class CType {
 
 }
 
-fun getVarSort(ctx: KContext, typeEnv: Map<String, CType>, name: String): KExpr<KSort> {
+fun getVarSort(ctx: KContext, typeEnv: Map<String, CType>, name: String): KExpr<KIntSort> {
     return when (typeEnv[name]) {
         CType.INT, CType.CHAR -> ctx.mkIntSort().mkConst(name) // treat CHAR as int
+        //CType.DOUBLE -> ctx.mkRealSort().mkConst(name)
         else -> error("Unsupported variable type for '$name'")
     }
 }
 
+fun convertIntExprToBoolExpr(intSort: KExpr<KIntSort>, ctx: KContext) =
+    ctx.mkDistinct(listOf(intSort, ctx.mkIntNum(0)))
+
+fun convertBoolExprToIntExpr(expr: KExpr<KBoolSort>, ctx: KContext) =
+    ctx.mkIte(expr, ctx.mkIntNum("1"), ctx.mkIntNum("0"))

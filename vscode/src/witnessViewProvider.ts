@@ -18,9 +18,13 @@ export class WitnessViewProvider implements vscode.WebviewViewProvider {
             (message) => {
                 switch (message.command) {
                     case 'analyze':
-                        message.fileUri = this.getActiveFileUri();
-                        this.lc.sendNotification('custom/handleWebviewMessage', message);
-                        break;
+                        const activeFileUri = this.getActiveFileUri();
+                        if (activeFileUri) {
+                            message.fileUri = activeFileUri.uri;
+                            message.fileRelativePath = activeFileUri.relativePath;
+                            this.lc.sendNotification('custom/handleWebviewMessage', message);
+                            break;
+                        }
                 }
             },
             null,
@@ -28,16 +32,21 @@ export class WitnessViewProvider implements vscode.WebviewViewProvider {
         );
     }
 
-    private getActiveFileUri() {
+    private getActiveFileUri(): { uri: string; relativePath: string } | undefined {
         const editor = vscode.window.activeTextEditor;
         if (editor && editor.document.languageId == 'c') {
-            return editor.document.uri.toString();
-        } else {
-            vscode.window.showWarningMessage('Please open a C file (.c, .h, .i) to analyze.');
+            const uri = editor.document.uri;
+            const relativePath = vscode.workspace.asRelativePath(uri);
+            return {
+                uri: uri.toString(),            // full URI, e.g. "file:///home/user/project/src/foo.c"
+                relativePath: relativePath      // relative to workspace, e.g. "src/foo.c"
+            };
         }
+        vscode.window.showWarningMessage('Please open a C file (.c, .h, .i) to analyze.');
+        return undefined;
     }
 
-    private getWebviewContent() : string {
+    private getWebviewContent(): string {
         return `
             <html>
                 <head>

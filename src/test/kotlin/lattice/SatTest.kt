@@ -1,9 +1,9 @@
 package lattice
 
 import c.CInvariantAst
-import combine.sat.CType
-import combine.sat.createSMTBoolExpr
-import combine.sat.impliesSat
+import combine.ksmt.CType
+import combine.ksmt.createSMTBoolExpr
+import combine.ksmt.impliesSat
 import io.ksmt.KContext
 import kotlin.test.Test
 import kotlin.test.assertFalse

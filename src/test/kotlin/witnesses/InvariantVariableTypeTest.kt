@@ -1,6 +1,6 @@
 package witnesses
 
-import combine.sat.CType
+import combine.ksmt.CType
 import combine.types.TypeEnv
 import combine.types.VariableType
 import combine.types.VariableTypeHandler.extractTypeEnvByLocation

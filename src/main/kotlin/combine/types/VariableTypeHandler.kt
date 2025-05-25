@@ -1,6 +1,6 @@
 package combine.types
 
-import combine.sat.CType
+import combine.ksmt.CType
 import kotlinx.serialization.json.Json
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger

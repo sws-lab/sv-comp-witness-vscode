@@ -35,8 +35,8 @@ object SmtTest {
     fun test_unsat_implication() {
         val typeEnv: Map<String, CType> = mapOf("x" to CType.INT)
         KContext().use { ctx ->
-            val formula1 = createSMTBoolExpr(CInvariantAst.createAst("x > 2"), ctx, typeEnv)
-            val formula2 = createSMTBoolExpr(CInvariantAst.createAst("x >= 0"), ctx, typeEnv)
+            val formula1 = createSMTBoolExpr(CInvariantAst.createAst("x > 0"), ctx, typeEnv)
+            val formula2 = createSMTBoolExpr(CInvariantAst.createAst("x >= 2"), ctx, typeEnv)
             val implies = impliesSat(ctx, formula1, formula2)
             assertFalse(implies)
         }

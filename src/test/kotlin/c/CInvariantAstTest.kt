@@ -100,7 +100,7 @@ object CInvariantAstTest {
         legal(
             "((__int128) 2 * a)",
             binary(
-                unary("__int128", constant("2"), "(__int128) 2"),
+                unary("(__int128)", constant("2"), "(__int128) 2"),
                 "*",
                 variable("a"),
                 "(__int128) 2 * a"
@@ -108,14 +108,14 @@ object CInvariantAstTest {
         )
         legal(
             "(unsigned __int128) 1",
-            unary("unsigned __int128", constant("1"), "(unsigned __int128) 1"),
+            unary("(unsigned __int128)", constant("1"), "(unsigned __int128) 1"),
         )
         legal(
             "len == (vuint32_t const   )4U",
             binary(
                 variable("len"),
                 "==",
-                unary("vuint32_t const", constant("4U"), "(vuint32_t const   )4U"),
+                unary("(vuint32_t const)", constant("4U"), "(vuint32_t const   )4U"),
                 "len == (vuint32_t const   )4U"
             ),
         )
@@ -144,9 +144,9 @@ object CInvariantAstTest {
     @Test
     fun test_pointers() {
         legal("&pqb", unary("&", variable("pqb"), "&pqb"))
-        legal("(void *)0", unary("void *", constant("0"), "(void *)0"))
+        legal("(void *)0", unary("(void *)", constant("0"), "(void *)0"))
         val `((struct aws_array_list ptr)buf)` =
-            unary("struct aws_array_list *", variable("buf"), "(struct aws_array_list *)buf")
+            unary("(struct aws_array_list *)", variable("buf"), "(struct aws_array_list *)buf")
         legal("((struct aws_array_list *)buf)", `((struct aws_array_list ptr)buf)`)
         legal(
             "(((struct aws_array_list *)buf)->alloc)->impl",
@@ -192,11 +192,11 @@ object CInvariantAstTest {
                     binary(
                         unary("-", constant("1LL"), "-1LL"),
                         "+",
-                        unary("long long", variable("A"), "(long long )A"),
+                        unary("(long long)", variable("A"), "(long long )A"),
                         "-1LL + (long long )A"
                     ),
                     "+",
-                    unary("long long", variable("B"), "(long long )B"),
+                    unary("(long long)", variable("B"), "(long long )B"),
                     "(-1LL + (long long )A) + (long long )B"
                 ),
                 ">=",

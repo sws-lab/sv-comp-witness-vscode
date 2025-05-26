@@ -4,7 +4,7 @@ import c.invariantAST.Expression
 import witnesses.data.run.Tool
 import witnesses.data.yaml.Location
 
-data class InvariantPiece(
+data class InvariantComponent(
     val type: String,
     val location: Location,
     val value: String,

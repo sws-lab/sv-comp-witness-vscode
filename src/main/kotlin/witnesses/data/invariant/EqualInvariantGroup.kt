@@ -5,9 +5,9 @@ import witnesses.data.yaml.Location
 data class EqualInvariantGroup(
     val shortestInvariantString: String,
     val location: Location,
-    val allInvariants: List<InvariantPiece>
+    val equalInvariantComponents: List<InvariantComponent>
 ) {
     override fun toString(): String {
-        return allInvariants.joinToString(", ") { it.tool.name + ": " + it.value }
+        return equalInvariantComponents.joinToString(", ") { it.tool.name + ": " + it.value }
     }
 }

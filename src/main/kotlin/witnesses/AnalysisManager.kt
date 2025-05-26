@@ -9,7 +9,7 @@ import org.eclipse.lsp4j.Command
 import org.eclipse.lsp4j.Position
 import org.eclipse.lsp4j.Range
 import witnesses.WitnessComparison.decomposeInvariantByConjunctions
-import witnesses.WitnessComparison.findAgreeableTools
+import witnesses.WitnessComparison.getEqualInvariantGroups
 import witnesses.WitnessReader.readWitnessFromYaml
 import witnesses.data.invariant.EqualInvariantGroup
 import witnesses.data.run.Tool
@@ -64,13 +64,14 @@ class AnalysisManager(private val fmWeckClient: FmWeckClient) {
                 }
             }
         }
-        correctnessInvariants.map { (invariant, witness) ->
-            decomposeInvariantByConjunctions(invariant, witness)
+        val invariantComponentsByLoc: LocToInvariantComponents = mutableMapOf()
+        correctnessInvariants.forEach { (invariant, witness) ->
+            decomposeInvariantByConjunctions(invariant, witness, invariantComponentsByLoc)
         }
-        val findAgreeableTools = findAgreeableTools()
-        val correctnessCodeLenses = findAgreeableTools.map { (invariantConf, _) ->
-            convertCorrectnessWitness(invariantConf)
-        }
+        val correctnessCodeLenses =
+            getEqualInvariantGroups(invariantComponentsByLoc).map { equalInvariantGroup ->
+                convertCorrectnessWitness(equalInvariantGroup)
+            }
         return correctnessCodeLenses + violationCodeLenses
     }
 

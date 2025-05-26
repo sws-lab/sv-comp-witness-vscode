@@ -11,12 +11,12 @@ import io.ksmt.utils.mkConst
 
 fun impliesSat(ctx: KContext, formula1: KExpr<KBoolSort>, formula2: KExpr<KBoolSort>): Boolean {
     val negated = ctx.mkNot(ctx.mkImplies(formula1, formula2))
-    val solver = KZ3Solver(ctx)
-
-    solver.assert(negated)
-    return when (solver.check()) {
-        KSolverStatus.UNSAT -> true
-        else -> false
+    return KZ3Solver(ctx).use { solver ->
+        solver.assert(negated)
+        when (solver.check()) {
+            KSolverStatus.UNSAT -> true
+            else -> false
+        }
     }
 }
 

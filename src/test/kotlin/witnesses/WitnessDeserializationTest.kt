@@ -39,7 +39,10 @@ object WitnessDeserializationTest {
             val expected = listOf(
                 Witness(
                     "invariant_set",
-                    MetaData(Tool("CPAchecker", "2.2.1-svn")),
+                    MetaData(
+                        producer = Tool("CPAchecker", "2.2.1-svn"),
+                        task = MetaData.Task(listOf("./safe-program-example.c"))
+                    ),
                     contentList
                 )
             )
@@ -74,7 +77,10 @@ object WitnessDeserializationTest {
             val expected = listOf(
                 Witness(
                     "invariant_set",
-                    MetaData(Tool("CPAchecker", "2.2.1-svn")),
+                    MetaData(
+                        producer = Tool("CPAchecker", "2.2.1-svn"),
+                        task = MetaData.Task(listOf("./safe-program-example.c"))
+                    ),
                     contentList
                 )
             )

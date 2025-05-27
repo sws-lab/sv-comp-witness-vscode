@@ -2,6 +2,11 @@ package witnesses
 
 import c.CInvariantAst
 import c.collectConjunctAsts
+import combine.ksmt.CType
+import combine.ksmt.createSMTBoolExpr
+import combine.ksmt.impliesSat
+import combine.types.TypeEnv
+import io.ksmt.KContext
 import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector
 import org.jgrapht.graph.DefaultDirectedGraph
 import org.jgrapht.graph.DefaultEdge
@@ -34,11 +39,11 @@ object WitnessComparison {
         invariantComponentsByLoc.getOrPut(invariant.location) { mutableListOf() }.addAll(invariantComponents)
     }
 
-    fun getEqualInvariantGroups(invariantComponentsByLoc: LocToInvariantComponents) =
-        computeEqualInvariantGroups(invariantComponentsByLoc)
+    fun getEqualInvariantGroups(invariantComponentsByLoc: LocToInvariantComponents, typeEnv: TypeEnv) =
+        computeEqualInvariantGroups(invariantComponentsByLoc, typeEnv)
 
-    fun computeEqualInvariantGroups(invariantComponentsByLoc: LocToInvariantComponents): List<EqualInvariantGroup> {
-        val graph = buildImplicationGraph(invariantComponentsByLoc)
+    fun computeEqualInvariantGroups(invariantComponentsByLoc: LocToInvariantComponents, typeEnv: TypeEnv): List<EqualInvariantGroup> {
+        val graph = buildImplicationGraph(invariantComponentsByLoc, typeEnv)
         val inspector = KosarajuStrongConnectivityInspector(graph)
         val sccList = inspector.stronglyConnectedSets()
         return sccList.map { component ->
@@ -51,21 +56,35 @@ object WitnessComparison {
         }
     }
 
-    private fun implies(a: InvariantComponent, b: InvariantComponent): Boolean {
-        // Placeholder: check if a logically implies b
-        return a.normValue == b.normValue // TODO: replace with solver queries
+    private fun areEqual(a: InvariantComponent, b: InvariantComponent, locTypeEnv: Map<String, CType>): Boolean {
+        if (a.normValue == b.normValue) return true
+        else {
+            try {
+                KContext().use { ctx ->
+                    val aSmtExpr = createSMTBoolExpr(a.ast, ctx, locTypeEnv)
+                    val bSmtExpr = createSMTBoolExpr(b.ast, ctx, locTypeEnv)
+                    return impliesSat(ctx, aSmtExpr, bSmtExpr) && impliesSat(ctx, bSmtExpr, aSmtExpr)
+                }
+            } catch (t: Throwable) {
+                return false
+            }
+
+        }
     }
 
-    private fun buildImplicationGraph(invariantComponentsByLoc: LocToInvariantComponents): DefaultDirectedGraph<InvariantComponent, DefaultEdge> {
+    private fun buildImplicationGraph(invariantComponentsByLoc: LocToInvariantComponents, typeEnv: TypeEnv): DefaultDirectedGraph<InvariantComponent, DefaultEdge> {
         val graph = DefaultDirectedGraph<InvariantComponent, DefaultEdge>(DefaultEdge::class.java)
 
-        for (invariants in invariantComponentsByLoc.values) {
+        for ((loc, invariants) in invariantComponentsByLoc) {
+            val locTypeEnv = typeEnv[loc.line]
             for (a in invariants) {
                 graph.addVertex(a)
             }
-            for (a in invariants) {
-                for (b in invariants) {
-                    if (a != b && implies(a, b) && implies(b, a)) {
+            for (i in invariants.indices) {
+                for (j in i + 1 until invariants.size) {
+                    val a = invariants[i]
+                    val b = invariants[j]
+                    if (locTypeEnv != null && areEqual(a, b, locTypeEnv)) {
                         graph.addEdge(a, b)
                         graph.addEdge(b, a)
                     }

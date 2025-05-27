@@ -1,5 +1,7 @@
 package witnesses
 
+import combine.types.VariableTypeHandler.extractTypeEnvByLocation
+import combine.types.VariableTypeHandler.getVariableTypesForProgram
 import fmweckserver.AnalyzeMessageParams
 import fmweckserver.FmWeckClient
 import org.apache.logging.log4j.LogManager
@@ -34,7 +36,7 @@ class AnalysisManager(private val fmWeckClient: FmWeckClient) {
             witnesses.addAll(readWitnessFromYaml(witnessStrings))
         }
 
-        lenses.addAll(convert(witnesses))
+        lenses.addAll(convert(witnesses, message))
         return lenses
     }
 
@@ -51,7 +53,7 @@ class AnalysisManager(private val fmWeckClient: FmWeckClient) {
         }
     }
 
-    private fun convert(witnesses: List<Witness>): List<CodeLens> {
+    private fun convert(witnesses: List<Witness>, message: AnalyzeMessageParams): List<CodeLens> {
         val correctnessInvariants = mutableListOf<Pair<Invariant, Witness>>()
         val violationCodeLenses = mutableListOf<CodeLens>()
         for (witness in witnesses) {
@@ -68,8 +70,9 @@ class AnalysisManager(private val fmWeckClient: FmWeckClient) {
         correctnessInvariants.forEach { (invariant, witness) ->
             decomposeInvariantByConjunctions(invariant, witness, invariantComponentsByLoc)
         }
+        val typeEnv = extractTypeEnvByLocation(getVariableTypesForProgram(message.fileRelativePath, "vtypes.json"))
         val correctnessCodeLenses =
-            getEqualInvariantGroups(invariantComponentsByLoc).map { equalInvariantGroup ->
+            getEqualInvariantGroups(invariantComponentsByLoc, typeEnv).map { equalInvariantGroup ->
                 convertCorrectnessWitness(equalInvariantGroup)
             }
         return correctnessCodeLenses + violationCodeLenses

@@ -20,34 +20,34 @@ fun impliesSat(ctx: KContext, formula1: KExpr<KBoolSort>, formula2: KExpr<KBoolS
     }
 }
 
-fun createSMTArithExpr(invariantAst: Expression, ctx: KContext, typeEnv: Map<String, CType>): KExpr<KIntSort> {
+fun createSMTArithExpr(invariantAst: Expression, ctx: KContext, locTypeEnv: Map<String, CType>): KExpr<KIntSort> {
     return when (invariantAst) {
-        is Var -> getVarSort(ctx, typeEnv, invariantAst.name)
+        is Var -> getVarSort(ctx, locTypeEnv, invariantAst.name)
         is Const -> ctx.mkIntNum(invariantAst.value)
         is BinaryExpression -> {
             when (invariantAst.op) {
                 "+" -> ctx.mkArithAdd(
-                    createSMTArithExpr(invariantAst.left, ctx, typeEnv),
-                    createSMTArithExpr(invariantAst.right, ctx, typeEnv)
+                    createSMTArithExpr(invariantAst.left, ctx, locTypeEnv),
+                    createSMTArithExpr(invariantAst.right, ctx, locTypeEnv)
                 )
 
                 "-" -> ctx.mkArithSub(
-                    createSMTArithExpr(invariantAst.left, ctx, typeEnv),
-                    createSMTArithExpr(invariantAst.right, ctx, typeEnv)
+                    createSMTArithExpr(invariantAst.left, ctx, locTypeEnv),
+                    createSMTArithExpr(invariantAst.right, ctx, locTypeEnv)
                 )
 
                 "*" -> ctx.mkArithMul(
-                    createSMTArithExpr(invariantAst.left, ctx, typeEnv),
-                    createSMTArithExpr(invariantAst.right, ctx, typeEnv)
+                    createSMTArithExpr(invariantAst.left, ctx, locTypeEnv),
+                    createSMTArithExpr(invariantAst.right, ctx, locTypeEnv)
                 )
 
                 "/" -> ctx.mkArithDiv(
-                    createSMTArithExpr(invariantAst.left, ctx, typeEnv),
-                    createSMTArithExpr(invariantAst.right, ctx, typeEnv)
+                    createSMTArithExpr(invariantAst.left, ctx, locTypeEnv),
+                    createSMTArithExpr(invariantAst.right, ctx, locTypeEnv)
                 )
 
                 ">", "<", ">=", "<=", "!=", "==", "&&", "||" ->
-                    convertBoolExprToIntExpr(createSMTBoolExpr(invariantAst, ctx, typeEnv), ctx)
+                    convertBoolExprToIntExpr(createSMTBoolExpr(invariantAst, ctx, locTypeEnv), ctx)
 
                 else -> error("Unsupported SMTArith expression: ${invariantAst.toValue()}")
             }
@@ -55,8 +55,8 @@ fun createSMTArithExpr(invariantAst: Expression, ctx: KContext, typeEnv: Map<Str
 
         is UnaryExpression ->
             when (invariantAst.op) {
-                "-" -> ctx.mkArithUnaryMinus(createSMTArithExpr(invariantAst.exp, ctx, typeEnv))
-                "!" -> convertBoolExprToIntExpr(createSMTBoolExpr(invariantAst, ctx, typeEnv), ctx)
+                "-" -> ctx.mkArithUnaryMinus(createSMTArithExpr(invariantAst.exp, ctx, locTypeEnv))
+                "!" -> convertBoolExprToIntExpr(createSMTBoolExpr(invariantAst, ctx, locTypeEnv), ctx)
                 else -> error("Unsupported SMTBool expression: ${invariantAst.toValue()}")
             }
 
@@ -64,55 +64,55 @@ fun createSMTArithExpr(invariantAst: Expression, ctx: KContext, typeEnv: Map<Str
     }
 }
 
-fun createSMTBoolExpr(invariantAst: Expression, ctx: KContext, typeEnv: Map<String, CType>): KExpr<KBoolSort> {
+fun createSMTBoolExpr(invariantAst: Expression, ctx: KContext, locTypeEnv: Map<String, CType>): KExpr<KBoolSort> {
     return when (invariantAst) {
-        is Var -> convertIntExprToBoolExpr(getVarSort(ctx, typeEnv, invariantAst.name), ctx)
+        is Var -> convertIntExprToBoolExpr(getVarSort(ctx, locTypeEnv, invariantAst.name), ctx)
         is Const -> convertIntExprToBoolExpr(ctx.mkIntNum(invariantAst.value), ctx)
         is BinaryExpression -> {
             when (invariantAst.op) {
                 ">" -> ctx.mkArithGt(
-                    createSMTArithExpr(invariantAst.left, ctx, typeEnv),
-                    createSMTArithExpr(invariantAst.right, ctx, typeEnv)
+                    createSMTArithExpr(invariantAst.left, ctx, locTypeEnv),
+                    createSMTArithExpr(invariantAst.right, ctx, locTypeEnv)
                 )
 
                 "<" -> ctx.mkArithLt(
-                    createSMTArithExpr(invariantAst.left, ctx, typeEnv),
-                    createSMTArithExpr(invariantAst.right, ctx, typeEnv)
+                    createSMTArithExpr(invariantAst.left, ctx, locTypeEnv),
+                    createSMTArithExpr(invariantAst.right, ctx, locTypeEnv)
                 )
 
                 ">=" -> ctx.mkArithGe(
-                    createSMTArithExpr(invariantAst.left, ctx, typeEnv),
-                    createSMTArithExpr(invariantAst.right, ctx, typeEnv)
+                    createSMTArithExpr(invariantAst.left, ctx, locTypeEnv),
+                    createSMTArithExpr(invariantAst.right, ctx, locTypeEnv)
                 )
 
                 "<=" -> ctx.mkArithLe(
-                    createSMTArithExpr(invariantAst.left, ctx, typeEnv),
-                    createSMTArithExpr(invariantAst.right, ctx, typeEnv)
+                    createSMTArithExpr(invariantAst.left, ctx, locTypeEnv),
+                    createSMTArithExpr(invariantAst.right, ctx, locTypeEnv)
                 )
 
                 "==" -> ctx.mkEq(
-                    createSMTArithExpr(invariantAst.left, ctx, typeEnv),
-                    createSMTArithExpr(invariantAst.right, ctx, typeEnv)
+                    createSMTArithExpr(invariantAst.left, ctx, locTypeEnv),
+                    createSMTArithExpr(invariantAst.right, ctx, locTypeEnv)
                 )
 
                 "!=" -> ctx.mkNot(
                     ctx.mkEq(
-                        createSMTArithExpr(invariantAst.left, ctx, typeEnv),
-                        createSMTArithExpr(invariantAst.right, ctx, typeEnv)
+                        createSMTArithExpr(invariantAst.left, ctx, locTypeEnv),
+                        createSMTArithExpr(invariantAst.right, ctx, locTypeEnv)
                     )
                 )
 
                 "&&" -> ctx.mkAnd(
-                    createSMTBoolExpr(invariantAst.left, ctx, typeEnv),
-                    createSMTBoolExpr(invariantAst.right, ctx, typeEnv)
+                    createSMTBoolExpr(invariantAst.left, ctx, locTypeEnv),
+                    createSMTBoolExpr(invariantAst.right, ctx, locTypeEnv)
                 )
 
                 "||" -> ctx.mkOr(
-                    createSMTBoolExpr(invariantAst.left, ctx, typeEnv),
-                    createSMTBoolExpr(invariantAst.right, ctx, typeEnv)
+                    createSMTBoolExpr(invariantAst.left, ctx, locTypeEnv),
+                    createSMTBoolExpr(invariantAst.right, ctx, locTypeEnv)
                 )
 
-                "+", "-", "*", "/" -> convertIntExprToBoolExpr(createSMTArithExpr(invariantAst, ctx, typeEnv), ctx)
+                "+", "-", "*", "/" -> convertIntExprToBoolExpr(createSMTArithExpr(invariantAst, ctx, locTypeEnv), ctx)
 
                 else -> error("Unsupported SMTBool expression: ${invariantAst.toValue()}")
             }
@@ -120,8 +120,8 @@ fun createSMTBoolExpr(invariantAst: Expression, ctx: KContext, typeEnv: Map<Stri
 
         is UnaryExpression ->
             when (invariantAst.op) {
-                "!" -> ctx.mkNot(createSMTBoolExpr(invariantAst.exp, ctx, typeEnv))
-                "-" -> convertIntExprToBoolExpr(createSMTArithExpr(invariantAst, ctx, typeEnv), ctx)
+                "!" -> ctx.mkNot(createSMTBoolExpr(invariantAst.exp, ctx, locTypeEnv))
+                "-" -> convertIntExprToBoolExpr(createSMTArithExpr(invariantAst, ctx, locTypeEnv), ctx)
                 else -> error("Unsupported SMTBool expression: ${invariantAst.toValue()}")
             }
 

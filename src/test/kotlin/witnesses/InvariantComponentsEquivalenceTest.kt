@@ -1,6 +1,11 @@
 package witnesses
 
+import c.invariantAST.BinaryExpression
 import c.invariantAST.Const
+import c.invariantAST.Expression
+import c.invariantAST.Var
+import combine.ksmt.CType
+import combine.types.TypeEnv
 import witnesses.WitnessComparison.computeEqualInvariantGroups
 import witnesses.data.invariant.InvariantComponent
 import witnesses.data.run.Tool
@@ -16,7 +21,7 @@ object InvariantComponentsEquivalenceTest {
     private val tool3 = Tool("ToolC", null)
     private val tool4 = Tool("ToolD", null)
 
-    private fun invariant(value: String, normvalue: String, tool: Tool = tool1) = InvariantComponent(
+    private fun invariant(value: String, normvalue: String, tool: Tool, ast: Expression) = InvariantComponent(
         type = "loop_invariant",
         location = loc,
         value = value,
@@ -24,13 +29,18 @@ object InvariantComponentsEquivalenceTest {
         tool = tool,
         normValue = normvalue,
         originalValue = value,
-        ast = Const("0")
+        ast = ast
     )
 
-    private val inv1 = invariant("data == 2", "data == 2", tool1)
-    private val inv2 = invariant("data == 2", "data == 2", tool2)
-    private val inv3 = invariant("2 == data", "data == 2", tool3)
-    private val inv4 = invariant("i == 0", "i == 0", tool4)
+    private val `data==2 ast` = BinaryExpression(Var("data"), "==", Const("0"), "data == 2")
+    private val `i==2 ast` = BinaryExpression(Var("i"), "==", Const("0"), "i == 2")
+
+    private val inv1 = invariant("data == 2", "data == 2", tool1, `data==2 ast`)
+    private val inv2 = invariant("data == 2", "data == 2", tool2, `data==2 ast`)
+    private val inv3 = invariant("2 == data", "data == 2", tool3, `data==2 ast`)
+    private val inv4 = invariant("i == 0", "i == 0", tool4, `i==2 ast`)
+
+    private val typeEnv: TypeEnv = mapOf(10 to mapOf("data" to CType.INT, "i" to CType.INT),)
 
     private val invariantComponentsByLoc: LocToInvariantComponents = mutableMapOf(
         loc to mutableListOf(inv1, inv2, inv3, inv4)
@@ -38,9 +48,8 @@ object InvariantComponentsEquivalenceTest {
 
     @Test
     fun testEquivalentInvariantGroups() {
-        val equivalenceClasses = computeEqualInvariantGroups(invariantComponentsByLoc)
+        val equivalenceClasses = computeEqualInvariantGroups(invariantComponentsByLoc, typeEnv)
 
-        // Check that we get 2 SCCs
         assertEquals(2, equivalenceClasses.size)
 
         val largestGroup = equivalenceClasses.maxByOrNull { it.equalInvariantComponents.size }!!

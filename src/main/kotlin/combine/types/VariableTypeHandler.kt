@@ -50,7 +50,7 @@ object VariableTypeHandler {
     fun extractTypeEnvByLocation(data: VariableTypeMap): TypeEnv {
         return data.values
             .flatMap { it.entries }
-            .groupBy({ it.key })
+            .groupBy { it.key }
             .mapValues { (_, entries) ->
                 entries
                     .flatMap { it.value.values }

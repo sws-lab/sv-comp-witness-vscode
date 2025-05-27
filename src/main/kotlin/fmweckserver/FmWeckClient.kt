@@ -11,7 +11,7 @@ import java.io.File
 import java.io.IOException
 import java.net.URI
 
-class FmWeckClient(host: String?, port: Int) {
+class FmWeckClient(host: String, port: Int) {
     private val channel = NettyChannelBuilder.forAddress(host, port)
         .usePlaintext()
         .build()

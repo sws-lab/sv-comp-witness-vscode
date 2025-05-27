@@ -53,7 +53,7 @@ class AnalysisManager(private val fmWeckClient: FmWeckClient) {
         }
     }
 
-    private fun convert(witnesses: List<Witness>, message: AnalyzeMessageParams): List<CodeLens> {
+    fun convert(witnesses: List<Witness>, message: AnalyzeMessageParams): List<CodeLens> {
         val correctnessInvariants = mutableListOf<Pair<Invariant, Witness>>()
         val violationCodeLenses = mutableListOf<CodeLens>()
         for (witness in witnesses) {
@@ -72,7 +72,9 @@ class AnalysisManager(private val fmWeckClient: FmWeckClient) {
         }
         val typeEnv = extractTypeEnvByLocation(getVariableTypesForProgram(message.fileRelativePath, "vtypes.json"))
         val correctnessCodeLenses =
-            getEqualInvariantGroups(invariantComponentsByLoc, typeEnv).map { equalInvariantGroup ->
+            getEqualInvariantGroups(invariantComponentsByLoc, typeEnv)
+                .sortedByDescending { it.equalInvariantComponents.size }
+                .map { equalInvariantGroup ->
                 convertCorrectnessWitness(equalInvariantGroup)
             }
         return correctnessCodeLenses + violationCodeLenses

@@ -11,6 +11,6 @@ data class InvariantComponent(
     val format: String,
     val tool: Tool,
     val normValue: String,
-    val originalValue: String,
+    val originalInvariantValue: String,
     val ast: Expression
 )

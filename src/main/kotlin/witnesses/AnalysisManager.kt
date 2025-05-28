@@ -15,7 +15,6 @@ import witnesses.WitnessComparison.getEqualInvariantGroups
 import witnesses.WitnessReader.readWitnessFromYaml
 import witnesses.data.invariant.EqualInvariantGroup
 import witnesses.data.run.Tool
-import witnesses.data.run.ToolLoader
 import witnesses.data.yaml.Invariant
 import witnesses.data.yaml.Location
 import witnesses.data.yaml.Waypoint
@@ -23,16 +22,14 @@ import witnesses.data.yaml.Witness
 
 class AnalysisManager(private val fmWeckClient: FmWeckClient) {
 
-    private val tools: List<Tool> = ToolLoader.tools
-
     private val log: Logger = LogManager.getLogger(AnalysisManager::class.java)
 
     fun analyze(message: AnalyzeMessageParams): MutableList<CodeLens> {
         val lenses = mutableListOf<CodeLens>()
         val witnesses = mutableListOf<Witness>()
 
-        tools.forEach { tool ->
-            val witnessStrings = runTool(message, tool)
+        message.tools.forEach { tool ->
+            val witnessStrings = runTool(message, Tool(tool, null))
             witnesses.addAll(readWitnessFromYaml(witnessStrings))
         }
 

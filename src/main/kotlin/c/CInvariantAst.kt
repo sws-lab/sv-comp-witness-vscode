@@ -81,7 +81,7 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
     }
 
     override fun visitCast(ctx: InvariantCParser.CastContext) =
-        UnaryExpression(ctx.typeName().originalText(), visit(ctx.castExpression()), ctx.originalText())
+        UnaryExpression("(${ctx.typeName().originalText()})", visit(ctx.castExpression()), ctx.originalText())
 
     override fun visitCastbase(ctx: InvariantCParser.CastbaseContext) =
         visit(ctx.unaryExpression())

@@ -2,79 +2,101 @@ package witnesses
 
 import c.CInvariantAst
 import c.collectConjunctAsts
+import combine.ksmt.CType
+import combine.ksmt.createSMTBoolExpr
+import combine.ksmt.impliesSat
+import combine.types.TypeEnv
+import io.ksmt.KContext
+import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector
+import org.jgrapht.graph.DefaultDirectedGraph
+import org.jgrapht.graph.DefaultEdge
 import witnesses.data.invariant.EqualInvariantGroup
-import witnesses.data.invariant.InvariantPiece
+import witnesses.data.invariant.InvariantComponent
 import witnesses.data.yaml.Invariant
+import witnesses.data.yaml.Location
 import witnesses.data.yaml.Witness
+
+typealias LocToInvariantComponents = MutableMap<Location, MutableList<InvariantComponent>> // TODO: make map immutable
 
 object WitnessComparison {
 
-    private val invariantsByLoc: MutableMap<Int, MutableList<InvariantPiece>> = mutableMapOf()
-
-    fun decomposeInvariantByConjunctions(invariant: Invariant, witness: Witness) {
+    fun decomposeInvariantByConjunctions(invariant: Invariant, witness: Witness, invariantComponentsByLoc: LocToInvariantComponents) {
         val ast = CInvariantAst.createAst(invariant.value)
         val conjunctAsts = collectConjunctAsts(ast)
-        val invariantPieces = conjunctAsts.map { conjunctNode ->
+        val invariantComponents = conjunctAsts.map { conjunctNode ->
             val normalizedAst = conjunctNode.normalize()
-            InvariantPiece(
+            InvariantComponent(
                 type = invariant.type,
                 location = invariant.location,
                 value = conjunctNode.toValue(),
                 format = invariant.format,
                 tool = witness.metadata.producer,
                 normValue = normalizedAst.toValue(),
-                originalValue = invariant.value,
+                originalInvariantValue = invariant.value,
                 ast = normalizedAst
             )
         }
-        invariantsByLoc.getOrPut(invariant.location.line) { mutableListOf() }.addAll(invariantPieces)
+        invariantComponentsByLoc.getOrPut(invariant.location) { mutableListOf() }.addAll(invariantComponents)
     }
 
-    fun findAgreeableTools() = mapImplicationsToConf(findImplications())
+    fun getEqualInvariantGroups(invariantComponentsByLoc: LocToInvariantComponents, typeEnv: TypeEnv) =
+        computeEqualInvariantGroups(invariantComponentsByLoc, typeEnv)
 
-    private fun findImplications(): Map<InvariantPiece, Set<InvariantPiece>> {
-        // Build mapping representing implication relationships (e.g., inv1 => inv2),
-        val implicationMap: MutableMap<InvariantPiece, MutableSet<InvariantPiece>> = mutableMapOf()
-        for (invariants in invariantsByLoc.values) {
+    fun computeEqualInvariantGroups(invariantComponentsByLoc: LocToInvariantComponents, typeEnv: TypeEnv): List<EqualInvariantGroup> {
+        val graph = buildImplicationGraph(invariantComponentsByLoc, typeEnv)
+        val inspector = KosarajuStrongConnectivityInspector(graph)
+        val sccList = inspector.stronglyConnectedSets()
+        return sccList.map { equivalentInvariantComponents ->
+            // Deduplicate per tool: pick shortest .value for each tool
+            val deDuplicated = equivalentInvariantComponents
+                .groupBy { it.tool }
+                .mapValues { (_, group) -> group.minByOrNull { it.value.length }!! }
+                .values.toList()
+            val representative = deDuplicated.minByOrNull { it.normValue.length }!!
+            EqualInvariantGroup(
+                shortestInvariantString = representative.normValue,
+                location = representative.location,
+                equalInvariantComponents = deDuplicated.toList()
+            )
+        }
+    }
+
+    private fun areEqual(a: InvariantComponent, b: InvariantComponent, locTypeEnv: Map<String, CType>): Boolean {
+        if (a.normValue == b.normValue) return true
+        else {
+            try {
+                KContext().use { ctx ->
+                    val aSmtExpr = createSMTBoolExpr(a.ast, ctx, locTypeEnv)
+                    val bSmtExpr = createSMTBoolExpr(b.ast, ctx, locTypeEnv)
+                    return impliesSat(ctx, aSmtExpr, bSmtExpr) && impliesSat(ctx, bSmtExpr, aSmtExpr)
+                }
+            } catch (t: Throwable) {
+                return false
+            }
+
+        }
+    }
+
+    private fun buildImplicationGraph(invariantComponentsByLoc: LocToInvariantComponents, typeEnv: TypeEnv): DefaultDirectedGraph<InvariantComponent, DefaultEdge> {
+        val graph = DefaultDirectedGraph<InvariantComponent, DefaultEdge>(DefaultEdge::class.java)
+
+        for ((loc, invariants) in invariantComponentsByLoc) {
+            val locTypeEnv = typeEnv[loc.line]
             for (a in invariants) {
-                for (b in invariants) {
-                    if (a != b && implies(a, b)) {
-                        implicationMap.getOrPut(a) { mutableSetOf() }.add(b)
+                graph.addVertex(a)
+            }
+            for (i in invariants.indices) {
+                for (j in i + 1 until invariants.size) {
+                    val a = invariants[i]
+                    val b = invariants[j]
+                    if (locTypeEnv != null && areEqual(a, b, locTypeEnv)) {
+                        graph.addEdge(a, b)
+                        graph.addEdge(b, a)
                     }
                 }
-                // Ensure all invariants are represented even if they imply nothing
-                implicationMap.getOrPut(a) { mutableSetOf() }
             }
         }
-
-        return implicationMap
-    }
-
-    private fun implies(a: InvariantPiece, b: InvariantPiece): Boolean {
-        // Placeholder: check if a logically implies b
-        return a.normValue == b.normValue // TODO: replace with solver queries
-    }
-
-    private fun mapImplicationsToConf(implMap: Map<InvariantPiece, Set<InvariantPiece>>): Map<EqualInvariantGroup, Set<EqualInvariantGroup>> {
-        val valueToConf = implMap.keys
-            .groupBy { it.normValue }
-            .mapValues { (_, invList) ->
-                val first = invList.first()
-                EqualInvariantGroup(first.normValue, first.location, invList)
-            }
-
-        // Helper to get InvariantConf from Invariant
-        fun toConf(inv: InvariantPiece) = valueToConf[inv.normValue]!!
-
-        // Fold original implication map from Invariant           -> Set<Invariant>
-        //                               into EqualInvariantGroup -> Set<EqualInvariantGroup>
-        return implMap.entries
-            .fold(mutableMapOf<EqualInvariantGroup, MutableSet<EqualInvariantGroup>>()) { acc, (key, implied) ->
-                val keyConf = toConf(key)
-                val impliedInvariants = implied.map { toConf(it) }.toSet()
-                acc.getOrPut(keyConf) { mutableSetOf() }.addAll(impliedInvariants)
-                acc
-            }.mapValues { it.value.toSet() }
+        return graph
     }
 
 }

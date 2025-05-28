@@ -1,0 +1,26 @@
+- entry_type: "invariant_set"
+  metadata:
+    format_version: "2.0"
+    uuid: "330d8b67-d5fa-3050-9d9c-681a2e55ca71"
+    creation_time: "2024-12-01T10:28:45+01:00"
+    producer:
+      name: "CPAchecker"
+      version: "4.0"
+    task:
+      input_files:
+        - "../../sv-benchmarks/c/termination-restricted-15/b.16.c"
+      input_file_hashes:
+        "../../sv-benchmarks/c/termination-restricted-15/b.16.c": "bd5ab01fc166812a75c8bdc5c42111290012e12e0fb0aba380271d0f3f7f7767"
+      specification: "CHECK( init(main()), LTL(G ! overflow) )"
+      data_model: "LP64"
+      language: "C"
+  content:
+    - invariant:
+        type: "loop_invariant"
+        location:
+          file_name: "../../sv-benchmarks/c/termination-restricted-15/b.16.c"
+          line: 12
+          column: 9
+          function: "main"
+        value: "( 0 < x )"
+        format: "c_expression"

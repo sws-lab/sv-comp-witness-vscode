@@ -9,4 +9,19 @@ data class Location(
     val line: Int,
     val column: Int? = null,
     val function: String? = null
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as Location
+        if (line != other.line) return false
+        if (column != other.column) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = line
+        result = 31 * result + (column ?: 0)
+        return result
+    }
+}

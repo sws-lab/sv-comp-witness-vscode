@@ -6,6 +6,7 @@ import fm_weck.generated.FmWeckService
 import io.grpc.netty.NettyChannelBuilder
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import witnesses.data.yaml.Tool
 import java.io.File
 import java.io.IOException
 import java.net.URI

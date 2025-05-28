@@ -5,7 +5,6 @@ import kotlinx.serialization.decodeFromString
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Test
 import witnesses.WitnessReader.readWitnessFromYaml
-import witnesses.data.run.Tool
 import witnesses.data.yaml.*
 import kotlin.test.assertContains
 import kotlin.test.assertEquals

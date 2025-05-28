@@ -8,7 +8,7 @@ import combine.ksmt.CType
 import combine.types.TypeEnv
 import witnesses.WitnessComparison.computeEqualInvariantGroups
 import witnesses.data.invariant.InvariantComponent
-import witnesses.data.run.Tool
+import witnesses.data.yaml.Tool
 import witnesses.data.yaml.Location
 import kotlin.test.Test
 import kotlin.test.assertEquals

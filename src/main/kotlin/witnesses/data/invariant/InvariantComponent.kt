@@ -1,8 +1,8 @@
 package witnesses.data.invariant
 
 import c.invariantAST.Expression
-import witnesses.data.run.Tool
 import witnesses.data.yaml.Location
+import witnesses.data.yaml.Tool
 
 data class InvariantComponent(
     val type: String,

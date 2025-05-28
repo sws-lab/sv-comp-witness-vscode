@@ -9,8 +9,3 @@ data class AnalyzeMessageParams(
     val fileUri: String,
     val fileRelativePath: String
 )
-
-data class Tool(
-    val name: String,
-    val version: String?
-)

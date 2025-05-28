@@ -4,6 +4,7 @@ import combine.types.VariableTypeHandler.extractTypeEnvByLocation
 import combine.types.VariableTypeHandler.getVariableTypesForProgram
 import fmweckserver.AnalyzeMessageParams
 import fmweckserver.FmWeckClient
+import fmweckserver.Tool
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.eclipse.lsp4j.CodeLens
@@ -14,7 +15,6 @@ import witnesses.WitnessComparison.decomposeInvariantByConjunctions
 import witnesses.WitnessComparison.getEqualInvariantGroups
 import witnesses.WitnessReader.readWitnessFromYaml
 import witnesses.data.invariant.EqualInvariantGroup
-import witnesses.data.run.Tool
 import witnesses.data.yaml.Invariant
 import witnesses.data.yaml.Location
 import witnesses.data.yaml.Waypoint

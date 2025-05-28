@@ -1,3 +1,9 @@
 package witnesses.data.yaml
 
-class MetaData
+import kotlinx.serialization.Serializable
+import witnesses.data.run.Tool
+
+@Serializable
+data class MetaData(
+    val producer: Tool,
+)

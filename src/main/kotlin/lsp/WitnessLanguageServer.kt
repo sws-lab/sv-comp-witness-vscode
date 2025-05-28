@@ -2,6 +2,8 @@ package lsp
 
 import file.WitnessTextDocumentService
 import fmweckserver.AnalyzeMessageParams
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import org.eclipse.lsp4j.*
 import org.eclipse.lsp4j.jsonrpc.Launcher
 import org.eclipse.lsp4j.jsonrpc.services.JsonNotification
@@ -10,8 +12,6 @@ import org.eclipse.lsp4j.services.LanguageServer
 import org.eclipse.lsp4j.services.TextDocumentService
 import org.eclipse.lsp4j.services.WorkspaceService
 import witnesses.AnalysisManager
-import witnesses.data.run.ToolLoader
-import witnesses.data.run.Tool
 import java.io.InputStream
 import java.io.OutputStream
 import java.net.URI
@@ -25,9 +25,10 @@ typealias WitnessLanguageClient = LanguageClient
 class WitnessLanguageServer(private val analysisManager: AnalysisManager) : LanguageServer, WorkspaceService {
     private var client: WitnessLanguageClient? = null
     private val lspThreadPool: ExecutorService = Executors.newCachedThreadPool()
-    private val codeLenses: MutableMap<URI?, List<CodeLens>> = HashMap<URI?, List<CodeLens>>()
+    private val codeLenses: MutableMap<URI, List<CodeLens>> = HashMap()
     private val textDocumentService: TextDocumentService = WitnessTextDocumentService(codeLenses)
-    private val tools: List<Tool> = ToolLoader.tools
+
+    private val log: Logger = LogManager.getLogger(WitnessLanguageServer::class.java)
 
     override fun initialize(initializeParams: InitializeParams?): CompletableFuture<InitializeResult?> {
         val serverCapabilities = ServerCapabilities().apply {
@@ -112,11 +113,9 @@ class WitnessLanguageServer(private val analysisManager: AnalysisManager) : Lang
 
     @JsonNotification(value = "custom/handleWebviewMessage", useSegment = false)
     fun handleWebviewMessage(message: AnalyzeMessageParams) {
-        for (tool in tools) {
-            val fileUri = URI.create(message.fileUri)
-            codeLenses.put(fileUri, analysisManager.analyze(message, tool))
-            client!!.refreshCodeLenses()
-        }
+        val fileUri = URI.create(message.fileUri)
+        codeLenses[fileUri] = analysisManager.analyze(message)
+        client!!.refreshCodeLenses()
     }
 
 }

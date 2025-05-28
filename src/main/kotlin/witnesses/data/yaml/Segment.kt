@@ -1,6 +1,8 @@
 package witnesses.data.yaml
 
-@JvmRecord
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Segment(
     val waypoint: Waypoint
 )

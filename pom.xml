@@ -8,7 +8,8 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <kotlin.compiler.jvmTarget>17</kotlin.compiler.jvmTarget>
-        <kotlin.version>2.1.10</kotlin.version>
+        <kotlin.version>2.1.20</kotlin.version>
+        <serialization.version>1.8.1</serialization.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <protoc.version>3.25.5</protoc.version>
@@ -37,6 +38,7 @@
             <artifactId>log4j-core</artifactId>
             <version>2.24.3</version>
         </dependency>
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -87,6 +89,41 @@
             <version>${kotlin.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.antlr/antlr4-runtime -->
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4-runtime</artifactId>
+            <version>4.13.2</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-test -->
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test</artifactId>
+            <version>2.1.20</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-test-junit5 -->
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test-junit5</artifactId>
+            <version>2.1.20</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-serialization-json</artifactId>
+            <version>${serialization.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.charleskorn.kaml/kaml-jvm -->
+        <dependency>
+            <groupId>com.charleskorn.kaml</groupId>
+            <artifactId>kaml-jvm</artifactId>
+            <version>0.74.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -132,6 +169,18 @@
                         </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <compilerPlugins>
+                        <plugin>kotlinx-serialization</plugin>
+                    </compilerPlugins>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-maven-serialization</artifactId>
+                        <version>${kotlin.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
             <!-- build jar -->
@@ -178,10 +227,12 @@
                 <artifactId>protobuf-maven-plugin</artifactId>
                 <version>0.6.1</version>
                 <configuration>
-                    <protocArtifact>com.google.protobuf:protoc:${protoc.version}:exe:${os.detected.classifier}
+                    <protocArtifact>
+                        com.google.protobuf:protoc:${protoc.version}:exe:${os.detected.classifier}
                     </protocArtifact>
                     <pluginId>grpc-java</pluginId>
-                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}
+                    <pluginArtifact>
+                        io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}
                     </pluginArtifact>
                 </configuration>
                 <executions>
@@ -190,6 +241,28 @@
                             <goal>compile</goal>
                             <goal>compile-custom</goal>
                             <goal>test-compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr4-maven-plugin</artifactId>
+                <version>4.13.2</version>
+                <configuration>
+                    <sourceDirectory>src/main/antlr4</sourceDirectory>
+                    <outputDirectory>src/gen/java</outputDirectory>
+                    <arguments>
+                        <argument>-visitor</argument>
+                        <argument>-encoding</argument>
+                        <argument>utf-8</argument>
+                    </arguments>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>antlr4</goal>
                         </goals>
                     </execution>
                 </executions>

@@ -2,6 +2,7 @@
 **/target
 **/dist
 **/node_modules
+**/gen
 **/.idea
 **/.vscode-test/**
 **/*.map

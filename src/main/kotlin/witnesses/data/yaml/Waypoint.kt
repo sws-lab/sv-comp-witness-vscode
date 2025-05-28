@@ -1,9 +1,11 @@
 package witnesses.data.yaml
 
-@JvmRecord
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Waypoint(
     val type: String,
     val action: String,
     val location: Location,
-    val constraint: Constraint?
+    val constraint: Constraint? = null
 )

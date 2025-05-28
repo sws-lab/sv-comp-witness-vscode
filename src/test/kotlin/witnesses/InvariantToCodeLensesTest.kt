@@ -24,14 +24,14 @@ object InvariantToCodeLensesTest {
         ),
         CodeLens(
             Range(Position(11, 8), Position(11, 8)),
-            Command("c == 0", "showInvariantInfo", listOf("Goblint: c == 0, Goblint: 0 == c")),
+            Command(
+                "x <= 2147483647", "showInvariantInfo", listOf("Automizer: x <= 2147483647")
+            ),
             null
         ),
         CodeLens(
             Range(Position(11, 8), Position(11, 8)),
-            Command(
-                "x <= 2147483647", "showInvariantInfo", listOf("Automizer: x <= 2147483647")
-            ),
+            Command("c == 0", "showInvariantInfo", listOf("Goblint: c == 0")),
             null
         ),
         CodeLens(
@@ -48,7 +48,7 @@ object InvariantToCodeLensesTest {
         val lenses = mutableListOf<CodeLens>()
         val witnesses = mutableListOf<Witness>()
         val message = AnalyzeMessageParams(
-            "", "", "no_overflow",
+            "", "", "no_overflow", listOf("cpachecker", "goblint", "uautomizer"),
             "b.16.c", "examples/b.16.c"
         )
         val analysisManager = AnalysisManager(FmWeckClient("host", 1000))

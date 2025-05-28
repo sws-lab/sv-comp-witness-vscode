@@ -1,7 +1,10 @@
 package witnesses
 
+import combine.types.VariableTypeHandler.extractTypeEnvByLocation
+import combine.types.VariableTypeHandler.getVariableTypesForProgram
 import fmweckserver.AnalyzeMessageParams
 import fmweckserver.FmWeckClient
+import fmweckserver.Tool
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.eclipse.lsp4j.CodeLens
@@ -9,11 +12,9 @@ import org.eclipse.lsp4j.Command
 import org.eclipse.lsp4j.Position
 import org.eclipse.lsp4j.Range
 import witnesses.WitnessComparison.decomposeInvariantByConjunctions
-import witnesses.WitnessComparison.findAgreeableTools
+import witnesses.WitnessComparison.getEqualInvariantGroups
 import witnesses.WitnessReader.readWitnessFromYaml
 import witnesses.data.invariant.EqualInvariantGroup
-import witnesses.data.run.Tool
-import witnesses.data.run.ToolLoader
 import witnesses.data.yaml.Invariant
 import witnesses.data.yaml.Location
 import witnesses.data.yaml.Waypoint
@@ -21,20 +22,18 @@ import witnesses.data.yaml.Witness
 
 class AnalysisManager(private val fmWeckClient: FmWeckClient) {
 
-    private val tools: List<Tool> = ToolLoader.tools
-
     private val log: Logger = LogManager.getLogger(AnalysisManager::class.java)
 
     fun analyze(message: AnalyzeMessageParams): MutableList<CodeLens> {
         val lenses = mutableListOf<CodeLens>()
         val witnesses = mutableListOf<Witness>()
 
-        tools.forEach { tool ->
-            val witnessStrings = runTool(message, tool)
+        message.tools.forEach { tool ->
+            val witnessStrings = runTool(message, Tool(tool, null))
             witnesses.addAll(readWitnessFromYaml(witnessStrings))
         }
 
-        lenses.addAll(convert(witnesses))
+        lenses.addAll(convert(witnesses, message))
         return lenses
     }
 
@@ -51,7 +50,7 @@ class AnalysisManager(private val fmWeckClient: FmWeckClient) {
         }
     }
 
-    private fun convert(witnesses: List<Witness>): List<CodeLens> {
+    fun convert(witnesses: List<Witness>, message: AnalyzeMessageParams): List<CodeLens> {
         val correctnessInvariants = mutableListOf<Pair<Invariant, Witness>>()
         val violationCodeLenses = mutableListOf<CodeLens>()
         for (witness in witnesses) {
@@ -64,13 +63,17 @@ class AnalysisManager(private val fmWeckClient: FmWeckClient) {
                 }
             }
         }
-        correctnessInvariants.map { (invariant, witness) ->
-            decomposeInvariantByConjunctions(invariant, witness)
+        val invariantComponentsByLoc: LocToInvariantComponents = mutableMapOf()
+        correctnessInvariants.forEach { (invariant, witness) ->
+            decomposeInvariantByConjunctions(invariant, witness, invariantComponentsByLoc)
         }
-        val findAgreeableTools = findAgreeableTools()
-        val correctnessCodeLenses = findAgreeableTools.map { (invariantConf, _) ->
-            convertCorrectnessWitness(invariantConf)
-        }
+        val typeEnv = extractTypeEnvByLocation(getVariableTypesForProgram(message.fileRelativePath, "vtypes.json"))
+        val correctnessCodeLenses =
+            getEqualInvariantGroups(invariantComponentsByLoc, typeEnv)
+                .sortedByDescending { it.equalInvariantComponents.size }
+                .map { equalInvariantGroup ->
+                convertCorrectnessWitness(equalInvariantGroup)
+            }
         return correctnessCodeLenses + violationCodeLenses
     }
 

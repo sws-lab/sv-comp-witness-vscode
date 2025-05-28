@@ -18,9 +18,13 @@ export class WitnessViewProvider implements vscode.WebviewViewProvider {
             (message) => {
                 switch (message.command) {
                     case 'analyze':
-                        message.fileUri = this.getActiveFileUri();
-                        this.lc.sendNotification('custom/handleWebviewMessage', message);
-                        break;
+                        const activeFileUri = this.getActiveFileUri();
+                        if (activeFileUri) {
+                            message.fileUri = activeFileUri.uri;
+                            message.fileRelativePath = activeFileUri.relativePath;
+                            this.lc.sendNotification('custom/handleWebviewMessage', message);
+                            break;
+                        }
                 }
             },
             null,
@@ -28,16 +32,21 @@ export class WitnessViewProvider implements vscode.WebviewViewProvider {
         );
     }
 
-    private getActiveFileUri() {
+    private getActiveFileUri(): { uri: string; relativePath: string } | undefined {
         const editor = vscode.window.activeTextEditor;
         if (editor && editor.document.languageId == 'c') {
-            return editor.document.uri.toString();
-        } else {
-            vscode.window.showWarningMessage('Please open a C file (.c, .h, .i) to analyze.');
+            const uri = editor.document.uri;
+            const relativePath = vscode.workspace.asRelativePath(uri);
+            return {
+                uri: uri.toString(),            // full URI, e.g. "file:///home/user/project/src/foo.c"
+                relativePath: relativePath      // relative to workspace, e.g. "src/foo.c"
+            };
         }
+        vscode.window.showWarningMessage('Please open a C file (.c, .h, .i) to analyze.');
+        return undefined;
     }
 
-    private getWebviewContent() : string {
+    private getWebviewContent(): string {
         return `
             <html>
                 <head>
@@ -101,16 +110,23 @@ export class WitnessViewProvider implements vscode.WebviewViewProvider {
                 </head>
                 <body>            
                     <div class="selection-group">
-                    <label class="group-title">Select Data Model:</label>
+                        <label class="group-title">Select Data Model:</label>
                         <div class="selectable" data-group="dataModel" data-value="LP64" data-selected="true">LP64</div>
                         <div class="selectable" data-group="dataModel" data-value="ILP32">ILP32</div>
                     </div>
                 
                     <div class="selection-group">
-                    <label class="group-title">Choose a Property:</label>
+                        <label class="group-title">Choose a Property:</label>
                         <div class="selectable" data-group="property" data-value="no-overflow" data-selected="true">No Overflow</div>
                         <div class="selectable" data-group="property" data-value="unreach-call">Unreach Call</div>
                         <div class="selectable" data-group="property" data-value="no-data-race">No Data Race</div>
+                    </div>
+                    
+                    <div class="selection-group">
+                        <label class="group-title">Select Tools:</label>
+                        <div class="selectable" data-group="tool" data-value="cpachecker" data-selected="true">CPAchecker</div>
+                        <div class="selectable" data-group="tool" data-value="goblint" data-selected="true">Goblint</div>
+                        <div class="selectable" data-group="tool" data-value="uautomizer" data-selected="true">UAutomizer</div>
                     </div>
             
                     <button id="analyzeButton" onclick="analyze()">Analyze</button>
@@ -127,12 +143,17 @@ export class WitnessViewProvider implements vscode.WebviewViewProvider {
                             // Get the selected property
                             const propertyElement = document.querySelector('[data-group="property"][data-selected="true"]');
                             const property = propertyElement.getAttribute('data-value');
+                            
+                            // Get selected tools
+                            const toolElements = document.querySelectorAll('[data-group="tool"][data-selected="true"]');
+                            const tools = Array.from(toolElements).map(el => el.getAttribute('data-value'));
             
                             // Send message to VS Code extension
                             vscode.postMessage({
                                 command: 'analyze',
                                 dataModel: dataModel,
-                                property: property
+                                property: property,
+                                tools: tools
                             });
                         }
                         
@@ -149,6 +170,14 @@ export class WitnessViewProvider implements vscode.WebviewViewProvider {
                             property.addEventListener('click', () => {
                                 document.querySelectorAll('[data-group="property"]').forEach(prp => prp.setAttribute('data-selected', 'false'));
                                 property.setAttribute('data-selected', 'true');
+                            });
+                        });
+                        
+                        // Handle tool selection
+                        document.querySelectorAll('[data-group="tool"]').forEach(el => {
+                        el.addEventListener('click', () => {
+                                const selected = el.getAttribute('data-selected') === 'true';
+                                el.setAttribute('data-selected', (!selected).toString());
                             });
                         });
                     </script>

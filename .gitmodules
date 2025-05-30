@@ -1,4 +1,4 @@
 [submodule "build/cpachecker"]
 	path = build/cpachecker
 	url = https://gitlab.com/sosy-lab/software/cpachecker.git
-	branch = variable-type-export
+	branch = improvement-in-variable-type-export

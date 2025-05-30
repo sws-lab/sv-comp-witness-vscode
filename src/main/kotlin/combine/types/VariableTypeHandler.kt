@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
+import java.nio.file.Files
 import java.nio.file.Paths
 
 typealias VariableTypeMap = Map<String, Map<Int, Map<Int, List<VariableType>>>>
@@ -15,7 +16,14 @@ typealias TypeEnv = Map<Int, Map<String, CType>>
 object VariableTypeHandler {
 
     private val userDir = System.getProperty("user.dir")
-    private val resourcePath = Paths.get(userDir).resolve("build/cpachecker")
+    private val cpacheckerBasePath = run {
+        val submodulePath = Paths.get(userDir).resolve("sv-comp-witness-vscode").resolve("build/cpachecker")
+        val directPath = Paths.get(userDir).resolve("build/cpachecker")
+
+        if (Files.isDirectory(submodulePath)) submodulePath
+        else if (Files.isDirectory(directPath)) directPath
+        else throw IllegalStateException("CPAchecker base directory not found.")
+    }
 
     private val log: Logger = LogManager.getLogger(VariableTypeHandler::class.java)
 
@@ -23,8 +31,8 @@ object VariableTypeHandler {
 
         // cli usage: bin/cpachecker --config config/generateCFA.properties ./tmp.c --option cfa.pathForExportingVariablesInScopeWithTheirType=out.json
         // val resourcePath = Paths.get(userDir).resolve("lib/cpachecker-native")
-        val cpacheckerBinPath = resourcePath.resolve("bin/cpachecker").toString()
-        val configPath = resourcePath.resolve("config/generateCFA.properties").toString()
+        val cpacheckerBinPath = cpacheckerBasePath.resolve("bin/cpachecker").toString()
+        val configPath = cpacheckerBasePath.resolve("config/generateCFA.properties").toString()
         val processBuilder = ProcessBuilder(
             cpacheckerBinPath,
             "--config",

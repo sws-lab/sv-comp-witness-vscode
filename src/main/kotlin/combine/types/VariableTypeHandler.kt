@@ -5,6 +5,7 @@ import kotlinx.serialization.json.Json
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import java.io.File
+import java.nio.file.Paths
 
 typealias VariableTypeMap = Map<String, Map<Int, Map<Int, List<VariableType>>>>
 typealias TypeEnv = Map<Int, Map<String, CType>>
@@ -13,17 +14,26 @@ object VariableTypeHandler {
 
     private val log: Logger = LogManager.getLogger(VariableTypeHandler::class.java)
 
-    private fun startCPAChecker(programFileName: String, outputFileName: String): Process {
-        // TODO: currently assumes that cpachecker is available locally: use through fm-weck
+    fun startCPAChecker(programFileName: String, outputFileName: String): Process {
+        // Get the path to the CPAchecker binary from resources
+        val userDir = System.getProperty("user.dir")
+
+
+        val resourcePath = Paths.get(userDir).resolve("lib/cpachecker-native")
+        val cpacheckerBinPath = resourcePath.resolve("cpachecker").toString()
+        val configPath = resourcePath.resolve("config/generateCFA.properties").toString()
         val processBuilder = ProcessBuilder(
-            // usage: bin/cpachecker --config config/generateCFA.properties <<C-Program>> --option cfa.variablesInScope=<<OUTPUT-FILE>> --option cfa.exportCfaAsync=false
-            "../../../playground/cpachecker/bin/cpachecker",  // TODO: hardcoded path
-            "--config", "../../../playground/cpachecker/config/generateCFA.properties", // TODO: hardcoded path
-            programFileName, "--option", "cfa.variablesInScope=$outputFileName", "--option", "cfa.exportCfaAsync=false"
+            cpacheckerBinPath,
+            "--config",
+            configPath,
+            "--option",
+            "cfa.pathForExportingVariablesInScopeWithTheirType=$outputFileName",
+            "--option",
+            "cfa.exportCfaAsync=false",
+            programFileName
         )
         processBuilder.redirectErrorStream(true)
         val process = processBuilder.start()
-        //log.info("CPAchecker asked for variable types for program: $programFileName")
         return process
     }
 

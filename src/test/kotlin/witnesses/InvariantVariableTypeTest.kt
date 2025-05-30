@@ -4,11 +4,18 @@ import combine.ksmt.CType
 import combine.types.TypeEnv
 import combine.types.VariableType
 import combine.types.VariableTypeHandler.extractTypeEnvByLocation
+import combine.types.VariableTypeHandler.getVariableTypesForProgram
+import combine.types.VariableTypeHandler.startCPAChecker
 import combine.types.VariableTypeMap
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 object InvariantVariableTypeTest {
+
+  @Test
+  fun test() {
+    println(getVariableTypesForProgram("./examples/safe-program-example.c", "variable_type.json"))
+  }
 
     @Test
     fun test_typeEnv() {

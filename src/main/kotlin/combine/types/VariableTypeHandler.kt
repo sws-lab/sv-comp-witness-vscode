@@ -4,7 +4,9 @@ import combine.ksmt.CType
 import kotlinx.serialization.json.Json
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import java.io.BufferedReader
 import java.io.File
+import java.io.InputStreamReader
 import java.nio.file.Paths
 
 typealias VariableTypeMap = Map<String, Map<Int, Map<Int, List<VariableType>>>>
@@ -12,15 +14,16 @@ typealias TypeEnv = Map<Int, Map<String, CType>>
 
 object VariableTypeHandler {
 
+    private val userDir = System.getProperty("user.dir")
+    private val resourcePath = Paths.get(userDir).resolve("build/cpachecker")
+
     private val log: Logger = LogManager.getLogger(VariableTypeHandler::class.java)
 
     fun startCPAChecker(programFileName: String, outputFileName: String): Process {
-        // Get the path to the CPAchecker binary from resources
-        val userDir = System.getProperty("user.dir")
 
         // cli usage: bin/cpachecker --config config/generateCFA.properties ./tmp.c --option cfa.pathForExportingVariablesInScopeWithTheirType=out.json
-        val resourcePath = Paths.get(userDir).resolve("lib/cpachecker-native")
-        val cpacheckerBinPath = resourcePath.resolve("cpachecker").toString()
+        // val resourcePath = Paths.get(userDir).resolve("lib/cpachecker-native")
+        val cpacheckerBinPath = resourcePath.resolve("bin/cpachecker").toString()
         val configPath = resourcePath.resolve("config/generateCFA.properties").toString()
         val processBuilder = ProcessBuilder(
             cpacheckerBinPath,
@@ -31,7 +34,17 @@ object VariableTypeHandler {
             programFileName
         )
         processBuilder.redirectErrorStream(true)
+        userDir.let { processBuilder.directory(File(it)) }
         val process = processBuilder.start()
+        val outputGobbler = Thread {
+            BufferedReader(InputStreamReader(process.inputStream)).use { reader ->
+                var line: String?
+                while (reader.readLine().also { line = it } != null) {
+                    println(line) // Print each line to your Kotlin app's stdout (which goes to terminal)
+                }
+            }
+        }
+        outputGobbler.start()
         return process
     }
 
@@ -43,6 +56,7 @@ object VariableTypeHandler {
     }
 
     fun getVariableTypesForProgram(programFileName: String, outputFileName: String): VariableTypeMap {
+        println("../../..$programFileName")
         val cpaCheckerProcess = startCPAChecker(programFileName, outputFileName)
         if (cpaCheckerProcess.waitFor() == 0) {
             //log.info("CPAchecker completed for $programFileName")

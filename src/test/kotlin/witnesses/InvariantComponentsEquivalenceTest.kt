@@ -8,8 +8,8 @@ import combine.ksmt.CType
 import combine.types.TypeEnv
 import witnesses.WitnessComparison.computeEqualInvariantGroups
 import witnesses.data.invariant.InvariantComponent
-import witnesses.data.yaml.Tool
 import witnesses.data.yaml.Location
+import witnesses.data.yaml.Tool
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -32,8 +32,8 @@ object InvariantComponentsEquivalenceTest {
         ast = ast
     )
 
-    private val `data==2 ast` = BinaryExpression(Var("data"), "==", Const("0"), "data == 2")
-    private val `i==2 ast` = BinaryExpression(Var("i"), "==", Const("0"), "i == 2")
+    private val `data==2 ast` = BinaryExpression(Var("data"), "==", Const("0", ""), "data == 2")
+    private val `i==2 ast` = BinaryExpression(Var("i"), "==", Const("0", ""), "i == 2")
 
     private val inv1 = invariant("data == 2", "data == 2", tool1, `data==2 ast`)
     private val inv2 = invariant("data == 2", "data == 2", tool2, `data==2 ast`)

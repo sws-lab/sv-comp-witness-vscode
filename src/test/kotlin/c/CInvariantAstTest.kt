@@ -12,21 +12,34 @@ import kotlin.test.assertNotEquals
 
 object CInvariantAstTest {
 
-    private val `x LT 0` = binary(variable("x"), "<", constant("0"), "x < 0")
-    private val `y LT 0` = binary(variable("y"), "<", constant("0"), "y < 0")
-    private val `i EQ 0` = binary(variable("i"), "==", constant("0"), "i == 0")
-    private val `j EQ 0` = binary(variable("j"), "==", constant("0"), "j == 0")
+    private val `x LT 0` = binary(variable("x"), "<", constant("0", null), "x < 0")
+    private val `y LT 0` = binary(variable("y"), "<", constant("0", null), "y < 0")
+    private val `i EQ 0` = binary(variable("i"), "==", constant("0", null), "i == 0")
+    private val `j EQ 0` = binary(variable("j"), "==", constant("0", null), "j == 0")
 
     @Test
     fun test_variable_constant() {
         legal("x", variable("x"))
         legal("xyz", variable("xyz"))
         legal("x1", variable("x1"))
-        legal("1", constant("1"))
-        legal("0.0", constant("0.0"))
-        legal("1L", constant("1L"))
-        legal("1u", constant("1u"))
-        legal("'c'", constant("'c'"))
+        legal("1", constant("1", null))
+        legal("0.0", constant("0.0", null))
+        legal("1L", constant("1", "L"))
+        legal("1u", constant("1", "u"))
+        legal("'c'", constant("'c'", null))
+    }
+
+    @Test
+    fun testIntegerConstantSplitting() {
+        assertEquals(constant("123", null), splitIntegerConstantAndSuffix("123"))
+        assertEquals(constant("42", "U"), splitIntegerConstantAndSuffix("42U"))
+        assertEquals(constant("10", "L"), splitIntegerConstantAndSuffix("10L"))
+        assertEquals(constant("255", "ULL"), splitIntegerConstantAndSuffix("255ULL"))
+        assertEquals(constant("0xFA", "uL"), splitIntegerConstantAndSuffix("0xFAuL"))
+        assertEquals(constant("0b101", "LL"), splitIntegerConstantAndSuffix("0b101LL"))
+        assertEquals(constant("789", "lU"), splitIntegerConstantAndSuffix("789lU"))
+        assertEquals(constant("0o177", null), splitIntegerConstantAndSuffix("0o177"))
+        assertEquals(constant("123.45F", null), splitIntegerConstantAndSuffix("123.45F"))
     }
 
     @Test
@@ -36,8 +49,8 @@ object CInvariantAstTest {
         legal("x > y", binary(variable("x"), ">", variable("y"), "x > y"))
         legal("x >= y", binary(variable("x"), ">=", variable("y"), "x >= y"))
         legalNonEqual("x < y", binary(variable("x"), "<=", variable("y"), "x < y"))
-        legal("x == 0", binary(variable("x"), "==", constant("0"), "x == 0"))
-        legal("0 != y", binary(constant("0"), "!=", variable("y"), "0 != y"))
+        legal("x == 0", binary(variable("x"), "==", constant("0", null), "x == 0"))
+        legal("0 != y", binary(constant("0", null), "!=", variable("y"), "0 != y"))
     }
 
     @Test
@@ -74,7 +87,7 @@ object CInvariantAstTest {
                 binary(
                     `y LT 0`,
                     "||",
-                    binary(variable("x"), ">", constant("0"), "x > 0"),
+                    binary(variable("x"), ">", constant("0", null), "x > 0"),
                     "(y < 0) || x > 0"
                 ),
                 "(x < 0) && ((y < 0) || x > 0)"
@@ -87,9 +100,9 @@ object CInvariantAstTest {
         legal(
             "x > 0 ? 1 : 0",
             ternary(
-                binary(variable("x"), ">", constant("0"), "x > 0"),
-                constant("1"),
-                constant("0"),
+                binary(variable("x"), ">", constant("0", null), "x > 0"),
+                constant("1", null),
+                constant("0", null),
                 "x > 0 ? 1 : 0"
             )
         )
@@ -100,7 +113,7 @@ object CInvariantAstTest {
         legal(
             "((__int128) 2 * a)",
             binary(
-                unary("(__int128)", constant("2"), "(__int128) 2"),
+                unary("(__int128)", constant("2", null), "(__int128) 2"),
                 "*",
                 variable("a"),
                 "(__int128) 2 * a"
@@ -108,14 +121,14 @@ object CInvariantAstTest {
         )
         legal(
             "(unsigned __int128) 1",
-            unary("(unsigned __int128)", constant("1"), "(unsigned __int128) 1"),
+            unary("(unsigned __int128)", constant("1", null), "(unsigned __int128) 1"),
         )
         legal(
             "len == (vuint32_t const   )4U",
             binary(
                 variable("len"),
                 "==",
-                unary("(vuint32_t const)", constant("4U"), "(vuint32_t const   )4U"),
+                unary("(vuint32_t const)", constant("4", "U"), "(vuint32_t const   )4U"),
                 "len == (vuint32_t const   )4U"
             ),
         )
@@ -144,7 +157,7 @@ object CInvariantAstTest {
     @Test
     fun test_pointers() {
         legal("&pqb", unary("&", variable("pqb"), "&pqb"))
-        legal("(void *)0", unary("(void *)", constant("0"), "(void *)0"))
+        legal("(void *)0", unary("(void *)", constant("0", null), "(void *)0"))
         val `((struct aws_array_list ptr)buf)` =
             unary("(struct aws_array_list *)", variable("buf"), "(struct aws_array_list *)buf")
         legal("((struct aws_array_list *)buf)", `((struct aws_array_list ptr)buf)`)
@@ -175,7 +188,7 @@ object CInvariantAstTest {
                     `i EQ 0`,
                     "&&",
                     binary(
-                        constant("1"),
+                        constant("1", null),
                         "<=",
                         variable("j"),
                         "1 <= j"
@@ -190,7 +203,7 @@ object CInvariantAstTest {
             binary(
                 binary(
                     binary(
-                        unary("-", constant("1LL"), "-1LL"),
+                        unary("-", constant("1", "LL"), "-1LL"),
                         "+",
                         unary("(long long)", variable("A"), "(long long )A"),
                         "-1LL + (long long )A"
@@ -200,7 +213,7 @@ object CInvariantAstTest {
                     "(-1LL + (long long )A) + (long long )B"
                 ),
                 ">=",
-                constant("0LL"),
+                constant("0", "LL"),
                 "(-1LL + (long long )A) + (long long )B >= 0LL"
             )
         )

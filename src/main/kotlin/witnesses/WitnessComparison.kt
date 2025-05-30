@@ -51,7 +51,8 @@ object WitnessComparison {
             val deDuplicated = equivalentInvariantComponents
                 .groupBy { it.tool }
                 .mapValues { (_, group) -> group.minByOrNull { it.value.length }!! }
-                .values.toList()
+                .values
+                .sortedBy { it.value.length }
             val representative = deDuplicated.minByOrNull { it.normValue.length }!!
             EqualInvariantGroup(
                 shortestInvariantString = representative.normValue,
@@ -73,7 +74,6 @@ object WitnessComparison {
             } catch (t: Throwable) {
                 return false
             }
-
         }
     }
 

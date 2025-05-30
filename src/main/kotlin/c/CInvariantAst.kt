@@ -129,10 +129,10 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
         Var(ctx.Identifier().text)
 
     override fun visitCons(ctx: InvariantCParser.ConsContext) =
-        Const(ctx.Constant().text)
+        splitIntegerConstantAndSuffix(ctx.Constant().text)
 
     override fun visitString(ctx: InvariantCParser.StringContext) =
-        Const(ctx.text)
+        Const(ctx.text, "")
 
     override fun visitParens(ctx: InvariantCParser.ParensContext): Expression =
         visit(ctx.expression())
@@ -165,3 +165,10 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
 }
 
 fun ParserRuleContext.originalText(): String = start.inputStream.getText(Interval.of(start.startIndex, stop.stopIndex))
+
+fun splitIntegerConstantAndSuffix(text: String): Const {
+    val suffixRegex = Regex("(?i)(ULL|LLU|LL|LU|UL|U|L)$") // match known suffixes at the end, case-insensitive
+    val match = suffixRegex.find(text)
+    return if (match != null) Const(text.substring(0, match.range.first), match.value)
+    else Const(text, null)
+}

@@ -22,11 +22,11 @@ object CInvariantAstNormalizationTest {
     @Test
     fun test_logical_negation_f_relational_operators() {
         assertEquals(
-            BinaryExpression(Var("x"), ">=", Const("1"), "x >= 1"),
+            BinaryExpression(Var("x"), ">=", Const("1", null), "x >= 1"),
             CInvariantAst.createAst("!(x < 1)").normalize()
         )
         assertEquals(
-            BinaryExpression(Var("y"), ">", Const("42"), "y > 42"),
+            BinaryExpression(Var("y"), ">", Const("42", null), "y > 42"),
             CInvariantAst.createAst("!(y <= 42)").normalize()
         )
         assertEquals(
@@ -42,7 +42,7 @@ object CInvariantAstNormalizationTest {
             CInvariantAst.createAst("!(b != a)").normalize()
         )
         assertEquals(
-            BinaryExpression(Var("x"), "<", Const("1"), "x < 1"),
+            BinaryExpression(Var("x"), "<", Const("1", null), "x < 1"),
             CInvariantAst.createAst("!(1 <= x)").normalize()
         )
     }
@@ -50,19 +50,19 @@ object CInvariantAstNormalizationTest {
     @Test
     fun test_canonical_operand_ordering() {
         assertEquals(
-            BinaryExpression(Var("x"), ">", Const("1"), "x > 1"),
+            BinaryExpression(Var("x"), ">", Const("1", null), "x > 1"),
             CInvariantAst.createAst("1<x").normalize()
         )
         assertEquals(
-            BinaryExpression(Var("y"), ">=", Const("2"), "y >= 2"),
+            BinaryExpression(Var("y"), ">=", Const("2", null), "y >= 2"),
             CInvariantAst.createAst("2 <= y").normalize()
         )
         assertEquals(
-            BinaryExpression(Var("z"), "<", Const("3"), "z < 3"),
+            BinaryExpression(Var("z"), "<", Const("3", null), "z < 3"),
             CInvariantAst.createAst("3 > z").normalize()
         )
         assertEquals(
-            BinaryExpression(Var("a"), "<=", Const("4"), "a <= 4"),
+            BinaryExpression(Var("a"), "<=", Const("4", null), "a <= 4"),
             CInvariantAst.createAst("4 >= a").normalize()
         )
         assertEquals(
@@ -76,15 +76,15 @@ object CInvariantAstNormalizationTest {
         assertEquals(Var("x"), CInvariantAst.createAst("(x)").normalize())
         assertEquals(Var("y"), CInvariantAst.createAst("((y))").normalize())
         assertEquals(
-            BinaryExpression(Var("x"), "==", Const("0"), "x == 0"),
+            BinaryExpression(Var("x"), "==", Const("0", null), "x == 0"),
             CInvariantAst.createAst("x == (0)").normalize()
         )
         assertEquals(
-            BinaryExpression(Var("x"), "==", Const("0"), "x == 0"),
+            BinaryExpression(Var("x"), "==", Const("0", null), "x == 0"),
             CInvariantAst.createAst("(0) == (x)").normalize()
         )
         assertEquals(
-            BinaryExpression(Var("a"), "<=", Const("4"), "a <= 4"),
+            BinaryExpression(Var("a"), "<=", Const("4", null), "a <= 4"),
             CInvariantAst.createAst("4 >= ((a))").normalize()
         )
     }
@@ -99,13 +99,13 @@ object CInvariantAstNormalizationTest {
                     BinaryExpression(
                         UnaryExpression("(long long)", Var("x"), "(long long)x"),
                         "+",
-                        Const("4294967296LL"),
+                        Const("4294967296", "LL"),
                         "(long long)x + 4294967296LL"
                     ),
                     "(long long)y + (long long)x + 4294967296LL",
                 ),
                 ">=",
-                Const("0LL"),
+                Const("0", "LL"),
                 "(long long)y + (long long)x + 4294967296LL >= 0LL"
             ),
             CInvariantAst.createAst("(4294967296LL + (long long )x) + (long long )y >= 0LL").normalize()

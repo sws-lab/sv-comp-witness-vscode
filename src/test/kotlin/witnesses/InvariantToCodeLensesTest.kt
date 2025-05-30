@@ -25,7 +25,7 @@ object InvariantToCodeLensesTest {
         CodeLens(
             Range(Position(11, 8), Position(11, 8)),
             Command(
-                "x <= 2147483647", "showInvariantInfo", listOf("Automizer: x <= 2147483647")
+                "y <= 2147483647", "showInvariantInfo", listOf("Automizer: y <= 2147483647")
             ),
             null
         ),
@@ -37,7 +37,7 @@ object InvariantToCodeLensesTest {
         CodeLens(
             Range(Position(11, 8), Position(11, 8)),
             Command(
-                "y <= 2147483647", "showInvariantInfo", listOf("Automizer: y <= 2147483647")
+                "x <= 2147483647", "showInvariantInfo", listOf("Automizer: x <= 2147483647")
             ),
             null
         )

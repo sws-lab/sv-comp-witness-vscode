@@ -14,16 +14,9 @@ import witnesses.WitnessComparison.decomposeInvariantByConjunctions
 import witnesses.WitnessComparison.getEqualInvariantGroups
 import witnesses.WitnessReader.readWitnessFromYaml
 import witnesses.data.invariant.EqualInvariantGroup
-import witnesses.data.run.Tool
-import witnesses.data.run.ToolLoader
-import witnesses.data.yaml.Invariant
-import witnesses.data.yaml.Location
-import witnesses.data.yaml.Waypoint
-import witnesses.data.yaml.Witness
+import witnesses.data.yaml.*
 
 class AnalysisManager(private val fmWeckClient: FmWeckClient) {
-
-    private val tools: List<Tool> = ToolLoader.tools
 
     private val log: Logger = LogManager.getLogger(AnalysisManager::class.java)
 
@@ -31,8 +24,8 @@ class AnalysisManager(private val fmWeckClient: FmWeckClient) {
         val lenses = mutableListOf<CodeLens>()
         val witnesses = mutableListOf<Witness>()
 
-        tools.forEach { tool ->
-            val witnessStrings = runTool(message, tool)
+        message.tools.forEach { tool ->
+            val witnessStrings = runTool(message, Tool(tool, null))
             witnesses.addAll(readWitnessFromYaml(witnessStrings))
         }
 
@@ -49,11 +42,11 @@ class AnalysisManager(private val fmWeckClient: FmWeckClient) {
             return fmWeckClient.waitOnRun(runId)
         } catch (e: Throwable) {
             e.printStackTrace()
-            TODO("proper error handling")
+            TODO("proper error handling (runTool)")
         }
     }
 
-    private fun convert(witnesses: List<Witness>, message: AnalyzeMessageParams): List<CodeLens> {
+    fun convert(witnesses: List<Witness>, message: AnalyzeMessageParams): List<CodeLens> {
         val correctnessInvariants = mutableListOf<Pair<Invariant, Witness>>()
         val violationCodeLenses = mutableListOf<CodeLens>()
         for (witness in witnesses) {
@@ -72,7 +65,9 @@ class AnalysisManager(private val fmWeckClient: FmWeckClient) {
         }
         val typeEnv = extractTypeEnvByLocation(getVariableTypesForProgram(message.fileRelativePath, "vtypes.json"))
         val correctnessCodeLenses =
-            getEqualInvariantGroups(invariantComponentsByLoc, typeEnv).map { equalInvariantGroup ->
+            getEqualInvariantGroups(invariantComponentsByLoc, typeEnv)
+                .sortedByDescending { it.equalInvariantComponents.size }
+                .map { equalInvariantGroup ->
                 convertCorrectnessWitness(equalInvariantGroup)
             }
         return correctnessCodeLenses + violationCodeLenses

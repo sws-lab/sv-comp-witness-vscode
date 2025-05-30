@@ -1,0 +1,29 @@
+- entry_type: invariant_set
+  metadata:
+    format_version: '2.0'
+    uuid: 2e8a21a1-6ba2-4c43-986e-2fbd89439366
+    creation_time: '2024-12-02T13:06:57+01:00'
+    producer:
+      name: Automizer
+      version: 0.3.0-dev-d790fec
+    task:
+      input_files:
+        - /tmp/vcloud_worker_vcloud-master_on_vcloud-master/run_dir_c84519dd-211e-470e-87c5-86accff0cc54/sv-benchmarks/c/termination-restricted-15/b.16.c
+      input_file_hashes:
+        bd5ab01fc166812a75c8bdc5c42111290012e12e0fb0aba380271d0f3f7f7767
+      specification: |+
+        CHECK( init(main()), LTL(G ! overflow) )
+
+      data_model: LP64
+      language: C
+  content:
+    - invariant:
+        type: loop_invariant
+        location:
+          file_name: /tmp/vcloud_worker_vcloud-master_on_vcloud-master/run_dir_c84519dd-211e-470e-87c5-86accff0cc54/sv-benchmarks/c/termination-restricted-15/b.16.c
+          file_hash: bd5ab01fc166812a75c8bdc5c42111290012e12e0fb0aba380271d0f3f7f7767
+          line: 12
+          column: 9
+          function: main
+        value: (((x <= 2147483647) && (1 <= x)) && (y <= 2147483647))
+        format: c_expression

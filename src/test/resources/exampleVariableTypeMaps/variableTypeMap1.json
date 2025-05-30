@@ -1,0 +1,48 @@
+{
+  "./someFileName.c": {
+    "32": {
+      "3": [
+        {
+          "name": "i",
+          "type": "unsigned int"
+        },
+        {
+          "name": "n",
+          "type": "unsigned char"
+        },
+        {
+          "name": "s",
+          "type": "int"
+        },
+        {
+          "name": "l",
+          "type": "long long"
+        },
+        {
+          "name": "c",
+          "type": "char"
+        }
+      ]
+    },
+    "10": {
+      "3": [
+        {
+          "name": "n",
+          "type": "unsigned char"
+        }
+      ]
+    },
+    "16": {
+      "3": [
+        {
+          "name": "n",
+          "type": "unsigned char"
+        },
+        {
+          "name": "c",
+          "type": "char"
+        }
+      ]
+    }
+  }
+}

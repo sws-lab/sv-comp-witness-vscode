@@ -6,12 +6,12 @@ import fm_weck.generated.FmWeckService
 import io.grpc.netty.NettyChannelBuilder
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
-import witnesses.data.run.Tool
+import witnesses.data.yaml.Tool
 import java.io.File
 import java.io.IOException
 import java.net.URI
 
-class FmWeckClient(host: String?, port: Int) {
+class FmWeckClient(host: String, port: Int) {
     private val channel = NettyChannelBuilder.forAddress(host, port)
         .usePlaintext()
         .build()
@@ -48,8 +48,7 @@ class FmWeckClient(host: String?, port: Int) {
                     .setCProgram(ByteString.copyFrom(File(URI.create(message.fileUri)).readBytes()))
                     .build()
             } catch (e: IOException) {
-                throw java.lang.RuntimeException(e)
-                TODO("proper error handling")
+                TODO("proper error handling (startRun)")
             }
 
         log.info("Start run request: tool=${request.tool.toolId}, property=${request.property.propertyId}, data model=${request.dataModel}")
@@ -93,7 +92,8 @@ class FmWeckClient(host: String?, port: Int) {
         } else {
             // TODO: notify user about failed analysis
             log.error("Run was unsuccessful! $runResult")
-            TODO("proper error handling")
+            // TODO("proper error handling (waitOnRun)")
+            return emptyList()
         }
     }
 }

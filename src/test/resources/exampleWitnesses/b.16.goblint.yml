@@ -1,0 +1,47 @@
+- entry_type: invariant_set
+  metadata:
+    format_version: "2.0"
+    uuid: 0b0a2d8a-6230-410a-b3a2-778b55fff364
+    creation_time: 2024-11-30T14:51:26Z
+    producer:
+      name: Goblint
+      version: tags/svcomp25-0-g5512d834b
+      command_line: '''./goblint'' ''--conf'' ''conf/svcomp25.json'' ''--sets'' ''ana.specification''
+        ''../../sv-benchmarks/c/properties/no-overflow.prp'' ''--sets'' ''exp.architecture''
+        ''64bit'' ''../../sv-benchmarks/c/termination-restricted-15/b.16.c'''
+    task:
+      input_files:
+        - ../../sv-benchmarks/c/termination-restricted-15/b.16.c
+      input_file_hashes:
+        ../../sv-benchmarks/c/termination-restricted-15/b.16.c: bd5ab01fc166812a75c8bdc5c42111290012e12e0fb0aba380271d0f3f7f7767
+      data_model: LP64
+      language: C
+      specification: CHECK( init(main()), LTL(G ! overflow) )
+  content:
+    - invariant:
+        type: loop_invariant
+        location:
+          file_name: ../../sv-benchmarks/c/termination-restricted-15/b.16.c
+          line: 12
+          column: 9
+          function: main
+        value: 1 <= x
+        format: c_expression
+    - invariant:
+        type: loop_invariant
+        location:
+          file_name: ../../sv-benchmarks/c/termination-restricted-15/b.16.c
+          line: 12
+          column: 9
+          function: main
+        value: 0 == c
+        format: c_expression
+    - invariant:
+        type: loop_invariant
+        location:
+          file_name: ../../sv-benchmarks/c/termination-restricted-15/b.16.c
+          line: 12
+          column: 9
+          function: main
+        value: c == 0
+        format: c_expression

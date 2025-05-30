@@ -55,7 +55,7 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
             }
 
             ctx.castExpression() != null -> {
-                val unaryOp = ctx.unaryOp.text
+                val unaryOp = Op(ctx.unaryOp.text)
                 val expr = visit(ctx.castExpression())
                 UnaryExpression(unaryOp, expr, ctx.originalText())
             }
@@ -66,7 +66,7 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
 
             ctx.Identifier() != null -> {
                 val label = ctx.Identifier().text
-                UnaryExpression("&&", Var(label), ctx.originalText())
+                UnaryExpression(Op("&&"), Var(label), ctx.originalText())
             }
 
             else -> throw RuntimeException("Unexpected unary expression structure: ${ctx.text}")
@@ -76,12 +76,12 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
         return ctx.op.foldRight(baseExpr) { opToken, acc ->
             val op = opToken.text
             // TODO: concatenate for str
-            UnaryExpression(op, acc, op)
+            UnaryExpression(Op(op), acc, op)
         }
     }
 
     override fun visitCast(ctx: InvariantCParser.CastContext) =
-        UnaryExpression("(${ctx.typeName().originalText()})", visit(ctx.castExpression()), ctx.originalText())
+        UnaryExpression(Type("(${ctx.typeName().originalText()})"), visit(ctx.castExpression()), ctx.originalText())
 
     override fun visitCastbase(ctx: InvariantCParser.CastbaseContext) =
         visit(ctx.unaryExpression())
@@ -129,10 +129,10 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
         Var(ctx.Identifier().text)
 
     override fun visitCons(ctx: InvariantCParser.ConsContext) =
-        Const(ctx.Constant().text)
+        splitIntegerConstantAndSuffix(ctx.Constant().text)
 
     override fun visitString(ctx: InvariantCParser.StringContext) =
-        Const(ctx.text)
+        Const(ctx.text, "")
 
     override fun visitParens(ctx: InvariantCParser.ParensContext): Expression =
         visit(ctx.expression())
@@ -165,3 +165,10 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
 }
 
 fun ParserRuleContext.originalText(): String = start.inputStream.getText(Interval.of(start.startIndex, stop.stopIndex))
+
+fun splitIntegerConstantAndSuffix(text: String): Const {
+    val suffixRegex = Regex("(?i)(ULL|LLU|LL|LU|UL|U|L)$") // match known suffixes at the end, case-insensitive
+    val match = suffixRegex.find(text)
+    return if (match != null) Const(text.substring(0, match.range.first), match.value)
+    else Const(text, null)
+}

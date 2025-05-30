@@ -32,7 +32,7 @@ object WitnessComparison {
                 format = invariant.format,
                 tool = witness.metadata.producer,
                 normValue = normalizedAst.toValue(),
-                originalValue = invariant.value,
+                originalInvariantValue = invariant.value,
                 ast = normalizedAst
             )
         }
@@ -46,12 +46,18 @@ object WitnessComparison {
         val graph = buildImplicationGraph(invariantComponentsByLoc, typeEnv)
         val inspector = KosarajuStrongConnectivityInspector(graph)
         val sccList = inspector.stronglyConnectedSets()
-        return sccList.map { component ->
-            val representative = component.minByOrNull { it.normValue.length }!!
+        return sccList.map { equivalentInvariantComponents ->
+            // Deduplicate per tool: pick shortest .value for each tool
+            val deDuplicated = equivalentInvariantComponents
+                .groupBy { it.tool }
+                .mapValues { (_, group) -> group.minByOrNull { it.value.length }!! }
+                .values
+                .sortedBy { it.value.length }
+            val representative = deDuplicated.minByOrNull { it.normValue.length }!!
             EqualInvariantGroup(
                 shortestInvariantString = representative.normValue,
                 location = representative.location,
-                equalInvariantComponents = component.toList()
+                equalInvariantComponents = deDuplicated.toList()
             )
         }
     }
@@ -68,7 +74,6 @@ object WitnessComparison {
             } catch (t: Throwable) {
                 return false
             }
-
         }
     }
 

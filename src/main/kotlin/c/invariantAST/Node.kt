@@ -5,12 +5,12 @@ abstract class Node : AbstractNode() {
 
         fun variable(name: String) = Var(name)
 
-        fun constant(value: String) = Const(value)
+        fun constant(value: String, suffix: String?) = Const(value, suffix)
 
         fun binary(left: Expression, op: String, right: Expression, str: String) =
             BinaryExpression(left, op, right, str)
 
-        fun unary(op: String, exp: Expression, str: String) =
+        fun unary(op: UnaryOp, exp: Expression, str: String) =
             UnaryExpression(op, exp, str)
 
         fun ternary(fst: Expression, snd: Expression, thrd: Expression, str: String) =

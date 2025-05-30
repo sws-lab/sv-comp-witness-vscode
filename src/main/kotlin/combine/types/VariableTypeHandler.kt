@@ -18,7 +18,7 @@ object VariableTypeHandler {
         // Get the path to the CPAchecker binary from resources
         val userDir = System.getProperty("user.dir")
 
-
+        // cli usage: bin/cpachecker --config config/generateCFA.properties ./tmp.c --option cfa.pathForExportingVariablesInScopeWithTheirType=out.json
         val resourcePath = Paths.get(userDir).resolve("lib/cpachecker-native")
         val cpacheckerBinPath = resourcePath.resolve("cpachecker").toString()
         val configPath = resourcePath.resolve("config/generateCFA.properties").toString()
@@ -28,8 +28,6 @@ object VariableTypeHandler {
             configPath,
             "--option",
             "cfa.pathForExportingVariablesInScopeWithTheirType=$outputFileName",
-            "--option",
-            "cfa.exportCfaAsync=false",
             programFileName
         )
         processBuilder.redirectErrorStream(true)
@@ -37,7 +35,7 @@ object VariableTypeHandler {
         return process
     }
 
-    private fun serializeTypesForProgram(typesJsonString: String): VariableTypeMap {
+    fun serializeTypesForProgram(typesJsonString: String): VariableTypeMap {
         val serializer = Json {
             serializersModule = Json.serializersModule
         }
@@ -53,8 +51,9 @@ object VariableTypeHandler {
             //log.info("Variable types map: $variableTypes")
             return variableTypes
         }
-        log.error(cpaCheckerProcess.errorReader().readText())
-        TODO("Proper error handling")
+        val errorText = cpaCheckerProcess.errorReader().readText()
+        log.error(errorText)
+        TODO("Proper error handling (getVariableTypesForProgram): $errorText")
     }
 
     fun extractTypeEnvByLocation(data: VariableTypeMap): TypeEnv {
@@ -66,7 +65,7 @@ object VariableTypeHandler {
                     .flatMap { it.value.values }
                     .flatten()
                     .mapNotNull { vt ->
-                        vt.simpleType
+                        vt.type
                             ?.let { CType.fromSimpleType(it) }
                             ?.let { type -> vt.name to type }
                     }.toMap()

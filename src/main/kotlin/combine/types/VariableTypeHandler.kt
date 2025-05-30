@@ -19,7 +19,7 @@ object VariableTypeHandler {
             // usage: bin/cpachecker --config config/generateCFA.properties <<C-Program>> --option cfa.variablesInScope=<<OUTPUT-FILE>> --option cfa.exportCfaAsync=false
             "../../../playground/cpachecker/bin/cpachecker",  // TODO: hardcoded path
             "--config", "../../../playground/cpachecker/config/generateCFA.properties", // TODO: hardcoded path
-            programFileName, "--option", "cfa.variablesInScope=$outputFileName", "--option", "cfa.exportCfaAsync=false"
+            programFileName, "--option", "cfa.pathForExportingVariablesInScopeWithTheirType=$outputFileName"
         )
         processBuilder.redirectErrorStream(true)
         val process = processBuilder.start()

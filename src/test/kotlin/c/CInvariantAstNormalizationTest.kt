@@ -1,9 +1,6 @@
 package c
 
-import c.invariantAST.BinaryExpression
-import c.invariantAST.Const
-import c.invariantAST.UnaryExpression
-import c.invariantAST.Var
+import c.invariantAST.*
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
@@ -94,10 +91,10 @@ object CInvariantAstNormalizationTest {
         assertEquals(
             BinaryExpression(
                 BinaryExpression(
-                    UnaryExpression("(long long)", Var("y"), "(long long)y"),
+                    UnaryExpression(Type("(long long)"), Var("y"), "(long long)y"),
                     "+",
                     BinaryExpression(
-                        UnaryExpression("(long long)", Var("x"), "(long long)x"),
+                        UnaryExpression(Type("(long long)"), Var("x"), "(long long)x"),
                         "+",
                         Const("4294967296", "LL"),
                         "(long long)x + 4294967296LL"

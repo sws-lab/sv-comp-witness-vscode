@@ -6,6 +6,8 @@ import c.invariantAST.Node.Companion.constant
 import c.invariantAST.Node.Companion.ternary
 import c.invariantAST.Node.Companion.unary
 import c.invariantAST.Node.Companion.variable
+import c.invariantAST.Op
+import c.invariantAST.Type
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import kotlin.test.assertNotEquals
@@ -113,7 +115,8 @@ object CInvariantAstTest {
         legal(
             "((__int128) 2 * a)",
             binary(
-                unary("(__int128)", constant("2", null), "(__int128) 2"),
+                unary(
+                    Type("(__int128)"), constant("2", null), "(__int128) 2"),
                 "*",
                 variable("a"),
                 "(__int128) 2 * a"
@@ -121,14 +124,14 @@ object CInvariantAstTest {
         )
         legal(
             "(unsigned __int128) 1",
-            unary("(unsigned __int128)", constant("1", null), "(unsigned __int128) 1"),
+            unary(Type("(unsigned __int128)"), constant("1", null), "(unsigned __int128) 1"),
         )
         legal(
             "len == (vuint32_t const   )4U",
             binary(
                 variable("len"),
                 "==",
-                unary("(vuint32_t const)", constant("4", "U"), "(vuint32_t const   )4U"),
+                unary(Type("(vuint32_t const)"), constant("4", "U"), "(vuint32_t const   )4U"),
                 "len == (vuint32_t const   )4U"
             ),
         )
@@ -156,10 +159,10 @@ object CInvariantAstTest {
 
     @Test
     fun test_pointers() {
-        legal("&pqb", unary("&", variable("pqb"), "&pqb"))
-        legal("(void *)0", unary("(void *)", constant("0", null), "(void *)0"))
+        legal("&pqb", unary(Op("&"), variable("pqb"), "&pqb"))
+        legal("(void *)0", unary(Type("(void *)"), constant("0", null), "(void *)0"))
         val `((struct aws_array_list ptr)buf)` =
-            unary("(struct aws_array_list *)", variable("buf"), "(struct aws_array_list *)buf")
+            unary(Type("(struct aws_array_list *)"), variable("buf"), "(struct aws_array_list *)buf")
         legal("((struct aws_array_list *)buf)", `((struct aws_array_list ptr)buf)`)
         legal(
             "(((struct aws_array_list *)buf)->alloc)->impl",
@@ -203,13 +206,13 @@ object CInvariantAstTest {
             binary(
                 binary(
                     binary(
-                        unary("-", constant("1", "LL"), "-1LL"),
+                        unary(Op("-"), constant("1", "LL"), "-1LL"),
                         "+",
-                        unary("(long long)", variable("A"), "(long long )A"),
+                        unary(Type("(long long)"), variable("A"), "(long long )A"),
                         "-1LL + (long long )A"
                     ),
                     "+",
-                    unary("(long long)", variable("B"), "(long long )B"),
+                    unary(Type("(long long)"), variable("B"), "(long long )B"),
                     "(-1LL + (long long )A) + (long long )B"
                 ),
                 ">=",

@@ -55,7 +55,7 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
             }
 
             ctx.castExpression() != null -> {
-                val unaryOp = ctx.unaryOp.text
+                val unaryOp = Op(ctx.unaryOp.text)
                 val expr = visit(ctx.castExpression())
                 UnaryExpression(unaryOp, expr, ctx.originalText())
             }
@@ -66,7 +66,7 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
 
             ctx.Identifier() != null -> {
                 val label = ctx.Identifier().text
-                UnaryExpression("&&", Var(label), ctx.originalText())
+                UnaryExpression(Op("&&"), Var(label), ctx.originalText())
             }
 
             else -> throw RuntimeException("Unexpected unary expression structure: ${ctx.text}")
@@ -76,12 +76,12 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
         return ctx.op.foldRight(baseExpr) { opToken, acc ->
             val op = opToken.text
             // TODO: concatenate for str
-            UnaryExpression(op, acc, op)
+            UnaryExpression(Op(op), acc, op)
         }
     }
 
     override fun visitCast(ctx: InvariantCParser.CastContext) =
-        UnaryExpression("(${ctx.typeName().originalText()})", visit(ctx.castExpression()), ctx.originalText())
+        UnaryExpression(Type("(${ctx.typeName().originalText()})"), visit(ctx.castExpression()), ctx.originalText())
 
     override fun visitCastbase(ctx: InvariantCParser.CastbaseContext) =
         visit(ctx.unaryExpression())

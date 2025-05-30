@@ -10,7 +10,7 @@ abstract class Node : AbstractNode() {
         fun binary(left: Expression, op: String, right: Expression, str: String) =
             BinaryExpression(left, op, right, str)
 
-        fun unary(op: String, exp: Expression, str: String) =
+        fun unary(op: UnaryOp, exp: Expression, str: String) =
             UnaryExpression(op, exp, str)
 
         fun ternary(fst: Expression, snd: Expression, thrd: Expression, str: String) =

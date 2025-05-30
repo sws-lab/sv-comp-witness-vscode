@@ -54,10 +54,15 @@ fun createSMTArithExpr(invariantAst: Expression, ctx: KContext, locTypeEnv: Map<
         }
 
         is UnaryExpression ->
-            when (invariantAst.op) {
-                "-" -> ctx.mkArithUnaryMinus(createSMTArithExpr(invariantAst.exp, ctx, locTypeEnv))
-                "!" -> convertBoolExprToIntExpr(createSMTBoolExpr(invariantAst, ctx, locTypeEnv), ctx)
-                else -> error("Unsupported SMTBool expression: ${invariantAst.toValue()}")
+            when (val op = invariantAst.op) {
+                is Type -> getVarSort(ctx, locTypeEnv, invariantAst.exp.toValue())
+                is Op -> {
+                    when (op.name) {
+                        "-" -> ctx.mkArithUnaryMinus(createSMTArithExpr(invariantAst.exp, ctx, locTypeEnv))
+                        "!" -> convertBoolExprToIntExpr(createSMTBoolExpr(invariantAst, ctx, locTypeEnv), ctx)
+                        else -> error("Unsupported SMTBool expression: ${invariantAst.toValue()}")
+                    }
+                }
             }
 
         else -> error("Unsupported SMTArith expression: ${invariantAst.toValue()}")
@@ -119,10 +124,15 @@ fun createSMTBoolExpr(invariantAst: Expression, ctx: KContext, locTypeEnv: Map<S
         }
 
         is UnaryExpression ->
-            when (invariantAst.op) {
-                "!" -> ctx.mkNot(createSMTBoolExpr(invariantAst.exp, ctx, locTypeEnv))
-                "-" -> convertIntExprToBoolExpr(createSMTArithExpr(invariantAst, ctx, locTypeEnv), ctx)
-                else -> error("Unsupported SMTBool expression: ${invariantAst.toValue()}")
+            when (val op = invariantAst.op) {
+                is Type -> convertIntExprToBoolExpr(getVarSort(ctx, locTypeEnv, invariantAst.exp.toValue()), ctx)
+                is Op -> {
+                    when (op.name) {
+                        "!" -> ctx.mkNot(createSMTBoolExpr(invariantAst.exp, ctx, locTypeEnv))
+                        "-" -> convertIntExprToBoolExpr(createSMTArithExpr(invariantAst, ctx, locTypeEnv), ctx)
+                        else -> error("Unsupported SMTBool expression: ${invariantAst.toValue()}")
+                    }
+                }
             }
 
         else -> error("Unsupported SMTBool expression: ${invariantAst.toValue()}")

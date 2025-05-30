@@ -29,7 +29,7 @@ SCRIPT_DIR=$(dirname $(realpath "$0"))
 CPACHECKER_DIR=$(realpath "$1")
 NATIVE_META_INFO_DIR=$(realpath "$2")
 OUTPUT_DIR=$(realpath "$3")
-NATIVE_IMAGE_ARGS=${@:4}
+NATIVE_IMAGE_ARGS=${@:4} # This captures any arguments passed from the Makefile's NATIVE_BUILD_PARAMS
 
 if [[ "$(basename "${NATIVE_META_INFO_DIR}")" != "META-INF" ]]; then
   2>&1 echo "The META-INF directory '$NATIVE_META_INFO_DIR' must be named 'META-INF'"
@@ -72,7 +72,9 @@ cp "$CPACHECKER_DIR"/cpachecker.jar "$TMP_DIR"/cpachecker.jar
 # From https://www.graalvm.org/latest/reference-manual/native-image/optimizations-and-performance/MemoryManagement/:
 # The minimum Java heap size defines how much memory the GC may always assume as reserved for the Java heap, no matter how little of that memory is actually used.
 # The maximum Java heap size defines the upper limit for the size of the whole Java heap. If the Java heap is full and the GC is unable reclaim sufficient memory for a Java object allocation, the allocation will fail with the OutOfMemoryError.
-NATIVE_IMAGE_ARGS="$NATIVE_IMAGE_ARGS --verbose \
+NATIVE_IMAGE_ARGS="$NATIVE_IMAGE_ARGS \
+    --initialize-at-run-time=sun.reflect.misc.Trampoline \
+    --verbose \
     --no-fallback \
     --gc=serial \
     -R:MinHeapSize=1000m \

@@ -130,24 +130,25 @@ fun createSMTBoolExpr(invariantAst: Expression, ctx: KContext, locTypeEnv: Map<S
 }
 
 enum class CType {
-    INT, CHAR, DOUBLE;
+    INT, CHAR, DOUBLE, LONG;
 
     companion object {
-        fun fromSimpleType(type: String): CType? = when (type) {
-            "INT" -> INT
-            "CHAR" -> CHAR
-            "DOUBLE" -> DOUBLE
-            else -> null
-        }
+        fun fromSimpleType(type: String): CType? =
+            when (type.lowercase()) {
+                "int", "unsigned int" -> INT
+                "long", "unsigned long", "long long", "unsigned long long" -> LONG
+                "char", "unsigned char" -> CHAR
+                "double" -> DOUBLE
+                else -> null
+            }
     }
-
 }
 
 fun getVarSort(ctx: KContext, typeEnv: Map<String, CType>, name: String): KExpr<KIntSort> {
     return when (typeEnv[name]) {
-        CType.INT, CType.CHAR -> ctx.mkIntSort().mkConst(name) // treat CHAR as int
+        CType.INT, CType.LONG, CType.CHAR -> ctx.mkIntSort().mkConst(name) // treat CHAR as int
         //CType.DOUBLE -> ctx.mkRealSort().mkConst(name)
-        else -> error("Unsupported variable type for '$name'")
+        else -> error("Unsupported variable type for '$name: ${typeEnv[name]}'")
     }
 }
 

@@ -27,7 +27,7 @@ object VariableTypeHandler {
         return process
     }
 
-    private fun serializeTypesForProgram(typesJsonString: String): VariableTypeMap {
+    fun serializeTypesForProgram(typesJsonString: String): VariableTypeMap {
         val serializer = Json {
             serializersModule = Json.serializersModule
         }
@@ -57,7 +57,7 @@ object VariableTypeHandler {
                     .flatMap { it.value.values }
                     .flatten()
                     .mapNotNull { vt ->
-                        vt.simpleType
+                        vt.type
                             ?.let { CType.fromSimpleType(it) }
                             ?.let { type -> vt.name to type }
                     }.toMap()

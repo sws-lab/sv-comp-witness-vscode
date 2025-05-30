@@ -1,0 +1,1687 @@
+[
+{
+  "name":"[B"
+},
+{
+  "name":"[C"
+},
+{
+  "name":"[D"
+},
+{
+  "name":"[F"
+},
+{
+  "name":"[I"
+},
+{
+  "name":"[J"
+},
+{
+  "name":"[Ljava.lang.Object;"
+},
+{
+  "name":"[Ljava.lang.String;"
+},
+{
+  "name":"[Ljavax.management.openmbean.CompositeData;"
+},
+{
+  "name":"[Lorg.eclipse.cdt.core.dom.ast.IASTArrayModifier;"
+},
+{
+  "name":"[Lorg.eclipse.cdt.core.dom.ast.IASTAttribute;"
+},
+{
+  "name":"[Lorg.eclipse.cdt.core.dom.ast.IASTAttributeSpecifier;"
+},
+{
+  "name":"[Lorg.eclipse.cdt.core.dom.ast.IASTDeclaration;"
+},
+{
+  "name":"[Lorg.eclipse.cdt.core.dom.ast.IASTDeclarator;"
+},
+{
+  "name":"[Lorg.eclipse.cdt.core.dom.ast.IASTInitializerClause;"
+},
+{
+  "name":"[Lorg.eclipse.cdt.core.dom.ast.IASTName;"
+},
+{
+  "name":"[Lorg.eclipse.cdt.core.dom.ast.IASTParameterDeclaration;"
+},
+{
+  "name":"[Lorg.eclipse.cdt.core.dom.ast.IASTPointerOperator;"
+},
+{
+  "name":"[Lorg.eclipse.cdt.core.dom.ast.IASTStatement;"
+},
+{
+  "name":"[Lorg.eclipse.cdt.core.dom.ast.IASTToken;"
+},
+{
+  "name":"[Lorg.eclipse.cdt.core.dom.ast.c.ICASTDesignator;"
+},
+{
+  "name":"[Lorg.sosy_lab.cpachecker.util.yamlwitnessexport.model.AbstractEntry;"
+},
+{
+  "name":"[Lsun.security.pkcs.SignerInfo;"
+},
+{
+  "name":"[S"
+},
+{
+  "name":"[Z"
+},
+{
+  "name":"com.fasterxml.jackson.databind.ext.Java7HandlersImpl",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.fasterxml.jackson.databind.ext.Java7SupportImpl",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.google.common.collect.BiMap",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"com.google.common.collect.ImmutableBiMap",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"com.google.common.collect.ImmutableCollection",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"com.google.common.collect.ImmutableList",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"copyOf","parameterTypes":["java.lang.Iterable"] }]
+},
+{
+  "name":"com.google.common.collect.ImmutableMap",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"com.google.common.collect.ImmutableSet",
+  "methods":[{"name":"copyOf","parameterTypes":["java.lang.Iterable"] }]
+},
+{
+  "name":"com.google.common.collect.RegularImmutableList",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"com.google.common.collect.SingletonImmutableBiMap",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"com.google.common.collect.SingletonImmutableList",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"com.google.common.util.concurrent.AbstractFuture",
+  "fields":[{"name":"listeners"}, {"name":"value"}, {"name":"waiters"}]
+},
+{
+  "name":"com.google.common.util.concurrent.AbstractFuture$Waiter",
+  "fields":[{"name":"next"}, {"name":"thread"}]
+},
+{
+  "name":"com.sun.management.GarbageCollectorMXBean",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"com.sun.management.GcInfo",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"com.sun.management.HotSpotDiagnosticMXBean",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"com.sun.management.OperatingSystemMXBean",
+  "methods":[{"name":"getCommittedVirtualMemorySize","parameterTypes":[] }, {"name":"getProcessCpuTime","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.management.ThreadMXBean",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"com.sun.management.UnixOperatingSystemMXBean",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"com.sun.management.VMOption",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"com.sun.management.internal.GarbageCollectorExtImpl",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"com.sun.management.internal.HotSpotDiagnostic",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"com.sun.management.internal.HotSpotThreadImpl",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"com.sun.management.internal.OperatingSystemImpl",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"cpa.arg.ARGCPA"
+},
+{
+  "name":"cpa.assumptions.storage.AssumptionStorageCPA"
+},
+{
+  "name":"cpa.automaton.ControlAutomatonCPA"
+},
+{
+  "name":"cpa.bam.BAMCPA"
+},
+{
+  "name":"cpa.bdd.BDDCPA"
+},
+{
+  "name":"cpa.callstack.CallstackCPA"
+},
+{
+  "name":"cpa.composite.CompositeCPA"
+},
+{
+  "name":"cpa.constraints.ConstraintsCPA"
+},
+{
+  "name":"cpa.datarace.DataRaceCPA"
+},
+{
+  "name":"cpa.functionpointer.FunctionPointerCPA"
+},
+{
+  "name":"cpa.input.InputCPA"
+},
+{
+  "name":"cpa.invariants.InvariantsCPA"
+},
+{
+  "name":"cpa.livevar.LiveVariablesCPA"
+},
+{
+  "name":"cpa.location.LocationCPA"
+},
+{
+  "name":"cpa.location.LocationCPABackwards"
+},
+{
+  "name":"cpa.loopbound.LoopBoundCPA"
+},
+{
+  "name":"cpa.overflow.OverflowCPA"
+},
+{
+  "name":"cpa.pointer2.PointerCPA"
+},
+{
+  "name":"cpa.predicate.BAMPredicateCPA"
+},
+{
+  "name":"cpa.predicate.BAMPredicateRefiner"
+},
+{
+  "name":"cpa.predicate.PredicateCPA"
+},
+{
+  "name":"cpa.predicate.PredicateRefiner"
+},
+{
+  "name":"cpa.smg2.SMGCPA"
+},
+{
+  "name":"cpa.termination.TerminationARGBasedRefiner"
+},
+{
+  "name":"cpa.termination.TerminationCPA"
+},
+{
+  "name":"cpa.terminationviamemory.TerminationToReachCPA"
+},
+{
+  "name":"cpa.threading.ThreadingCPA"
+},
+{
+  "name":"cpa.value.ValueAnalysisCPA"
+},
+{
+  "name":"cpa.value.refiner.ValueAnalysisDelegatingBAMRefiner"
+},
+{
+  "name":"cpa.value.refiner.ValueAnalysisRefiner"
+},
+{
+  "name":"java.io.Console",
+  "methods":[{"name":"isTerminal","parameterTypes":[] }]
+},
+{
+  "name":"java.io.Serializable",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"java.lang.Boolean",
+  "fields":[{"name":"TYPE"}],
+  "methods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"java.lang.Byte",
+  "fields":[{"name":"TYPE"}]
+},
+{
+  "name":"java.lang.Character",
+  "fields":[{"name":"TYPE"}]
+},
+{
+  "name":"java.lang.Class",
+  "methods":[{"name":"getRecordComponents","parameterTypes":[] }]
+},
+{
+  "name":"java.lang.Deprecated",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.Double",
+  "fields":[{"name":"TYPE"}],
+  "methods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"java.lang.Float",
+  "fields":[{"name":"TYPE"}]
+},
+{
+  "name":"java.lang.Integer",
+  "fields":[{"name":"TYPE"}],
+  "methods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"java.lang.Iterable",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"java.lang.Long",
+  "fields":[{"name":"TYPE"}]
+},
+{
+  "name":"java.lang.Record",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"java.lang.Short",
+  "fields":[{"name":"TYPE"}]
+},
+{
+  "name":"java.lang.StackTraceElement",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.String",
+  "fields":[{"name":"TYPE"}]
+},
+{
+  "name":"java.lang.Thread",
+  "fields":[{"name":"threadLocalRandomProbe"}]
+},
+{
+  "name":"java.lang.Void",
+  "fields":[{"name":"TYPE"}]
+},
+{
+  "name":"java.lang.management.BufferPoolMXBean",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.management.ClassLoadingMXBean",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.management.CompilationMXBean",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.management.LockInfo",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.management.ManagementPermission",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"java.lang.management.MemoryMXBean",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.management.MemoryManagerMXBean",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.management.MemoryPoolMXBean",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.management.MemoryUsage",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.management.MonitorInfo",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.management.PlatformLoggingMXBean",
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"getLoggerLevel","parameterTypes":["java.lang.String"] }, {"name":"getLoggerNames","parameterTypes":[] }, {"name":"getParentLoggerName","parameterTypes":["java.lang.String"] }, {"name":"setLoggerLevel","parameterTypes":["java.lang.String","java.lang.String"] }]
+},
+{
+  "name":"java.lang.management.RuntimeMXBean",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.management.ThreadInfo",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"java.lang.reflect.RecordComponent",
+  "methods":[{"name":"getName","parameterTypes":[] }, {"name":"getType","parameterTypes":[] }]
+},
+{
+  "name":"java.math.BigDecimal"
+},
+{
+  "name":"java.math.BigInteger"
+},
+{
+  "name":"java.security.MessageDigestSpi"
+},
+{
+  "name":"java.security.SecureRandomParameters"
+},
+{
+  "name":"java.security.interfaces.RSAPrivateKey"
+},
+{
+  "name":"java.security.interfaces.RSAPublicKey"
+},
+{
+  "name":"java.sql.Date"
+},
+{
+  "name":"java.sql.Timestamp"
+},
+{
+  "name":"java.util.AbstractCollection",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"java.util.Collection",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"java.util.Date"
+},
+{
+  "name":"java.util.List",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"java.util.Map",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"java.util.PropertyPermission",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String"] }]
+},
+{
+  "name":"java.util.RandomAccess",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"java.util.concurrent.ForkJoinTask",
+  "fields":[{"name":"aux"}, {"name":"status"}]
+},
+{
+  "name":"java.util.concurrent.atomic.AtomicBoolean",
+  "fields":[{"name":"value"}]
+},
+{
+  "name":"java.util.concurrent.atomic.AtomicReference",
+  "fields":[{"name":"value"}]
+},
+{
+  "name":"java.util.concurrent.atomic.Striped64",
+  "fields":[{"name":"base"}, {"name":"cellsBusy"}]
+},
+{
+  "name":"java.util.logging.LogManager",
+  "methods":[{"name":"getLoggingMXBean","parameterTypes":[] }]
+},
+{
+  "name":"java.util.logging.LoggingMXBean",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"javax.management.MBeanOperationInfo",
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"getSignature","parameterTypes":[] }]
+},
+{
+  "name":"javax.management.MBeanServerBuilder",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"javax.management.ObjectName"
+},
+{
+  "name":"javax.management.StandardEmitterMBean",
+  "methods":[{"name":"cacheMBeanInfo","parameterTypes":["javax.management.MBeanInfo"] }, {"name":"getCachedMBeanInfo","parameterTypes":[] }, {"name":"getMBeanInfo","parameterTypes":[] }]
+},
+{
+  "name":"javax.management.openmbean.CompositeData"
+},
+{
+  "name":"javax.management.openmbean.OpenMBeanOperationInfoSupport"
+},
+{
+  "name":"javax.management.openmbean.TabularData"
+},
+{
+  "name":"javax.security.auth.x500.X500Principal",
+  "fields":[{"name":"thisX500Name"}],
+  "methods":[{"name":"<init>","parameterTypes":["sun.security.x509.X500Name"] }]
+},
+{
+  "name":"jdk.internal.misc.Unsafe"
+},
+{
+  "name":"jdk.management.jfr.ConfigurationInfo",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"jdk.management.jfr.EventTypeInfo",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"jdk.management.jfr.FlightRecorderMXBean",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"jdk.management.jfr.FlightRecorderMXBeanImpl",
+  "queryAllPublicConstructors":true,
+  "methods":[{"name":"cacheMBeanInfo","parameterTypes":["javax.management.MBeanInfo"] }, {"name":"getCachedMBeanInfo","parameterTypes":[] }, {"name":"getMBeanInfo","parameterTypes":[] }, {"name":"getNotificationInfo","parameterTypes":[] }]
+},
+{
+  "name":"jdk.management.jfr.RecordingInfo",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"jdk.management.jfr.SettingDescriptorInfo",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"net.sf.javabdd.JFactory",
+  "fields":[{"name":"applycache"}]
+},
+{
+  "name":"net.sf.javabdd.JFactory$BddCache",
+  "fields":[{"name":"table"}]
+},
+{
+  "name":"org.eclipse.core.internal.runtime.Messages",
+  "allDeclaredFields":true
+},
+{
+  "name":"org.sosy_lab.common.configuration.converters.FileTypeConverter",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.common.log.BasicLogManager$LogManagerBean",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"org.sosy_lab.common.log.BasicLogManager$LogManagerMXBean",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.sosy_lab.common.log.LoggingOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cfa.CFACreator",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cfa.CFACreator$AVariableDeclarationExchange$AVariableDeclarationExchangeSerializer",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cfa.CFASecondPassBuilder",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cfa.CParser$ParserOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cfa.CParserWithLocationMapper",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cfa.CPreprocessor",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cfa.Preprocessor",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cfa.ast.AVariableDeclarationExchange",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"name","parameterTypes":[] }, {"name":"simpleType","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cfa.blocks.builder.FunctionPartitioning",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cfa.parser.Parsers$EclipseCParserOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cfa.parser.eclipse.c.EclipseCParser",
+  "methods":[{"name":"<init>","parameterTypes":["org.sosy_lab.common.log.LogManager","org.sosy_lab.cpachecker.cfa.parser.Parsers$EclipseCParserOptions","org.sosy_lab.cpachecker.cfa.types.MachineModel","org.sosy_lab.common.ShutdownNotifier"] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cfa.postprocessing.function.CFunctionPointerResolver",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cfa.postprocessing.function.EdgeReplacer",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cfa.postprocessing.function.EdgeReplacerParameterFunctionPointer",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cfa.postprocessing.global.CFACloner",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cfa.types.c.CBasicType",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cmdline.CPAMain$BootstrapOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cmdline.CPAMain$MainOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cmdline.CPAMain$WitnessOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.CPABuilder",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.CPAchecker",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.CPAchecker$ApproachNameInformation",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.CPAchecker$CPAcheckerBean",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.CPAchecker$CPAcheckerMXBean",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.CoreComponentsFactory",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.MainCPAStatistics",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.algorithm.CEGARAlgorithm$CEGARAlgorithmFactory",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.algorithm.CEGARAlgorithm$CEGARMBean",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.algorithm.CEGARAlgorithm$CEGARMXBean",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.algorithm.CPAAlgorithm$CPAAlgorithmFactory",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.algorithm.ExceptionHandlingAlgorithm$ExceptionHandlingOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.algorithm.ParallelAlgorithm",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.algorithm.RestartAlgorithm",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.algorithm.SelectionAlgorithm",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.algorithm.bmc.AbstractBMCAlgorithm",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.algorithm.bmc.BMCAlgorithm",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.algorithm.bmc.IMCAlgorithm",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.algorithm.bmc.IMCAlgorithm$LoopBoundManager",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.algorithm.counterexamplecheck.CounterexampleCPAchecker",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.algorithm.counterexamplecheck.CounterexampleCheckAlgorithm",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.algorithm.termination.TerminationAlgorithm",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.algorithm.termination.TerminationStatistics",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.algorithm.termination.lasso_analysis.LassoAnalysis",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.algorithm.termination.lasso_analysis.construction.LassoBuilder",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.counterexample.AssumptionToEdgeAllocator",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.counterexample.ReportGenerator",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.defaults.precision.ConfigurablePrecision",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.defaults.precision.VariableTrackingPrecision$RefinablePrecisionOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.interfaces.Refiner$Factory",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.reachedset.ReachedSetFactory",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.core.waitlist.WeightedRandomWaitlist$WaitlistOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.arg.ARGCPA",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.sosy_lab.cpachecker.core.interfaces.ConfigurableProgramAnalysis","org.sosy_lab.common.configuration.Configuration","org.sosy_lab.common.log.LogManager","org.sosy_lab.cpachecker.core.specification.Specification","org.sosy_lab.cpachecker.cfa.CFA"] }, {"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.arg.ARGMergeJoin$MergeOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.arg.ARGStatistics",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.arg.counterexamples.CEXExportOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.arg.counterexamples.CEXExporter",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.arg.witnessexport.WitnessOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.assumptions.storage.AssumptionStorageCPA",
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.sosy_lab.common.configuration.Configuration","org.sosy_lab.common.log.LogManager","org.sosy_lab.common.ShutdownNotifier","org.sosy_lab.cpachecker.cfa.CFA"] }, {"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.automaton.ARGToAutomatonConverter",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.automaton.AutomatonGraphmlParser",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.automaton.ControlAutomatonCPA",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.sosy_lab.cpachecker.cpa.automaton.Automaton","org.sosy_lab.common.configuration.Configuration","org.sosy_lab.common.log.LogManager","org.sosy_lab.cpachecker.cfa.CFA","org.sosy_lab.common.ShutdownNotifier"] }, {"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.bam.AbstractBAMCPA",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.bam.BAMCPA",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.sosy_lab.cpachecker.core.interfaces.ConfigurableProgramAnalysis","org.sosy_lab.common.configuration.Configuration","org.sosy_lab.common.log.LogManager","org.sosy_lab.cpachecker.core.reachedset.ReachedSetFactory","org.sosy_lab.common.ShutdownNotifier","org.sosy_lab.cpachecker.core.specification.Specification","org.sosy_lab.cpachecker.cfa.CFA"] }, {"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.bam.BAMCPAStatistics",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.bam.BAMPCCManager",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.bam.BAMReachedSetExporter",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.bam.BAMTransferRelationWithFixPointForRecursion",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.bam.cache.BAMCacheImpl",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.bdd.BDDCPA",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.sosy_lab.cpachecker.cfa.CFA","org.sosy_lab.common.configuration.Configuration","org.sosy_lab.common.log.LogManager","org.sosy_lab.common.ShutdownNotifier"] }, {"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.bdd.BDDStatistics",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.bdd.PredicateManager",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.callstack.CallstackCPA",
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.sosy_lab.common.configuration.Configuration","org.sosy_lab.common.log.LogManager"] }, {"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.callstack.CallstackOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.composite.CompositeCPA",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.constraints.ConstraintsCPA",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.sosy_lab.common.configuration.Configuration","org.sosy_lab.common.log.LogManager","org.sosy_lab.common.ShutdownNotifier","org.sosy_lab.cpachecker.cfa.CFA"] }, {"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.constraints.ConstraintsTransferRelation",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.constraints.domain.ConstraintsSolver",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.constraints.util.StateSimplifier",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.datarace.DataRaceCPA",
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.functionpointer.FunctionPointerCPA",
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.sosy_lab.common.log.LogManager","org.sosy_lab.common.configuration.Configuration"] }, {"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.functionpointer.FunctionPointerTransferRelation",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.input.InputCPA",
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.sosy_lab.cpachecker.cfa.CFA"] }, {"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.invariants.InvariantsCPA",
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.sosy_lab.common.configuration.Configuration","org.sosy_lab.common.log.LogManager","org.sosy_lab.cpachecker.cpa.invariants.InvariantsCPA$InvariantsOptions","org.sosy_lab.common.ShutdownNotifier","org.sosy_lab.cpachecker.cfa.CFA","org.sosy_lab.cpachecker.core.specification.Specification"] }, {"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.invariants.InvariantsCPA$InvariantsOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.livevar.LiveVariablesCPA",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.sosy_lab.common.configuration.Configuration","org.sosy_lab.common.log.LogManager","org.sosy_lab.cpachecker.cfa.CFA"] }, {"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.livevar.LiveVariablesTransferRelation",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.location.LocationCPA",
+  "methods":[{"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.location.LocationCPABackwards",
+  "methods":[{"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.location.LocationStateFactory",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.loopbound.LoopBoundCPA",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.sosy_lab.common.configuration.Configuration","org.sosy_lab.cpachecker.cfa.CFA","org.sosy_lab.common.log.LogManager"] }, {"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.loopbound.LoopBoundPrecisionAdjustment",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.loopbound.LoopBoundTransferRelation",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.overflow.OverflowCPA",
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.sosy_lab.cpachecker.cfa.CFA","org.sosy_lab.common.log.LogManager","org.sosy_lab.common.configuration.Configuration"] }, {"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.pointer2.PointerCPA",
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.sosy_lab.cpachecker.cpa.pointer2.PointerCPA$PointerOptions"] }, {"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.pointer2.PointerCPA$PointerOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.predicate.BAMBlockOperator",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.predicate.BAMPredicateCPA",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.sosy_lab.common.configuration.Configuration","org.sosy_lab.common.log.LogManager","org.sosy_lab.cpachecker.cpa.predicate.BAMBlockOperator","org.sosy_lab.cpachecker.cfa.CFA","org.sosy_lab.common.ShutdownNotifier","org.sosy_lab.cpachecker.core.specification.Specification","org.sosy_lab.cpachecker.core.reachedset.AggregatedReachedSets"] }, {"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.predicate.BAMPredicateReducer",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.predicate.BAMPredicateRefiner",
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"create","parameterTypes":["org.sosy_lab.cpachecker.core.interfaces.ConfigurableProgramAnalysis"] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.predicate.PredicateAbstractionManagerOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.predicate.PredicateAbstractionRefinementStrategy",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.predicate.PredicateBasedPrefixProvider",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.predicate.PredicateCPA",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.sosy_lab.common.configuration.Configuration","org.sosy_lab.common.log.LogManager","org.sosy_lab.cpachecker.util.predicates.BlockOperator","org.sosy_lab.cpachecker.cfa.CFA","org.sosy_lab.common.ShutdownNotifier","org.sosy_lab.cpachecker.core.specification.Specification","org.sosy_lab.cpachecker.core.reachedset.AggregatedReachedSets"] }, {"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.predicate.PredicateCPAInvariantsManager",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.predicate.PredicateCPARefiner",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.predicate.PredicateCPARefinerFactory",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.predicate.PredicateCPAStatistics",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.predicate.PredicateCpaOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.predicate.PredicatePrecisionBootstrapper",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.predicate.PredicatePrecisionBootstrapper$InitialPredicatesOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.predicate.PredicateProvider",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.predicate.PredicateRefiner",
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"create","parameterTypes":["org.sosy_lab.cpachecker.core.interfaces.ConfigurableProgramAnalysis"] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.predicate.PredicateStaticRefiner",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.predicate.persistence.PredicateMapWriter",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.smg2.SMGCPA",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.sosy_lab.common.configuration.Configuration","org.sosy_lab.common.log.LogManager","org.sosy_lab.common.ShutdownNotifier","org.sosy_lab.cpachecker.cfa.CFA"] }, {"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.smg2.SMGOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.smg2.SMGPrecisionAdjustment$PrecAdjustmentOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.termination.TerminationARGBasedRefiner",
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"create","parameterTypes":["org.sosy_lab.cpachecker.core.interfaces.ConfigurableProgramAnalysis","org.sosy_lab.common.log.LogManager","org.sosy_lab.common.ShutdownNotifier"] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.termination.TerminationARGBasedRefiner$TerminationARGBasedRefinerConfig",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.termination.TerminationCPA",
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.sosy_lab.cpachecker.core.interfaces.ConfigurableProgramAnalysis","org.sosy_lab.cpachecker.cfa.CFA","org.sosy_lab.common.configuration.Configuration","org.sosy_lab.common.log.LogManager"] }, {"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.terminationviamemory.TerminationToReachCPA",
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.sosy_lab.common.log.LogManager","org.sosy_lab.common.configuration.Configuration","org.sosy_lab.common.ShutdownNotifier","org.sosy_lab.cpachecker.cfa.CFA"] }, {"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.terminationviamemory.TerminationToReachStatistics",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.threading.ThreadingCPA",
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.sosy_lab.common.configuration.Configuration","org.sosy_lab.common.log.LogManager","org.sosy_lab.cpachecker.cfa.CFA"] }, {"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.threading.ThreadingTransferRelation",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.value.PredicateToValuePrecisionConverter",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.value.ValueAnalysisCPA",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["org.sosy_lab.common.configuration.Configuration","org.sosy_lab.common.log.LogManager","org.sosy_lab.common.ShutdownNotifier","org.sosy_lab.cpachecker.cfa.CFA"] }, {"name":"factory","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.value.ValueAnalysisCPAStatistics",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.value.ValueAnalysisPrecisionAdjustment$PrecAdjustmentOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.value.ValueAnalysisTransferRelation$ValueTransferOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.value.refiner.ValueAnalysisDelegatingBAMRefiner",
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"create","parameterTypes":["org.sosy_lab.cpachecker.core.interfaces.ConfigurableProgramAnalysis"] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.value.refiner.ValueAnalysisPathInterpolator",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.value.refiner.ValueAnalysisRefiner",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"create","parameterTypes":["org.sosy_lab.cpachecker.core.interfaces.ConfigurableProgramAnalysis"] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.value.symbolic.ConstraintsStrengthenOperator",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.cpa.value.symbolic.SymbolicValueAssigner",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.ArithmeticOverflowAssumptionBuilder",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.LiveVariables$LiveVariablesConfiguration",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.StateToFormulaWriter",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.StaticRefiner",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.automaton.VerificationTaskMetaData$HackyOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.cwriter.LoopCollectingEdgeVisitor",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.cwriter.TranslatorConfig",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.faultlocalization.FaultLocalizationInfoExporter",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.harness.HarnessExporter",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.pixelexport.GraphToPixelsWriter$PixelsWriterOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.predicates.AbstractionManager",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.predicates.AbstractionManager$AbstractionPredicatesMBean",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.predicates.AbstractionManager$AbstractionPredicatesMXBean",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.predicates.BlockOperator",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.predicates.PathChecker",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.predicates.bdd.BDDManagerFactory",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.predicates.bdd.JavaBDDRegionManager",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"gcCallback","parameterTypes":["java.lang.Integer","net.sf.javabdd.BDDFactory$GCStats"] }, {"name":"reorderCallback","parameterTypes":["java.lang.Integer","net.sf.javabdd.BDDFactory$ReorderStats"] }, {"name":"resizeCallback","parameterTypes":["java.lang.Integer","java.lang.Integer"] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.predicates.interpolation.InterpolationManager",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.predicates.interpolation.strategy.SequentialInterpolation",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.predicates.pathformula.PathFormulaManagerImpl",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.predicates.pathformula.ctoformula.FormulaEncodingOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.predicates.pathformula.pointeraliasing.FormulaEncodingWithPointerAliasingOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.predicates.smt.FormulaManagerView",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.predicates.smt.ReplaceBitvectorWithNumeralAndFunctionTheory",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.predicates.smt.ReplaceIntegerWithBitvectorTheory$ReplaceIntegerEncodingOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.predicates.smt.Solver",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.predicates.weakening.WeakeningOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.refinement.GenericEdgeInterpolator",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.refinement.GenericFeasibilityChecker",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.refinement.GenericPathInterpolator",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.refinement.GenericRefiner",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.refinement.PathExtractor",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.resources.ResourceLimitChecker$ResourceLimitOptions",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.testcase.TestCaseExporter",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.variableclassification.VariableClassificationBuilder",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.yamlwitnessexport.AbstractYAMLWitnessExporter",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.yamlwitnessexport.YAMLWitnessExpressionType",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"toString","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.yamlwitnessexport.model.AbstractEntry",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"getEntryType","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.yamlwitnessexport.model.AbstractInformationRecord",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"getFormat","parameterTypes":[] }, {"name":"getType","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.yamlwitnessexport.model.InformationRecord",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"getValue","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.yamlwitnessexport.model.InvariantEntry$InvariantRecordSerializer",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.yamlwitnessexport.model.InvariantSetEntry",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.yamlwitnessexport.model.LocationRecord",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"getColumn","parameterTypes":[] }, {"name":"getFileName","parameterTypes":[] }, {"name":"getFunction","parameterTypes":[] }, {"name":"getLine","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.yamlwitnessexport.model.MetadataRecord",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"getCreationTime","parameterTypes":[] }, {"name":"getFormatVersion","parameterTypes":[] }, {"name":"getProducer","parameterTypes":[] }, {"name":"getTask","parameterTypes":[] }, {"name":"getUuid","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.yamlwitnessexport.model.ProducerRecord",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"getCommandLine","parameterTypes":[] }, {"name":"getConfiguration","parameterTypes":[] }, {"name":"getDescription","parameterTypes":[] }, {"name":"getName","parameterTypes":[] }, {"name":"getVersion","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.yamlwitnessexport.model.SegmentRecord",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"getSegment","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.yamlwitnessexport.model.TaskRecord",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"getDataModel","parameterTypes":[] }, {"name":"getInputFileHashes","parameterTypes":[] }, {"name":"getInputFiles","parameterTypes":[] }, {"name":"getLanguage","parameterTypes":[] }, {"name":"getSpecification","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.yamlwitnessexport.model.ViolationSequenceEntry",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"getContent","parameterTypes":[] }, {"name":"getMetadata","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.yamlwitnessexport.model.WaypointRecord$WaypointAction",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"getKeyword","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.yamlwitnessexport.model.WaypointRecord$WaypointSerializer",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.cpachecker.util.yamlwitnessexport.model.WaypointRecord$WaypointType",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"getKeyword","parameterTypes":[] }]
+},
+{
+  "name":"org.sosy_lab.java_smt.SolverContextFactory",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.java_smt.solvers.mathsat5.Mathsat5SolverContext$Mathsat5Settings",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.sosy_lab.java_smt.solvers.smtinterpol.SmtInterpolSolverContext$SmtInterpolSettings",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"sun.java2d.marlin.DMarlinRenderingEngine",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.management.ClassLoadingImpl",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"sun.management.CompilationImpl",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"sun.management.ManagementFactoryHelper$1",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"sun.management.ManagementFactoryHelper$PlatformLoggingImpl",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"sun.management.MemoryImpl",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"sun.management.MemoryManagerImpl",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"sun.management.MemoryPoolImpl",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"sun.management.RuntimeImpl",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"sun.misc.SharedSecrets"
+},
+{
+  "name":"sun.misc.Unsafe",
+  "allDeclaredFields":true
+},
+{
+  "name":"sun.reflect.misc.Trampoline",
+  "methods":[{"name":"invoke","parameterTypes":["java.lang.reflect.Method","java.lang.Object","java.lang.Object[]"] }]
+},
+{
+  "name":"sun.security.provider.MD5",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.NativePRNG",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"<init>","parameterTypes":["java.security.SecureRandomParameters"] }]
+},
+{
+  "name":"sun.security.provider.SHA",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.SHA2$SHA256",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.SHA5$SHA384",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.X509Factory",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.rsa.RSAKeyFactory$Legacy",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.rsa.RSASignature$SHA256withRSA",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.rsa.RSASignature$SHA384withRSA",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.util.ObjectIdentifier"
+},
+{
+  "name":"sun.security.x509.AuthorityInfoAccessExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.AuthorityKeyIdentifierExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.BasicConstraintsExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.CRLDistributionPointsExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.CertificateExtensions"
+},
+{
+  "name":"sun.security.x509.CertificatePoliciesExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.ExtendedKeyUsageExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.KeyUsageExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.SubjectAlternativeNameExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.SubjectKeyIdentifierExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+}
+]

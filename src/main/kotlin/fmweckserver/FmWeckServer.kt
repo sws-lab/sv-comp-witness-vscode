@@ -26,7 +26,7 @@ class FmWeckServer {
             // TODO: redirect server output to IDE output-log
         } catch (e: IOException) {
             log.error("Failed to start fm-weck server", e)
-            TODO("proper error handling")
+            TODO("proper error handling (startFmWeckServer)")
         }
     }
 }

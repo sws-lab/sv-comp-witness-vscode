@@ -42,7 +42,7 @@ class AnalysisManager(private val fmWeckClient: FmWeckClient) {
             return fmWeckClient.waitOnRun(runId)
         } catch (e: Throwable) {
             e.printStackTrace()
-            TODO("proper error handling")
+            TODO("proper error handling (runTool)")
         }
     }
 

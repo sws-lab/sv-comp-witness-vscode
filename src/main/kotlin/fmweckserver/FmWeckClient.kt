@@ -48,8 +48,7 @@ class FmWeckClient(host: String, port: Int) {
                     .setCProgram(ByteString.copyFrom(File(URI.create(message.fileUri)).readBytes()))
                     .build()
             } catch (e: IOException) {
-                throw java.lang.RuntimeException(e)
-                TODO("proper error handling")
+                TODO("proper error handling (startRun)")
             }
 
         log.info("Start run request: tool=${request.tool.toolId}, property=${request.property.propertyId}, data model=${request.dataModel}")
@@ -93,7 +92,8 @@ class FmWeckClient(host: String, port: Int) {
         } else {
             // TODO: notify user about failed analysis
             log.error("Run was unsuccessful! $runResult")
-            TODO("proper error handling")
+            // TODO("proper error handling (waitOnRun)")
+            return emptyList()
         }
     }
 }

@@ -43,8 +43,9 @@ object VariableTypeHandler {
             //log.info("Variable types map: $variableTypes")
             return variableTypes
         }
-        log.error(cpaCheckerProcess.errorReader().readText())
-        TODO("Proper error handling")
+        val errorText = cpaCheckerProcess.errorReader().readText()
+        log.error(errorText)
+        TODO("Proper error handling (getVariableTypesForProgram): $errorText")
     }
 
     fun extractTypeEnvByLocation(data: VariableTypeMap): TypeEnv {

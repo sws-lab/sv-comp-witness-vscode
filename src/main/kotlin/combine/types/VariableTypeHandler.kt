@@ -4,9 +4,7 @@ import combine.ksmt.CType
 import kotlinx.serialization.json.Json
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
-import java.io.BufferedReader
 import java.io.File
-import java.io.InputStreamReader
 import java.nio.file.Files
 import java.nio.file.Paths
 
@@ -44,7 +42,7 @@ object VariableTypeHandler {
         processBuilder.redirectErrorStream(true)
         userDir.let { processBuilder.directory(File(it)) }
         val process = processBuilder.start()
-        val outputGobbler = Thread {
+        /* val outputGobbler = Thread {
             BufferedReader(InputStreamReader(process.inputStream)).use { reader ->
                 var line: String?
                 while (reader.readLine().also { line = it } != null) {
@@ -52,7 +50,7 @@ object VariableTypeHandler {
                 }
             }
         }
-        outputGobbler.start()
+        outputGobbler.start()*/
         return process
     }
 
@@ -64,7 +62,6 @@ object VariableTypeHandler {
     }
 
     fun getVariableTypesForProgram(programFileName: String, outputFileName: String): VariableTypeMap {
-        println("../../..$programFileName")
         val cpaCheckerProcess = startCPAChecker(programFileName, outputFileName)
         if (cpaCheckerProcess.waitFor() == 0) {
             //log.info("CPAchecker completed for $programFileName")

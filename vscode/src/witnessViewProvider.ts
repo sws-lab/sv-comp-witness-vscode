@@ -119,7 +119,7 @@ export class WitnessViewProvider implements vscode.WebviewViewProvider {
                         <label class="group-title">Choose a Property:</label>
                         <div class="selectable" data-group="property" data-value="no-overflow" data-selected="true">No Overflow</div>
                         <div class="selectable" data-group="property" data-value="unreach-call">Unreach Call</div>
-                        <div class="selectable" data-group="property" data-value="no-data-race">No Data Race</div>
+                        <!-- <div class="selectable" data-group="property" data-value="no-data-race">No Data Race</div>-->
                     </div>
                     
                     <div class="selection-group">

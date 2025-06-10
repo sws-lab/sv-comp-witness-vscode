@@ -62,10 +62,10 @@ object VariableTypeHandler {
     }
 
     fun getVariableTypesForProgram(programFileName: String, outputFileName: String): VariableTypeMap {
-        val cpaCheckerProcess = startCPAChecker(programFileName, outputFileName)
+        val cpaCheckerProcess = startCPAChecker(programFileName, "variabletypes/$outputFileName")
         if (cpaCheckerProcess.waitFor() == 0) {
             //log.info("CPAchecker completed for $programFileName")
-            val typesJsonString = File("./output/$outputFileName").readText()
+            val typesJsonString = File("./output/variabletypes/$outputFileName").readText()
             val variableTypes = serializeTypesForProgram(typesJsonString)
             //log.info("Variable types map: $variableTypes")
             return variableTypes

@@ -28,11 +28,19 @@ data class UnaryExpression(val op: UnaryOp, val exp: Expression, val str: String
             }
         }
 
-        return UnaryExpression(op, inner, "${op.name}${inner.toCode()}")
+        return UnaryExpression(op, inner, getStr(op, inner))
     }
 
-    override fun toCode() = "${op.name}${exp.toCode()}"
+    override fun toCode() = getStr(op, exp)
 
     override fun toValue() = str
+
+    private fun getStr(op: UnaryOp, exp: Expression) =
+        when (op.name) {
+            // there must be parentheses around sizeof and _Alignof
+            "sizeof" -> "${op.name}(${exp.toCode()})"
+            "_Alignof" -> "${op.name}(${exp.toCode()})"
+            else -> "${op.name}${exp.toCode()}"
+        }
 
 }

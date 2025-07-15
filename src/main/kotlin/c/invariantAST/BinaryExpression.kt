@@ -24,13 +24,22 @@ data class BinaryExpression(val left: Expression, val op: String, val right: Exp
                 ">=" -> Triple("<=", r, l)
                 else -> Triple(op, l, r) // fallback
             }
-            return BinaryExpression(newLeft, newOp, newRight, "${newLeft.toCode()} $newOp ${newRight.toCode()}")
+            return BinaryExpression(newLeft, newOp, newRight, getStr(newLeft, newOp, newRight))
         }
 
-        return BinaryExpression(l, op, r, "${l.toCode()} $op ${r.toCode()}")
+        return BinaryExpression(l, op, r, getStr(l, op, r))
     }
 
-    override fun toCode() = "${left.toCode()} $op ${right.toCode()}"
+    override fun toCode() = getStr(left, op, right)
 
     override fun toValue() = str
+
+    private fun getStr(left: Expression, op: String, right: Expression) =
+        when (op) {
+            // no spaces around . and -> operations
+            "." -> "${left.toCode()}$op${right.toCode()}"
+            "->" -> "${left.toCode()}$op${right.toCode()}"
+            "[]" -> "${left.toCode()}[${right.toCode()}]"
+            else -> "${left.toCode()} $op ${right.toCode()}"
+        }
 }

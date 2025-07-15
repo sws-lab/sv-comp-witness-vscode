@@ -87,6 +87,24 @@ object CInvariantAstNormalizationTest {
     }
 
     @Test
+    fun test_dots_and_arrows() {
+        assertEquals(
+            BinaryExpression(
+                BinaryExpression(
+                    BinaryExpression(Var("queue"), "->", Var("container"), "queue->container"),
+                    ".",
+                    Var("alloc"),
+                    "queue->container.alloc"
+                ),
+                "==",
+                Const("0", null),
+                "queue->container.alloc == 0"
+            ),
+            CInvariantAst.createAst("queue->container.alloc == 0").normalize()
+        )
+    }
+
+    @Test
     fun test_tool_invariants() {
         assertEquals(
             BinaryExpression(
@@ -106,6 +124,35 @@ object CInvariantAstNormalizationTest {
                 "(long long)y + (long long)x + 4294967296LL >= 0LL"
             ),
             CInvariantAst.createAst("(4294967296LL + (long long )x) + (long long )y >= 0LL").normalize()
+        )
+
+        assertEquals(
+            BinaryExpression(
+                BinaryExpression(
+                    BinaryExpression(Var("uts"), "->", Var("version"), "uts->version"),
+                    "[]",
+                    BinaryExpression(
+                        UnaryExpression(
+                            Op("sizeof"),
+                            BinaryExpression(
+                                Var("uts"),
+                                "->",
+                                Var("version"),
+                                "uts->version"
+                            ),
+                            "sizeof(uts->version)",
+                        ),
+                        "-",
+                        Const("1", "UL"),
+                        "sizeof(uts->version) - 1UL"
+                    ),
+                    "uts->version[sizeof(uts->version) - 1UL]",
+                ),
+                "==",
+                UnaryExpression(Type("(char)"), Const("0", null), "(char)0"),
+                "uts->version[sizeof(uts->version) - 1UL] == (char)0"
+            ),
+            CInvariantAst.createAst("(char)0 == uts->version[sizeof(uts->version) - 1UL]").normalize()
         )
 
     }

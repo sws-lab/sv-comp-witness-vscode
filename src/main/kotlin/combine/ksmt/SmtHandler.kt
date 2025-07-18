@@ -25,7 +25,7 @@ fun createSMTArithExpr(invariantAst: Expression, ctx: KContext, locTypeEnv: Map<
         is Var -> getVarSort(ctx, locTypeEnv, invariantAst.name)
         is Const -> ctx.mkIntNum(invariantAst.value)
         is BinaryExpression -> {
-            when (invariantAst.op) {
+            when (invariantAst.op.name) {
                 "+" -> ctx.mkArithAdd(
                     createSMTArithExpr(invariantAst.left, ctx, locTypeEnv),
                     createSMTArithExpr(invariantAst.right, ctx, locTypeEnv)
@@ -55,14 +55,15 @@ fun createSMTArithExpr(invariantAst: Expression, ctx: KContext, locTypeEnv: Map<
 
         is UnaryExpression ->
             when (val op = invariantAst.op) {
-                is Type -> getVarSort(ctx, locTypeEnv, invariantAst.exp.toValue())
-                is Op -> {
+                is CastOp -> getVarSort(ctx, locTypeEnv, invariantAst.exp.toValue())
+                is UnaryOp -> {
                     when (op.name) {
                         "-" -> ctx.mkArithUnaryMinus(createSMTArithExpr(invariantAst.exp, ctx, locTypeEnv))
                         "!" -> convertBoolExprToIntExpr(createSMTBoolExpr(invariantAst, ctx, locTypeEnv), ctx)
                         else -> error("Unsupported SMTBool expression: ${invariantAst.toValue()}")
                     }
                 }
+                is BinaryOp -> TODO()
             }
 
         else -> error("Unsupported SMTArith expression: ${invariantAst.toValue()}")
@@ -74,7 +75,7 @@ fun createSMTBoolExpr(invariantAst: Expression, ctx: KContext, locTypeEnv: Map<S
         is Var -> convertIntExprToBoolExpr(getVarSort(ctx, locTypeEnv, invariantAst.name), ctx)
         is Const -> convertIntExprToBoolExpr(ctx.mkIntNum(invariantAst.value), ctx)
         is BinaryExpression -> {
-            when (invariantAst.op) {
+            when (invariantAst.op.name) {
                 ">" -> ctx.mkArithGt(
                     createSMTArithExpr(invariantAst.left, ctx, locTypeEnv),
                     createSMTArithExpr(invariantAst.right, ctx, locTypeEnv)
@@ -125,14 +126,15 @@ fun createSMTBoolExpr(invariantAst: Expression, ctx: KContext, locTypeEnv: Map<S
 
         is UnaryExpression ->
             when (val op = invariantAst.op) {
-                is Type -> convertIntExprToBoolExpr(getVarSort(ctx, locTypeEnv, invariantAst.exp.toValue()), ctx)
-                is Op -> {
+                is CastOp -> convertIntExprToBoolExpr(getVarSort(ctx, locTypeEnv, invariantAst.exp.toValue()), ctx)
+                is UnaryOp -> {
                     when (op.name) {
                         "!" -> ctx.mkNot(createSMTBoolExpr(invariantAst.exp, ctx, locTypeEnv))
                         "-" -> convertIntExprToBoolExpr(createSMTArithExpr(invariantAst, ctx, locTypeEnv), ctx)
                         else -> error("Unsupported SMTBool expression: ${invariantAst.toValue()}")
                     }
                 }
+                is BinaryOp -> TODO()
             }
 
         else -> error("Unsupported SMTBool expression: ${invariantAst.toValue()}")

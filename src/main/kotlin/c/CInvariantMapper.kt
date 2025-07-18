@@ -9,7 +9,7 @@ fun collectConjunctAsts(invariantASt: Expression): Set<Expression> = object : In
     override fun visit(constant: Const): Set<Expression> = setOf(constant)
 
     override fun visit(binop: BinaryExpression): Set<Expression> =
-        if (binop.op == "&&") visit(binop.left) + visit(binop.right) else setOf(binop)
+        if (binop.op.name == "&&") visit(binop.left) + visit(binop.right) else setOf(binop)
 
     override fun visit(unop: UnaryExpression): Set<Expression> = setOf(unop)
 

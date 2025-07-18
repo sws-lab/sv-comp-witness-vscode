@@ -1,6 +1,6 @@
 package c.invariantAST
 
-data class BinaryExpression(val left: Expression, val op: String, val right: Expression, val str: String) :
+data class BinaryExpression(val left: Expression, val op: BinaryOp, val right: Expression, val str: String) :
     Expression() {
     override fun <T> accept(visitor: InvariantAstVisitor<T>) = visitor.visit(this)
 
@@ -9,19 +9,19 @@ data class BinaryExpression(val left: Expression, val op: String, val right: Exp
         val r = right.normalize()
 
         // Commutative ops: order operands consistently
-        if (op in setOf("==", "!=", "+", "*", "&", "|", "&&", "||")) {
+        if (op.name in setOf("==", "!=", "+", "*", "&", "|")) {
             if (l is Const && r !is Const || r !is Const && r.hashCode() < l.hashCode()) {
-                return BinaryExpression(r, op, l, "${r.toCode()} $op ${l.toCode()}")
+                return BinaryExpression(r, op, l, getStr(r, op, l))
             }
         }
 
         // Relational ops: move variable to left, constant to right (if reversed)
         if (l is Const && r !is Const) {
-            val (newOp, newLeft, newRight) = when (op) {
-                "<" -> Triple(">", r, l)
-                "<=" -> Triple(">=", r, l)
-                ">" -> Triple("<", r, l)
-                ">=" -> Triple("<=", r, l)
+            val (newOp, newLeft, newRight) = when (op.name) {
+                "<" -> Triple(BinaryOp(">"), r, l)
+                "<=" -> Triple(BinaryOp(">="), r, l)
+                ">" -> Triple(BinaryOp("<"), r, l)
+                ">=" -> Triple(BinaryOp("<="), r, l)
                 else -> Triple(op, l, r) // fallback
             }
             return BinaryExpression(newLeft, newOp, newRight, getStr(newLeft, newOp, newRight))
@@ -34,12 +34,31 @@ data class BinaryExpression(val left: Expression, val op: String, val right: Exp
 
     override fun toValue() = str
 
-    private fun getStr(left: Expression, op: String, right: Expression) =
-        when (op) {
-            // no spaces around . and -> operations
-            "." -> "${left.toCode()}$op${right.toCode()}"
-            "->" -> "${left.toCode()}$op${right.toCode()}"
-            "[]" -> "${left.toCode()}[${right.toCode()}]"
-            else -> "${left.toCode()} $op ${right.toCode()}"
+    private fun getStr(left: Expression, op: Op, right: Expression): String {
+        val (parentPrec, parentAssoc) = opPrecedence(op)
+
+        val lCode = left.toCode()
+        val rCode = right.toCode()
+
+        val lStr =
+            if (left is BinaryExpression && (opPrecedence(left.op).precedence > parentPrec || (opPrecedence(left.op).precedence == parentPrec && parentAssoc == Assoc.RIGHT)))
+                "($lCode)"
+            else
+                lCode
+
+        val rStr = when (right) {
+            is BinaryExpression -> {
+                val rPrec = opPrecedence(right.op).precedence
+                // TODO: [] hack
+                if (rPrec > parentPrec && op.name != "[]" || (rPrec == parentPrec && parentAssoc == Assoc.RIGHT)) "($rCode)" else rCode
+            }
+            else -> rCode
         }
+
+        return when (op.name) {
+            ".", "->" -> "$lStr${op.name}$rStr"
+            "[]" -> "$lStr[$rStr]"
+            else -> "$lStr ${op.name} $rStr"
+        }
+    }
 }

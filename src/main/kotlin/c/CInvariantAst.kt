@@ -37,10 +37,10 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
         for (exp in ctx.postfixSecondExpression()) {
             when (exp) {
                 is InvariantCParser.SqBracketContext ->
-                    node = BinaryExpression(node, "[]", visit(exp.expression()), ctx.originalText())
+                    node = BinaryExpression(node, BinaryOp("[]"), visit(exp.expression()), ctx.originalText())
 
                 is InvariantCParser.DotArrowContext ->
-                    node = BinaryExpression(node, exp.op.text, Var(exp.Identifier().text), ctx.originalText())
+                    node = BinaryExpression(node, BinaryOp(exp.op.text), Var(exp.Identifier().text), ctx.originalText())
             }
         }
         return node
@@ -55,18 +55,18 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
             }
 
             ctx.castExpression() != null -> {
-                val unaryOp = Op(ctx.unaryOp.text)
+                val unaryOp = UnaryOp(ctx.unaryOp.text)
                 val expr = visit(ctx.castExpression())
                 UnaryExpression(unaryOp, expr, ctx.originalText())
             }
 
             ctx.typeName() != null -> {
-                Type(ctx.typeName().originalText())
+                CastOp(ctx.typeName().originalText())
             }
 
             ctx.Identifier() != null -> {
                 val label = ctx.Identifier().text
-                UnaryExpression(Op("&&"), Var(label), ctx.originalText())
+                UnaryExpression(UnaryOp("&&"), Var(label), ctx.originalText())
             }
 
             else -> throw RuntimeException("Unexpected unary expression structure: ${ctx.text}")
@@ -76,12 +76,12 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
         return ctx.op.foldRight(baseExpr) { opToken, acc ->
             val op = opToken.text
             // TODO: concatenate for str
-            UnaryExpression(Op(op), acc, op)
+            UnaryExpression(UnaryOp(op), acc, op)
         }
     }
 
     override fun visitCast(ctx: InvariantCParser.CastContext) =
-        UnaryExpression(Type("(${ctx.typeName().originalText()})"), visit(ctx.castExpression()), ctx.originalText())
+        UnaryExpression(CastOp("(${ctx.typeName().originalText()})"), visit(ctx.castExpression()), ctx.originalText())
 
     override fun visitCastbase(ctx: InvariantCParser.CastbaseContext) =
         visit(ctx.unaryExpression())
@@ -137,7 +137,7 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
     override fun visitParens(ctx: InvariantCParser.ParensContext): Expression =
         visit(ctx.expression())
 
-    override fun visitTypeName(ctx: InvariantCParser.TypeNameContext): Type =
+    override fun visitTypeName(ctx: InvariantCParser.TypeNameContext): CastOp =
         TODO("irrelevant")
 
     override fun visitSpecifierQualifierList(ctx: InvariantCParser.SpecifierQualifierListContext) =
@@ -158,7 +158,7 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
     private fun visitBinary(ctx: List<ParserRuleContext>, ops: List<Token>, str: String): Expression {
         var node = visit(ctx.first())
         for ((op, exp) in ops.zip(ctx.drop(1))) {
-            node = BinaryExpression(node, op.text, visit(exp), str)
+            node = BinaryExpression(node, BinaryOp(op.text), visit(exp), str)
         }
         return node
     }

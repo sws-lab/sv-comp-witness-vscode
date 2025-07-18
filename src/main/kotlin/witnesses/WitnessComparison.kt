@@ -81,15 +81,11 @@ object WitnessComparison {
         val graph = DefaultDirectedGraph<InvariantComponent, DefaultEdge>(DefaultEdge::class.java)
 
         for ((loc, invariants) in invariantComponentsByLoc) {
-            val locTypeEnv = typeEnv[loc.line]
-            for (a in invariants) {
-                graph.addVertex(a)
-            }
-            for (i in invariants.indices) {
-                for (j in i + 1 until invariants.size) {
-                    val a = invariants[i]
-                    val b = invariants[j]
-                    if (locTypeEnv != null && areEqual(a, b, locTypeEnv)) {
+            for (a in invariants) graph.addVertex(a)
+            val locTypeEnv = typeEnv[loc.line] ?: continue
+            for ((i, a) in invariants.withIndex()) {
+                for (b in invariants.drop(i + 1)) {
+                    if (areEqual(a, b, locTypeEnv)) {
                         graph.addEdge(a, b)
                         graph.addEdge(b, a)
                     }

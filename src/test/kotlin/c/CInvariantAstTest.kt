@@ -260,6 +260,8 @@ object CInvariantAstTest {
         CInvariantAst.createAst("tmp_if_expr\$7 == (_Bool)0")
         // goblint.2024-11-29_20-22-51.files/SV-COMP25_no-overflow/uname-1.yml/witness.yml
         CInvariantAst.createAst("(char)0 == uts->sysname[sizeof(uts->sysname) - 1UL]")
+        // goblint.2024-11-29_20-22-51.files/SV-COMP25_no-overflow/28-race_reach_19-callback_racing.yml
+        CInvariantAst.createAst("callback == (int (*)())(& bar)")
     }
 
     @Test
@@ -306,6 +308,13 @@ object CInvariantAstTest {
                     "&&!((10 << var_1_12) < (var_1_14 * var_1_3))) " +
                     "&& (last_1_var_1_12 == 1)))"
         )
+    }
+
+    @Test
+    fun test_parsing_theta_invariants() {
+        // "SV-COMP25_no-overflow/mutual_simple.yml"
+        CInvariantAst.createAst("(0 <= T0::P75988::f::q[0])")
+        CInvariantAst.createAst("(((INT_MIN == -2147483648) && (__idx_0 == 1)) || ((INT_MIN == -2147483648) && (__idx_0 == 1)) || ((INT_MIN == -2147483648) && (__idx_0 == 1) && (! ((INT_MIN == -2147483648) && (0 <= T0::P75988::f::q[0]) && (((__a_0 == T0__P75988__f__q) ? __idx_0 : 0) == ((__a_0 == T0__P75988__f__q) ? 1 : 0))))) || ((INT_MIN == -2147483648) && (__idx_0 == 1)) || ((INT_MIN == -2147483648) && (__idx_0 == 1)))")
     }
 
     private fun legal(input: String, expectedAst: Node) {

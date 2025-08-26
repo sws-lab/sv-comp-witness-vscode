@@ -155,6 +155,10 @@ private class ExpressionVisitor : InvariantCBaseVisitor<Expression>() {
         TODO("irrelevant")
     }
 
+    override fun visitDirectAbstractDeclarator(ctx: InvariantCParser.DirectAbstractDeclaratorContext): Expression {
+        TODO("irrelevant")
+    }
+
     private fun visitBinary(ctx: List<ParserRuleContext>, ops: List<Token>, str: String): Expression {
         var node = visit(ctx.first())
         for ((op, exp) in ops.zip(ctx.drop(1))) {

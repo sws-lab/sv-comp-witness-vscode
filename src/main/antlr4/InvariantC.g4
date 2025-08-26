@@ -129,6 +129,12 @@ typeName
 
 abstractDeclarator
     : pointer
+    | pointer? directAbstractDeclarator
+    ;
+
+directAbstractDeclarator
+    : '(' abstractDeclarator ')'
+    | directAbstractDeclarator '(' ')'
     ;
 
 typedefName

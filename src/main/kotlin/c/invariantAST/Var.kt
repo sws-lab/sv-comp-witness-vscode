@@ -9,4 +9,5 @@ data class Var(val name: String) : Expression() {
     override fun normalize() = this
     override fun toCode() = name
     override fun toValue() = name
+    override fun nodeOpStr() = "var"
 }

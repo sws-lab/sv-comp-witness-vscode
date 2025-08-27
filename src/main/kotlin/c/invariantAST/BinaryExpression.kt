@@ -61,4 +61,6 @@ data class BinaryExpression(val left: Expression, val op: BinaryOp, val right: E
             else -> "$lStr ${op.name} $rStr"
         }
     }
+
+    override fun nodeOpStr(): String = op.name
 }

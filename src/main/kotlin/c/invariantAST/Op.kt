@@ -7,4 +7,5 @@ sealed class Op : Expression() {
     override fun toCode() = name
     override fun toValue() = name
     override fun toString() = name
+    override fun nodeOpStr() = name
 }

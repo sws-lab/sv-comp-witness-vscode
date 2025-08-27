@@ -6,4 +6,5 @@ data class Const(val value: String, val suffix: String?) : Expression() {
     override fun normalize() = this
     override fun toCode() = value + (suffix ?: "")
     override fun toValue() = value + (suffix ?: "")
+    override fun nodeOpStr(): String = "const"
 }

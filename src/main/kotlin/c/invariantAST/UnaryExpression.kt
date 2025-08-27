@@ -43,4 +43,5 @@ data class UnaryExpression(val op: Op, val exp: Expression, val str: String) : E
             else -> "${op.name}${exp.toCode()}"
         }
 
+    override fun nodeOpStr() = op.name
 }

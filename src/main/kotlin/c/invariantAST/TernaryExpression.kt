@@ -17,4 +17,5 @@ data class TernaryExpression(val fst: Expression, val snd: Expression, val thrd:
 
     override fun toValue() = str
 
+    override fun nodeOpStr() = "?:"
 }

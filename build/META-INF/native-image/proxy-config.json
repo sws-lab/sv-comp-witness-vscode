@@ -1,5 +1,0 @@
-[
-  {
-    "interfaces":["org.sosy_lab.cpachecker.core.interfaces.Refiner$Factory"]
-  }
-]

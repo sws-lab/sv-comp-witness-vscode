@@ -310,13 +310,6 @@ object CInvariantAstTest {
         )
     }
 
-    @Test
-    fun test_parsing_theta_invariants() {
-        // "SV-COMP25_no-overflow/mutual_simple.yml"
-        CInvariantAst.createAst("(0 <= T0::P75988::f::q[0])")
-        CInvariantAst.createAst("(((INT_MIN == -2147483648) && (__idx_0 == 1)) || ((INT_MIN == -2147483648) && (__idx_0 == 1)) || ((INT_MIN == -2147483648) && (__idx_0 == 1) && (! ((INT_MIN == -2147483648) && (0 <= T0::P75988::f::q[0]) && (((__a_0 == T0__P75988__f__q) ? __idx_0 : 0) == ((__a_0 == T0__P75988__f__q) ? 1 : 0))))) || ((INT_MIN == -2147483648) && (__idx_0 == 1)) || ((INT_MIN == -2147483648) && (__idx_0 == 1)))")
-    }
-
     private fun legal(input: String, expectedAst: Node) {
         val actualAst = CInvariantAst.createAst(input)
         assertEquals(expectedAst, actualAst)

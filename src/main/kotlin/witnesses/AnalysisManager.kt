@@ -1,7 +1,5 @@
 package witnesses
 
-import combine.types.VariableTypeHandler.extractTypeEnvByLocation
-import combine.types.VariableTypeHandler.getVariableTypesForProgram
 import fmweckserver.AnalyzeMessageParams
 import fmweckserver.FmWeckClient
 import org.apache.logging.log4j.LogManager
@@ -10,10 +8,7 @@ import org.eclipse.lsp4j.CodeLens
 import org.eclipse.lsp4j.Command
 import org.eclipse.lsp4j.Position
 import org.eclipse.lsp4j.Range
-import witnesses.WitnessComparison.decomposeInvariantByConjunctions
-import witnesses.WitnessComparison.getEqualInvariantGroups
 import witnesses.WitnessReader.readWitnessFromYaml
-import witnesses.data.invariant.EqualInvariantGroup
 import witnesses.data.yaml.*
 
 class AnalysisManager(private val fmWeckClient: FmWeckClient) {
@@ -29,7 +24,7 @@ class AnalysisManager(private val fmWeckClient: FmWeckClient) {
             witnesses.addAll(readWitnessFromYaml(witnessStrings))
         }
 
-        lenses.addAll(convert(witnesses, message))
+        lenses.addAll(convert(witnesses))
         return lenses
     }
 
@@ -46,7 +41,7 @@ class AnalysisManager(private val fmWeckClient: FmWeckClient) {
         }
     }
 
-    fun convert(witnesses: List<Witness>, message: AnalyzeMessageParams): List<CodeLens> {
+    fun convert(witnesses: List<Witness>): List<CodeLens> {
         val correctnessInvariants = mutableListOf<Pair<Invariant, Witness>>()
         val violationCodeLenses = mutableListOf<CodeLens>()
         for (witness in witnesses) {
@@ -59,27 +54,19 @@ class AnalysisManager(private val fmWeckClient: FmWeckClient) {
                 }
             }
         }
-        val invariantComponentsByLoc: LocToInvariantComponents = mutableMapOf()
-        correctnessInvariants.forEach { (invariant, witness) ->
-            decomposeInvariantByConjunctions(invariant, witness, invariantComponentsByLoc)
+        val correctnessCodeLenses = correctnessInvariants.map { (invariant, witness) ->
+            convertCorrectnessWitness(invariant, witness)
         }
-        val typeEnv = extractTypeEnvByLocation(getVariableTypesForProgram(message.fileRelativePath, "vtypes.json"))
-        val correctnessCodeLenses =
-            getEqualInvariantGroups(invariantComponentsByLoc, typeEnv)
-                .sortedByDescending { it.equalInvariantComponents.size }
-                .map { equalInvariantGroup ->
-                convertCorrectnessWitness(equalInvariantGroup)
-            }
         return correctnessCodeLenses + violationCodeLenses
     }
 
-    private fun convertCorrectnessWitness(equalInvariantGroup: EqualInvariantGroup): CodeLens {
-        val range = rangeFromLocation(equalInvariantGroup.location)
+    private fun convertCorrectnessWitness(invariant: Invariant, witness: Witness): CodeLens {
+        val range = rangeFromLocation(invariant.location)
         val command =
             Command(
-                equalInvariantGroup.shortestInvariantString,
+                invariant.value,
                 "showInvariantInfo",
-                listOf(equalInvariantGroup.toString())
+                listOf(witness.metadata.producer.name)
             )
         return CodeLens(range, command, null)
     }

@@ -125,27 +125,6 @@
             <version>0.74.0</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/io.ksmt/ksmt-core -->
-        <dependency>
-            <groupId>io.ksmt</groupId>
-            <artifactId>ksmt-core</artifactId>
-            <version>0.5.30</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/io.ksmt/ksmt-z3-core -->
-        <dependency>
-            <groupId>io.ksmt</groupId>
-            <artifactId>ksmt-z3-core</artifactId>
-            <version>0.5.30</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/io.ksmt/ksmt-z3-native-linux-x64 -->
-        <dependency>
-            <groupId>io.ksmt</groupId>
-            <artifactId>ksmt-z3-native-linux-x64</artifactId>
-            <version>0.5.30</version>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.jgrapht/jgrapht-core -->
         <dependency>
             <groupId>org.jgrapht</groupId>

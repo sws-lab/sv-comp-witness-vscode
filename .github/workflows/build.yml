@@ -26,7 +26,7 @@ jobs:
           # cache: npm # TODO: requires package-lock.json
 
       - name: Build with Maven
-        run: mvn install -Dtest='**/*Test,!witnesses/InvariantToCodeLensesTest,!witnesses/InvariantVariableTypeTest'
+        run: mvn install
 
       - name: Build with NPM
         working-directory: ./vscode

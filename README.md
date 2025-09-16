@@ -5,22 +5,31 @@ for visualizing their combined verification witnesses.
 
 ## Developing
 
-Make sure the following are installed: `JDK 17`, `mvn`, `npm`, `nodejs`, `@vscode/vsce`.
+Make sure the following are installed:
+- `JDK 17`
+- `mvn`
+- `npm`
+- `nodejs`
+- `vsce` (using `npm install -g @vscode/vsce` for example)
+- [fm-weck](https://gitlab.com/sosy-lab/software/fm-weck)
 
-To build this extension, run the commands:
-~~~
-mvn install
-cd vscode
-npm install
-npm install -g vsce
-vsce package
-~~~
 
-## Installing
+To build this extension, run the commands starting from project root directory:
+1. `mvn install` (or can use `mvn package -Dmaven.test.skip` if tests are failing)
+2. `cd vscode`
+3. `npm install` (only needed the first time)
+4. `vsce package`
 
-Install the extension into VS Code with `code --install-extension sv-comp-verifiers-0.0.1.vsix`.
+### Installing
+
+Install the extension into VS Code with
+```shell
+cd vscode && code --install-extension sv-comp-verifiers-0.0.1.vsix
+```
 
 ## Testing
+
+Note that the first time run will take time with fm-weck getting the required tools.
 
 1. Open the project in VS Code after installing the extension.
 2. Open the file `standard_strcpy_original-2.i` in VS Code.
@@ -28,7 +37,7 @@ Install the extension into VS Code with `code --install-extension sv-comp-verifi
 
 ## Building native CPAchecker
 
-  NOTE: You need to have [GraalVM 22.04](https://www.oracle.com/java/graalvm/) installed to build the native CPAchecker.
+NOTE: You need to have [GraalVM 22.04](https://www.oracle.com/java/graalvm/) installed to build the native CPAchecker.
 
 To build the native CPAchecker, run the following commands:
 ```shell

@@ -34,14 +34,3 @@ Note that the first time run will take time with fm-weck getting the required to
 1. Open the project in VS Code after installing the extension.
 2. Open the file `standard_strcpy_original-2.i` in VS Code.
 3. The combined invariants should be shown above lines 22, 26, and 31.
-
-## Building native CPAchecker
-
-NOTE: You need to have [GraalVM 22.04](https://www.oracle.com/java/graalvm/) installed to build the native CPAchecker.
-
-To build the native CPAchecker, run the following commands:
-```shell
-make cpachecker
-```
-
-This command takes a while (~10min on a ThinkPad T14) and will produce a native binary in the `lib/cpachecker-native` directory.

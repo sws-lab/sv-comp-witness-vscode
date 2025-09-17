@@ -19,7 +19,7 @@ Runs one or more verifiers via **fm-weck** and renders their invariants inline i
     * Building the extension (see [Building](#building))
 3. Install the extension into VS Code:
 ```shell
-cd VS Code && code --install-extension sv-comp-verifiers-0.0.1.vsix
+cd vscode && code --install-extension sv-comp-verifiers-0.0.1.vsix
 ```
 
 ### Quick start

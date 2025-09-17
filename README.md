@@ -50,7 +50,7 @@ Make sure the following are installed:
  ### Building
 To build this extension, run the commands starting from project root directory:
 1. `mvn install` (or can use `mvn package -Dmaven.test.skip` if tests are failing)
-2. `cd VS Code`
+2. `cd vscode`
 3. `npm install` (only needed the first time)
 4. `vsce package`
 

@@ -1,4 +1,4 @@
-# sv-comp-witness-VS Code
+# Wiivi
 
 VS Code extension for running [SV-COMP](https://sv-comp.sosy-lab.org/) verification tools and
 visualizing their witnesses (correctness witnesses / invariants) for C programs.  

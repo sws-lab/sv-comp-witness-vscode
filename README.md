@@ -43,7 +43,7 @@ Make sure the following are installed:
 - `mvn`
 - `npm`
 - `nodejs`
-- `vsce` (using `npm install -g @VS Code/vsce` for example)
+- `vsce` (using `npm install -g @vscode/vsce` for example)
 - [fm-weck](https://gitlab.com/sosy-lab/software/fm-weck)
 
 

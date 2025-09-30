@@ -1,38 +1,57 @@
-# sv-comp-witness-vscode
+# Wiivi
 
-Integration of [SV-Comp](https://sv-comp.sosy-lab.org/) verification tools for C into VS Code
-for visualizing their combined verification witnesses.
+VS Code extension for running [SV-COMP](https://sv-comp.sosy-lab.org/) verification tools and
+visualizing their witnesses (correctness witnesses / invariants) for C programs.  
+Runs one or more verifiers via **fm-weck** and renders their invariants inline in the editor.
 
-## Developing
+## Use the extension
 
-Make sure the following are installed: `JDK 17`, `mvn`, `npm`, `nodejs`, `@vscode/vsce`.
+### Prerequisites
+- VS Code
+- fm-weck installed and working  
+  (with its own prerequisites, e.g., a container runtime such as Podman)
 
-To build this extension, run the commands:
-~~~
-mvn install
-cd vscode
-npm install
-npm install -g vsce
-vsce package
-~~~
+### Installing
 
-## Installing
-
-Install the extension into VS Code with `code --install-extension sv-comp-verifiers-0.0.1.vsix`.
-
-## Testing
-
-1. Open the project in VS Code after installing the extension.
-2. Open the file `standard_strcpy_original-2.i` in VS Code.
-3. The combined invariants should be shown above lines 22, 26, and 31.
-
-## Building native CPAchecker
-
-  NOTE: You need to have [GraalVM 22.04](https://www.oracle.com/java/graalvm/) installed to build the native CPAchecker.
-
-To build the native CPAchecker, run the following commands:
+1. Install [fm-weck](https://gitlab.com/sosy-lab/software/fm-weck)
+2. Get the extension package (`.vsix`) by either:
+    * Downloading the extension from [latest GitHub Actions build](https://github.com/sws-lab/sv-comp-witness-vscode/actions) → choose a workflow run → Artifacts → `wiivi-plugin`
+    * Building the extension (see [Building](#building))
+3. Install the extension into VS Code:
 ```shell
-make cpachecker
+cd vscode && code --install-extension sv-comp-verifiers-0.0.1.vsix
 ```
 
-This command takes a while (~10min on a ThinkPad T14) and will produce a native binary in the `lib/cpachecker-native` directory.
+### Quick start
+
+After installing the extension:
+
+1. Open the project in **VS Code** (e.g., calling `code .` in the project root directory).
+2. Open the file `standard_strcpy_original-2.i` in VS Code.
+3. Locate and open the **Witnesses** panel.
+4. In the panel **select** a data model, property, and which tools to run.
+5. Click **Analyze** to start analyzing the currently open file.  
+   (*Note: the first time run will take time with fm-weck getting the required tools.*)
+3. The invariants from the tools should be shown above lines 22, 26, and 31.
+
+## Build / Develop the extension
+
+### Prerequisites
+
+Make sure the following are installed:
+- `JDK 17`
+- `mvn`
+- `npm`
+- `nodejs`
+- `vsce` (using `npm install -g @vscode/vsce` for example)
+- [fm-weck](https://gitlab.com/sosy-lab/software/fm-weck)
+
+
+ ### Building
+To build this extension, run the commands starting from project root directory:
+1. `mvn install` (or can use `mvn package -Dmaven.test.skip` if tests are failing)
+2. `cd vscode`
+3. `npm install` (only needed the first time)
+4. `vsce package`
+
+
